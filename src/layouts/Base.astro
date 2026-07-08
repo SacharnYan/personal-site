@@ -81,8 +81,8 @@ const currentPath = Astro.url.pathname;
 
       // 首屏：分批错开，让肉眼能看到"陆续出现"
       allFade.forEach((el, i) => {
-        if (el.classList.contains('fade-on-scroll')) return; // 滚动的后面再触发
-        setTimeout(() => el.classList.add('is-visible'), 80 + i * 120);
+       if (el.classList.contains('fade-on-scroll')) return; // 滚动的后面再触发
+       setTimeout(() => el.classList.add('is-visible'), 200 + i * 250);
       });
 
       // 滚动：仅给明确标 .fade-on-scroll 的元素做
