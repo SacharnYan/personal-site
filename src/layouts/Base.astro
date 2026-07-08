@@ -80,9 +80,11 @@ const currentPath = Astro.url.pathname;
       const scrollOnly = document.querySelectorAll('[data-fade].fade-on-scroll');
 
       // 首屏：分批错开，让肉眼能看到"陆续出现"
+      // 每个元素 1400ms 动画，错开 400ms
+      // 上一个快完成时下一个才启动——像多米诺，不急
       allFade.forEach((el, i) => {
        if (el.classList.contains('fade-on-scroll')) return; // 滚动的后面再触发
-       setTimeout(() => el.classList.add('is-visible'), 200 + i * 250);
+       setTimeout(() => el.classList.add('is-visible'), 400 + i * 400);
       });
 
       // 滚动：仅给明确标 .fade-on-scroll 的元素做

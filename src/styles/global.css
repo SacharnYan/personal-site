@@ -407,15 +407,15 @@ p + p {
 /* ===== fade-in 动效 =====
    设计选择：
    1. 初始 opacity 0.001 而非 0 — 爬虫/JS 失败仍能看到内容
-   2. 同时 translateY(20px) — 明显的"从下浮起"方向感
-   3. 时长 800ms — 够快能看到完整过程，够慢不拖沓
-   4. 缓动 cubic-bezier(0.22, 1, 0.36, 1) — 自然缓出 */
+   2. 同时 translateY(24px) — 有存在感的上升幅度
+   3. 时长 1400ms — 能看到完整过程，不急不拖
+   4. 缓动 cubic-bezier(0.25, 0.1, 0.25, 1) — 平滑渐出，无弹性 */
 [data-fade] {
   opacity: 0.001;
-  transform: translateY(20px);
+  transform: translateY(24px);
   transition:
-    opacity 800ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 1400ms cubic-bezier(0.25, 0.1, 0.25, 1),
+    transform 1400ms cubic-bezier(0.25, 0.1, 0.25, 1);
   will-change: opacity, transform;
 }
 [data-fade].is-visible {
