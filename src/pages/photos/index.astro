@@ -1,10 +1,62 @@
 ---
 import Base from '../../layouts/Base.astro';
+
+const photos = Array.from({ length: 9 }, (_, i) => ({
+  src: `/photos/photo-${String(i + 1).padStart(2, '0')}.jpg`,
+}));
 ---
 
 <Base title="照片">
-  <div class="container" data-fade>
-    <h1>照片</h1>
-    <p class="text-muted">（这里以后会按主题分相册）</p>
-  </div>
+  <article class="container photos-page">
+    <header class="photos-header" data-fade>
+      <h1>照片</h1>
+      <p class="text-muted text-sm">用眼睛收集到的安静时刻。</p>
+    </header>
+
+    <div class="gallery">
+      {photos.map((photo, i) => (
+        <figure class="gallery-item" data-fade>
+          <img
+            src={photo.src}
+            alt=""
+            loading={i < 4 ? 'eager' : 'lazy'}
+          />
+        </figure>
+      ))}
+    </div>
+  </article>
 </Base>
+
+<style>
+  .photos-header {
+    padding-block: var(--space-4) var(--space-8);
+  }
+
+  .photos-header h1 {
+    margin-bottom: var(--space-2);
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+
+  .gallery-item {
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @media (max-width: 640px) {
+    .gallery {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+  }
+</style>

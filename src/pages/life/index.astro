@@ -3,8 +3,20 @@ import Base from '../../layouts/Base.astro';
 ---
 
 <Base title="生活">
-  <div class="container" data-fade>
+  <div class="container measure" data-fade>
     <h1>生活记录</h1>
-    <p class="text-muted">（这里以后会按时间倒序列出）</p>
+    <p>生活的内容已整理到 <a href="/photos/" class="inline-link">照片</a> 页面。</p>
   </div>
 </Base>
+
+<style>
+  .inline-link {
+    color: var(--color-fg);
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 1px;
+  }
+  .inline-link:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+</style>

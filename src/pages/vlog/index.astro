@@ -1,10 +1,66 @@
 ---
 import Base from '../../layouts/Base.astro';
+
+const clips = [
+  { src: '/vlog/vlog-01.mp4', label: '2026.06.20' },
+  { src: '/vlog/vlog-02.mp4', label: '2026.06.20' },
+];
 ---
 
 <Base title="vlog">
-  <div class="container" data-fade>
-    <h1>vlog</h1>
-    <p class="text-muted">（这里以后会嵌入视频）</p>
-  </div>
+  <article class="container vlog-page">
+    <header class="vlog-header" data-fade>
+      <h1>vlog</h1>
+      <p class="text-muted text-sm">短，长，慢。</p>
+    </header>
+
+    <div class="vlog-list">
+      {clips.map((clip, i) => (
+        <section class="vlog-item" data-fade>
+          <p class="vlog-label">{clip.label}</p>
+          <div class="vlog-player">
+            <video
+              controls
+              preload="metadata"
+              playsinline
+              src={clip.src}
+            >
+              您的浏览器不支持视频播放。
+            </video>
+          </div>
+        </section>
+      ))}
+    </div>
+  </article>
 </Base>
+
+<style>
+  .vlog-header {
+    padding-block: var(--space-4) var(--space-8);
+  }
+
+  .vlog-header h1 {
+    margin-bottom: var(--space-2);
+  }
+
+  .vlog-item {
+    margin-bottom: var(--space-8);
+    max-width: var(--measure);
+  }
+
+  .vlog-label {
+    font-size: var(--text-xs);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-fg-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .vlog-player video {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid var(--color-rule);
+    background: #000;
+  }
+</style>
