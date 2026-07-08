@@ -1,0 +1,88 @@
+---
+import Base from '../layouts/Base.astro';
+
+// 内容来源：content/index.json（首页内容）
+// 你以后改首页内容，只改这个 JSON 文件就行
+import sections from '../content/index.json';
+---
+
+<Base title="思想名片" description="一个安静的小站">
+  <section class="hero container" data-fade>
+    <p class="hero-eyebrow">Sacha Yan · Shenzhen</p>
+    <h1 class="hero-title">
+      主动的事，在做了。
+    </h1>
+    <p class="hero-sub">
+      季度更新。慢慢来。
+    </p>
+  </section>
+
+  <div class="container">
+    {sections.map((section, i) => (
+      <article class="block" class:list={[{ 'block-with-image': section.image }, { 'is-first': i === 0 }]} data-fade>
+        <p class="block-eyebrow">{section.eyebrow}</p>
+        <h2 class="block-title">{section.title}</h2>
+        {section.sub && <p class="block-sub">{section.sub}</p>}
+        {section.image && (
+          <figure class="block-figure">
+            <img
+              src={section.image}
+              alt={section.image_alt || ''}
+              loading={i < 2 ? 'eager' : 'lazy'}
+            />
+          </figure>
+        )}
+        {section.cta && (
+          <a href={section.cta.href} class="block-cta">
+            {section.cta.label}
+          </a>
+        )}
+      </article>
+    ))}
+  </div>
+</Base>
+
+<style>
+  .hero-eyebrow {
+    font-size: var(--text-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-fg-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .hero-title {
+    font-size: 3.25rem;  /* 52px — SJA 是 47px，比 SJA 略大以容纳中文字形 */
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-tight);
+    max-width: 12ch;
+    margin-bottom: var(--space-3);
+  }
+
+  .hero-sub {
+    font-size: var(--text-sm);
+    color: var(--color-fg-muted);
+  }
+
+  .block-figure {
+    margin: var(--space-4) 0;
+    width: 100%;
+    max-width: 480px;
+  }
+  .block-figure img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--color-rule);
+    display: block;
+  }
+
+  @media (max-width: 640px) {
+    .hero-title {
+      font-size: 2.25rem;  /* 36px */
+    }
+    .block-figure {
+      max-width: 100%;
+    }
+  }
+</style>

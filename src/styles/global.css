@@ -1,0 +1,515 @@
+/* ==========================================================================
+   全局样式 — 仿 Steve Jobs Archive 的克制感
+   核心原则：
+   - 纯白底、纯黑字、一种辅色（暖灰）
+   - 只用 6 个字号，2 个字重
+   - 留白单位用 8px 倍数
+   - 不用卡片阴影、不用圆角、不用 emoji
+   ========================================================================== */
+
+:root {
+  /* 颜色 — 极简三色 */
+  --color-bg: #ffffff;
+  --color-fg: #111111;
+  --color-fg-muted: #6b6b6b;
+  --color-fg-faint: #b8b8b8;
+  --color-rule: #e5e5e5;
+  --color-accent: #8b6f47; /* 暖棕褐色 — 比纯黑多一分温度 */
+
+  /* 字号 — 6 个就够 */
+  --text-xs: 0.75rem;   /* 12px — 元数据 */
+  --text-sm: 0.875rem;  /* 14px — 副标、标签 */
+  --text-base: 1rem;   /* 16px — 正文 */
+  --text-lg: 1.25rem;   /* 20px — 段落引文 */
+  --text-xl: 1.75rem;   /* 28px — 二级标题 */
+  --text-2xl: 2.5rem;   /* 40px — 一级标题 */
+  --text-3xl: 4rem;     /* 64px — hero */
+
+  /* 字重 — 只用两个 */
+  --weight-regular: 400;
+  --weight-medium: 500;
+
+  /* 间距 — 8px 倍数 */
+  --space-1: 0.5rem;    /* 8 */
+  --space-2: 1rem;      /* 16 */
+  --space-3: 1.5rem;    /* 24 */
+  --space-4: 2rem;      /* 32 */
+  --space-6: 3rem;      /* 48 */
+  --space-8: 4rem;      /* 64 */
+  --space-12: 6rem;     /* 96 */
+  --space-16: 8rem;     /* 128 */
+  --space-20: 10rem;    /* 160 */
+
+  /* 行高 */
+  --leading-tight: 1.15;
+  --leading-normal: 1.55;
+  --leading-loose: 1.7;
+
+  /* 字体栈 */
+  --font-display: 'Source Han Serif SC', 'Noto Serif SC', 'Songti SC',
+    Georgia, 'Times New Roman', serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+
+  /* 容器宽度 */
+  --measure: 38rem;        /* 单列阅读宽度 */
+  --container: 72rem;      /* 内容容器 */
+}
+
+/* ===== reset ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  font-weight: var(--weight-regular);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition:
+    opacity 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 普通链接 hover：仅透明度
+   nav-link / block-cta / footer-link 有自己的 hover 样式，
+   这里的全局规则不应盖住它们。 */
+a:not(.nav-link):not(.block-cta):not(.footer-link):not(.logo):hover {
+  opacity: 0.6;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ===== 通用工具类 ===== */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--space-3);
+}
+
+.measure {
+  max-width: var(--measure);
+}
+
+/* ===== 跳到内容（无障碍）===== */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--space-2);
+  background: var(--color-fg);
+  color: var(--color-bg);
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-sm);
+  z-index: 100;
+}
+.skip-link:focus {
+  top: var(--space-2);
+}
+
+/* ===== 头部 ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid transparent;
+  transition: border-color 200ms ease;
+}
+
+.site-header.is-scrolled {
+  border-bottom-color: var(--color-rule);
+}
+
+/* 兜底：不支持 backdrop-filter 的浏览器用纯白 */
+@supports not (backdrop-filter: blur(1px)) {
+  .site-header {
+    background: var(--color-bg);
+  }
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.logo-mark {
+  display: inline-block;
+  width: 18px;
+  height: 24px;
+  background: var(--color-fg);
+  /* 简化的人形剪影：圆头 + 钟形身体
+     不加任何修饰符号 */
+  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  position: relative;
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.logo-mark::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 10px;
+  background: var(--color-fg);
+  border-radius: 0 0 12px 12px / 0 0 10px 10px;
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.logo:hover .logo-mark {
+  transform: translateY(-2px) scale(1.08);
+}
+.logo:hover .logo-mark::after {
+  transform: translateX(-50%) scaleX(1.1);
+}
+
+.site-nav ul {
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.nav-link {
+  color: var(--color-fg);
+  letter-spacing: 0.01em;
+  position: relative;
+  padding-bottom: 2px;
+  transition: color 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--color-fg);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-link:hover {
+  opacity: 1;
+  color: var(--color-accent);
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+  background: var(--color-accent);
+}
+.nav-link.is-active {
+  color: var(--color-accent);
+}
+.nav-link.is-active::after {
+  transform: scaleX(1);
+  background: var(--color-accent);
+}
+
+/* ===== 主体 ===== */
+.site-main {
+  flex: 1;
+  padding-block: var(--space-12) var(--space-16);
+}
+
+/* ===== 页脚 ===== */
+.site-footer {
+  border-top: 1px solid var(--color-rule);
+  padding: var(--space-6) var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--color-fg-muted);
+}
+
+.footer-row {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  margin-bottom: var(--space-2);
+}
+
+.footer-row-meta {
+  justify-content: space-between;
+  max-width: var(--container);
+  margin-inline: auto;
+}
+
+.footer-link {
+  color: var(--color-fg-muted);
+}
+.footer-link:hover {
+  color: var(--color-fg);
+  opacity: 1;
+}
+
+/* ===== 排版 ===== */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  color: var(--color-fg);
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-4);
+}
+
+h2 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-3);
+}
+
+h3 {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-2);
+}
+
+p {
+  font-size: var(--text-base);
+  line-height: var(--leading-loose);
+  color: var(--color-fg);
+}
+
+p + p {
+  margin-top: var(--space-3);
+}
+
+.text-muted {
+  color: var(--color-fg-muted);
+}
+
+.text-sm {
+  font-size: var(--text-sm);
+}
+
+.text-xs {
+  font-size: var(--text-xs);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.rule {
+  border: 0;
+  border-top: 1px solid var(--color-rule);
+  margin: var(--space-8) 0;
+}
+
+/* ===== hero（首页大标题）===== */
+.hero {
+  padding-block: var(--space-12) var(--space-16);
+}
+
+.hero-title {
+  font-size: var(--text-2xl);
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  max-width: 24ch;
+  margin-bottom: var(--space-6);
+}
+
+.hero-meta {
+  font-size: var(--text-sm);
+  color: var(--color-fg-muted);
+}
+
+/* ===== 内容块（SJA 风格的统一模板）===== */
+.block {
+  margin-bottom: var(--space-12);
+}
+
+.block-eyebrow {
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+  margin-bottom: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-rule);
+}
+
+.block-title {
+  font-size: var(--text-xl);
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  margin-bottom: var(--space-2);
+}
+
+.block-sub {
+  font-size: var(--text-sm);
+  color: var(--color-fg-muted);
+  margin-bottom: var(--space-3);
+}
+
+.block-cta {
+  font-size: var(--text-sm);
+  color: var(--color-fg);
+  border-bottom: 1px solid var(--color-fg);
+  padding-bottom: 2px;
+}
+.block-cta:hover {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+  opacity: 1;
+}
+
+/* ===== fade-in 动效 =====
+   设计选择：
+   1. 初始 opacity 0.001 而非 0 — 爬虫/JS 失败仍能看到内容
+   2. 同时 translateY(8px) — 给"从下浮起"的方向感（仅 8px，很克制）
+   3. 时长 1200ms，缓动 cubic-bezier(0.16, 1, 0.3, 1) — 慢启动慢收尾
+   4. 触发阈值 -5% — 比 SJA 早一屏，让用户能看到过程 */
+[data-fade] {
+  opacity: 0.001;
+  transform: translateY(8px);
+  transition:
+    opacity 1200ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1200ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+[data-fade].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 减少动效偏好（无障碍） */
+@media (prefers-reduced-motion: reduce) {
+  [data-fade],
+  a,
+  .site-header,
+  .logo-mark,
+  .nav-link,
+  .block-cta,
+  .footer-link {
+    transition: none !important;
+    transform: none !important;
+  }
+  [data-fade] {
+    opacity: 1 !important;
+  }
+}
+
+/* ===== 响应式 =====
+   移动端策略：
+   - 视口窄到 640px 时，靠左 + 大留白会让"右边空一半"
+     所以 hero 和 block-title 改为居中（保留节奏，不影响可读性）
+   - 间距统一缩小一档
+   - nav 允许横向滚动而不是挤压换行
+*/
+@media (max-width: 640px) {
+  :root {
+    --text-2xl: 1.75rem;   /* 28px */
+    --text-xl: 1.5rem;     /* 24px */
+    --text-3xl: 2.5rem;
+    --space-12: 4rem;      /* 96 → 64 */
+    --space-16: 6rem;      /* 128 → 96 */
+  }
+
+  .site-header {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  /* nav 在窄屏允许横向滚动，避免挤压换行 */
+  .site-nav {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-right: calc(-1 * var(--space-3));
+    padding-right: var(--space-3);
+  }
+  .site-nav::-webkit-scrollbar { display: none; }
+  .site-nav ul {
+    gap: var(--space-3);
+    flex-wrap: nowrap;
+  }
+
+  .site-main {
+    padding-block: var(--space-8) var(--space-12);
+  }
+
+  .hero {
+    padding-block: var(--space-6) var(--space-8);
+    text-align: center;
+  }
+  .hero-title {
+    margin-inline: auto;
+  }
+
+  /* block 标题在窄屏居中——避免大留白时右边空一大块 */
+  .block {
+    text-align: left;
+  }
+  .block-title {
+    text-align: left;
+  }
+  .block-eyebrow {
+    letter-spacing: 0.08em;
+  }
+
+  /* 段落和列表的左边距收紧 */
+  .project-section,
+  .container .measure {
+    padding-inline: 0;
+  }
+  .project-list {
+    padding-left: var(--space-2);
+  }
+
+  /* footer 文字不挤在一起 */
+  .footer-row {
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+}
