@@ -2,19 +2,77 @@
 import Base from '../layouts/Base.astro';
 ---
 
-<Base title="关于">
-  <div class="container measure" data-fade>
-    <h1>关于这个站</h1>
+<Base title="关于 — 思想名片" description="闫树成 · 华为零售产品管理 · 南京">
+  <article class="container measure about-page" data-fade>
+    <h1 class="about-name">闫树成</h1>
+    <p class="about-role">华为 · 零售产品管理 · 南京</p>
+    <hr class="rule" />
+
     <p>
-      这里是我个人项目的家。我做的工作不一定和这些项目相关，
-      但这些项目定义了我下班后在想什么。
+      在做的事：把 AI 用到零售门店的真实场景里——销售助手、线索管理、店长看板。
     </p>
     <p>
-      站点设计参考 Steve Jobs Archive —— 少、对、真。字体尽量用系统默认，
-      动效只在有意义的时候出现。
+      下班后在做的事：写点东西、拍点东西、搭这个站。<br />
+      之前做过一套花艺课程表海报自动生成工具——改一个日期，全表 30+ 处自动更新。
     </p>
-    <p class="text-muted" style="margin-top: var(--space-6);">
-      想联系：sacharn@163.com
+    <p>
+      这个站叫思想名片，是我对外的一张数字卡片。<br />
+      设计想去掉所有不必要的修饰——纯白、衬线字、大留白、慢动效。
     </p>
-  </div>
+
+    <hr class="rule" />
+
+    <p class="text-sm">联系</p>
+    <ul class="contact-list">
+      <li>邮箱：<a href="mailto:sacharn@163.com" class="contact-link">sacharn@163.com</a></li>
+      <li>GitHub：<a href="https://github.com/SacharnYan" class="contact-link" target="_blank" rel="noopener">SacharnYan</a></li>
+    </ul>
+  </article>
 </Base>
+
+<style>
+  .about-page {
+    padding-top: var(--space-4);
+  }
+
+  .about-name {
+    font-size: var(--text-2xl);
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-1);
+  }
+
+  .about-role {
+    font-size: var(--text-sm);
+    color: var(--color-fg-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .about-page p {
+    margin-bottom: var(--space-3);
+    line-height: var(--leading-loose);
+  }
+
+  .contact-list {
+    margin-top: var(--space-2);
+  }
+
+  .contact-list li {
+    font-size: var(--text-sm);
+    line-height: var(--leading-loose);
+    color: var(--color-fg-muted);
+  }
+
+  .contact-link {
+    color: var(--color-fg);
+    border-bottom: 1px solid var(--color-rule);
+    padding-bottom: 1px;
+    transition: color 200ms, border-color 200ms;
+  }
+
+  .contact-link:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+</style>

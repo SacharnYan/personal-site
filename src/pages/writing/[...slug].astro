@@ -1,0 +1,121 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const fmt = (d) => {
+  const date = new Date(d);
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+};
+
+export async function getStaticPaths() {
+  const articles = await getCollection('writing', ({ data }) => !data.draft);
+  return articles.map(article => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await article.render();
+---
+
+<Base
+  title={`${article.data.title} — 写作`}
+  description={article.data.description || article.data.title}
+>
+  <article class="container measure article-page" data-fade>
+    <header class="article-header">
+      <p class="article-date">{fmt(article.data.date)}</p>
+      <h1 class="article-title">{article.data.title}</h1>
+      {article.data.tags && (
+        <div class="article-tags">
+          {article.data.tags.map(tag => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <hr class="rule" />
+
+    <div class="article-body">
+      <Content />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .article-page {
+    padding-top: var(--space-4);
+  }
+
+  .article-header {
+    margin-bottom: var(--space-4);
+  }
+
+  .article-date {
+    font-size: var(--text-xs);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-fg-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .article-header .article-title {
+    font-size: var(--text-xl);
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-2);
+  }
+
+  .article-tags {
+    display: flex;
+    gap: var(--space-1);
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: var(--text-xs);
+    letter-spacing: 0.03em;
+    color: var(--color-fg-muted);
+    border: 1px solid var(--color-rule);
+    padding: 2px 8px;
+  }
+
+  .article-body {
+    line-height: var(--leading-loose);
+  }
+
+  .article-body h2 {
+    font-size: var(--text-lg);
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-2);
+  }
+
+  .article-body h3 {
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-1);
+  }
+
+  .article-body p {
+    margin-bottom: var(--space-3);
+    line-height: var(--leading-loose);
+  }
+
+  .article-body ul,
+  .article-body ol {
+    margin-bottom: var(--space-3);
+    padding-left: var(--space-3);
+  }
+
+  .article-body li {
+    line-height: var(--leading-loose);
+    margin-bottom: var(--space-1);
+    list-style: disc;
+  }
+</style>
