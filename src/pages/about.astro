@@ -20,15 +20,9 @@ import Base from '../layouts/Base.astro';
       设计想去掉所有不必要的修饰——纯白、衬线字、大留白、慢动效。
     </p>
 
-    <hr class="rule" />
-
-    <ul class="personal-tags">
-      <li>INFJ · 绿老头</li>
-      <li>南京</li>
-      <li>做产品、写东西、拍东西</li>
-    </ul>
-
-    <hr class="rule" />
+    <p class="about-persona">
+      INFJ · 绿老头 · 在南京做产品、写东西、拍东西
+    </p>
 
     <p class="text-sm">联系</p>
     <ul class="contact-list">
@@ -84,14 +78,7 @@ import Base from '../layouts/Base.astro';
     border-bottom-color: var(--color-accent);
   }
 
-  .personal-tags {
-    list-style: none;
-    display: flex;
-    gap: var(--space-3);
-    flex-wrap: wrap;
-  }
-
-  .personal-tags li {
+  .about-persona {
     font-size: var(--text-sm);
     color: var(--color-fg-muted);
     letter-spacing: 0.02em;
