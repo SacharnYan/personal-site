@@ -22,6 +22,14 @@ import Base from '../layouts/Base.astro';
 
     <hr class="rule" />
 
+    <ul class="personal-tags">
+      <li>INFJ · 绿老头</li>
+      <li>南京</li>
+      <li>做产品、写东西、拍东西</li>
+    </ul>
+
+    <hr class="rule" />
+
     <p class="text-sm">联系</p>
     <ul class="contact-list">
       <li>邮箱：<a href="mailto:sacharn@163.com" class="contact-link">sacharn@163.com</a></li>
@@ -74,5 +82,18 @@ import Base from '../layouts/Base.astro';
   .contact-link:hover {
     color: var(--color-accent);
     border-bottom-color: var(--color-accent);
+  }
+
+  .personal-tags {
+    list-style: none;
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .personal-tags li {
+    font-size: var(--text-sm);
+    color: var(--color-fg-muted);
+    letter-spacing: 0.02em;
   }
 </style>
