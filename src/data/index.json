@@ -14,21 +14,24 @@
     "cta": { "href": "/writing/home/", "label": "读全文" }
   },
   {
+    "type": "photos",
     "eyebrow": "Photos",
-    "title": "照片",
-    "sub": "用眼睛收集到的安静时刻。",
-    "cta": { "href": "/photos/", "label": "看照片" }
+    "title": "用眼睛收集到的安静时刻",
+    "images": [
+      "/photos/photo-01.jpg",
+      "/photos/photo-02.jpg",
+      "/photos/photo-03.jpg",
+      "/photos/photo-04.jpg",
+      "/photos/photo-05.jpg",
+      "/photos/photo-06.jpg"
+    ],
+    "cta": { "href": "/photos/", "label": "全部照片" }
   },
   {
+    "type": "video",
     "eyebrow": "Vlog",
-    "title": "vlog",
-    "sub": "视频记录。短，长，慢。",
-    "cta": { "href": "/vlog/", "label": "看视频" }
-  },
-  {
-    "eyebrow": "Life",
-    "title": "生活记录",
-    "sub": "在做的事，去过的地方，遇见的人。",
-    "cta": { "href": "/life/", "label": "看生活" }
+    "title": "短，长，慢。",
+    "video_src": "/vlog/vlog-01.mp4",
+    "cta": { "href": "/vlog/", "label": "更多视频" }
   }
 ]

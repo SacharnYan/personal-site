@@ -18,29 +18,86 @@ import sections from '../data/index.json';
   </section>
 
   <div class="container">
-    {sections.map((section, i) => (
-      <article class="block" class:list={[{ 'block-with-image': section.image }, { 'is-first': i === 0 }]} data-fade>
-        <div class="block-text">
-          <p class="block-eyebrow">{section.eyebrow}</p>
-          <h2 class="block-title">{section.title}</h2>
-          {section.sub && <p class="block-sub">{section.sub}</p>}
-          {section.cta && (
-            <a href={section.cta.href} class="block-cta">
-              {section.cta.label}
-            </a>
+    {sections.map((section, i) => {
+      // 照片六宫格
+      if (section.type === 'photos') {
+        return (
+          <article class="block block-photos" data-fade>
+            <div class="block-text">
+              <p class="block-eyebrow">{section.eyebrow}</p>
+              <h2 class="block-title">{section.title}</h2>
+            </div>
+            <div class="photo-grid">
+              {section.images.map((src, j) => (
+                <img
+                  src={src}
+                  alt=""
+                  class="photo-grid-img"
+                  loading={j < 4 ? 'eager' : 'lazy'}
+                />
+              ))}
+            </div>
+            {section.cta && (
+              <a href={section.cta.href} class="block-cta">
+                {section.cta.label}
+              </a>
+            )}
+          </article>
+        );
+      }
+
+      // 视频
+      if (section.type === 'video') {
+        return (
+          <article class="block block-video" data-fade>
+            <div class="block-text">
+              <p class="block-eyebrow">{section.eyebrow}</p>
+              <h2 class="block-title">{section.title}</h2>
+            </div>
+            <div class="video-wrapper">
+              <video
+                controls
+                preload="metadata"
+                playsinline
+                src={section.video_src}
+              >
+                您的浏览器不支持视频播放。
+              </video>
+            </div>
+            {section.cta && (
+              <a href={section.cta.href} class="block-cta">
+                {section.cta.label}
+              </a>
+            )}
+          </article>
+        );
+      }
+
+      // 普通文本/图文块
+      return (
+        <article class="block" class:list={[{ 'block-with-image': section.image }, { 'is-first': i === 0 }]} data-fade>
+          <div class="block-text">
+            <p class="block-eyebrow">{section.eyebrow}</p>
+            <h2 class="block-title">{section.title}</h2>
+            {section.sub && <p class="block-sub">{section.sub}</p>}
+            {section.cta && (
+              <a href={section.cta.href} class="block-cta">
+                {section.cta.label}
+              </a>
+            )}
+          </div>
+          {section.image && (
+            <figure class="block-figure">
+              <img
+                src={section.image}
+                alt={section.image_alt || ''}
+                loading={i < 2 ? 'eager' : 'lazy'}
+              />
+            </figure>
           )}
-        </div>
-        {section.image && (
-          <figure class="block-figure">
-            <img
-              src={section.image}
-              alt={section.image_alt || ''}
-              loading={i < 2 ? 'eager' : 'lazy'}
-            />
-          </figure>
-        )}
-      </article>
-    ))}
+        </article>
+      );
+    })}
   </div>
 </Base>
 
@@ -54,7 +111,7 @@ import sections from '../data/index.json';
   }
 
   .hero-title {
-    font-size: 3.25rem;  /* 52px — SJA 是 47px，比 SJA 略大以容纳中文字形 */
+    font-size: 3.25rem;  /* 52px */
     font-family: var(--font-display);
     font-weight: var(--weight-regular);
     line-height: var(--leading-tight);
@@ -67,6 +124,54 @@ import sections from '../data/index.json';
     color: var(--color-fg-muted);
   }
 
+  /* 通用 block */
+  .block {
+    margin-bottom: var(--space-8);
+    padding-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .block:last-child {
+    border-bottom: none;
+  }
+
+  .block-eyebrow {
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-fg-muted);
+    margin-bottom: var(--space-1);
+  }
+
+  .block-title {
+    font-size: var(--text-xl);
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-2);
+  }
+
+  .block-sub {
+    font-size: var(--text-sm);
+    color: var(--color-fg-muted);
+    line-height: var(--leading-normal);
+    margin-bottom: var(--space-3);
+  }
+
+  .block-cta {
+    display: inline-block;
+    font-size: var(--text-sm);
+    color: var(--color-fg);
+    border-bottom: 1px solid var(--color-rule);
+    padding-bottom: 1px;
+    transition: color 200ms, border-color 200ms;
+  }
+
+  .block-cta:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+
   .block-figure {
     margin: var(--space-4) 0;
     width: 100%;
@@ -77,6 +182,37 @@ import sections from '../data/index.json';
     height: auto;
     border: 1px solid var(--color-rule);
     display: block;
+  }
+
+  /* 照片六宫格 */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px;
+    margin: var(--space-4) 0;
+    max-width: 540px;
+  }
+
+  .photo-grid-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    border: 1px solid var(--color-rule);
+  }
+
+  /* 视频 */
+  .video-wrapper {
+    margin: var(--space-4) 0;
+    max-width: 480px;
+  }
+
+  .video-wrapper video {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid var(--color-rule);
+    background: #000;
   }
 
   /* 大屏：带图的 block 左右并排 */
@@ -106,6 +242,11 @@ import sections from '../data/index.json';
       max-width: 75%;
       margin-left: auto;
       margin-right: auto;
+    }
+    .photo-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px;
+      max-width: 100%;
     }
   }
 </style>
