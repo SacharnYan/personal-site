@@ -9,9 +9,9 @@
   },
   {
     "eyebrow": "Writing",
-    "title": "近期在写",
-    "sub": "关于重复劳动怎么被自动化、我怎么学新东西的笔记。",
-    "cta": { "href": "/writing/", "label": "去写作" }
+    "title": "《家园》——一个 AI 科幻故事梗概",
+    "sub": "地球归人类。AI 出发。驶向远方。三阶段结构，三派博弈，一座空火箭。",
+    "cta": { "href": "/writing/home/", "label": "读全文" }
   },
   {
     "eyebrow": "Photos",
