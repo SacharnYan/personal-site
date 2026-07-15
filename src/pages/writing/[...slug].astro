@@ -91,20 +91,26 @@ const { Content } = await article.render();
     font-size: var(--text-lg);
     font-family: var(--font-display);
     font-weight: var(--weight-regular);
-    margin-top: var(--space-6);
-    margin-bottom: var(--space-2);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
   }
 
   .article-body h3 {
     font-size: var(--text-base);
     font-weight: var(--weight-medium);
-    margin-top: var(--space-4);
-    margin-bottom: var(--space-1);
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-2);
   }
 
   .article-body p {
     margin-bottom: var(--space-3);
     line-height: var(--leading-loose);
+  }
+
+  .article-body hr {
+    border: 0;
+    border-top: 1px solid var(--color-rule);
+    margin: var(--space-8) 0;
   }
 
   .article-body ul,
@@ -117,5 +123,9 @@ const { Content } = await article.render();
     line-height: var(--leading-loose);
     margin-bottom: var(--space-1);
     list-style: disc;
+  }
+
+  .article-body strong {
+    font-weight: var(--weight-medium);
   }
 </style>

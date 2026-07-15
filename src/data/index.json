@@ -28,10 +28,8 @@
     "cta": { "href": "/photos/", "label": "全部照片" }
   },
   {
-    "type": "video",
     "eyebrow": "Vlog",
     "title": "短，长，慢。",
-    "video_src": "/vlog/vlog-01.mp4",
-    "cta": { "href": "/vlog/", "label": "更多视频" }
+    "cta": { "href": "/vlog/", "label": "看视频" }
   }
 ]

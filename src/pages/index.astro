@@ -46,33 +46,6 @@ import sections from '../data/index.json';
         );
       }
 
-      // 视频
-      if (section.type === 'video') {
-        return (
-          <article class="block block-video" data-fade>
-            <div class="block-text">
-              <p class="block-eyebrow">{section.eyebrow}</p>
-              <h2 class="block-title">{section.title}</h2>
-            </div>
-            <div class="video-wrapper">
-              <video
-                controls
-                preload="metadata"
-                playsinline
-                src={section.video_src}
-              >
-                您的浏览器不支持视频播放。
-              </video>
-            </div>
-            {section.cta && (
-              <a href={section.cta.href} class="block-cta">
-                {section.cta.label}
-              </a>
-            )}
-          </article>
-        );
-      }
-
       // 普通文本/图文块
       return (
         <article class="block" class:list={[{ 'block-with-image': section.image }, { 'is-first': i === 0 }]} data-fade>
@@ -128,11 +101,6 @@ import sections from '../data/index.json';
   .block {
     margin-bottom: var(--space-8);
     padding-bottom: var(--space-8);
-    border-bottom: 1px solid var(--color-rule);
-  }
-
-  .block:last-child {
-    border-bottom: none;
   }
 
   .block-eyebrow {
@@ -199,20 +167,6 @@ import sections from '../data/index.json';
     object-fit: cover;
     display: block;
     border: 1px solid var(--color-rule);
-  }
-
-  /* 视频 */
-  .video-wrapper {
-    margin: var(--space-4) 0;
-    max-width: 480px;
-  }
-
-  .video-wrapper video {
-    width: 100%;
-    height: auto;
-    display: block;
-    border: 1px solid var(--color-rule);
-    background: #000;
   }
 
   /* 大屏：带图的 block 左右并排 */
