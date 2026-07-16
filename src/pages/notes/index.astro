@@ -1,5 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
+import notes from '../../data/notes.json';
+
+const fmt = (d) => {
+  const date = new Date(d);
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+};
 ---
 
 <Base title="随记">
@@ -10,7 +16,19 @@ import Base from '../../layouts/Base.astro';
     </header>
 
     <div class="notes-list">
-      <p class="text-muted">还没有内容，但会有的。</p>
+      {notes.length === 0 && (
+        <p class="text-muted">还没有内容，但会有的。</p>
+      )}
+      {notes.map((note, i) => (
+        <section class="note-item" data-fade>
+          <p class="note-date">{fmt(note.date)}</p>
+          <div class="note-text">
+            {note.text.split('\n').filter(l => l.trim()).map(line => (
+              <p>{line.trim()}</p>
+            ))}
+          </div>
+        </section>
+      ))}
     </div>
   </article>
 </Base>
@@ -22,5 +40,23 @@ import Base from '../../layouts/Base.astro';
 
   .notes-header h1 {
     margin-bottom: var(--space-2);
+  }
+
+  .note-item {
+    margin-bottom: var(--space-8);
+    max-width: var(--measure);
+  }
+
+  .note-date {
+    font-size: var(--text-xs);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-fg-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .note-text p {
+    line-height: var(--leading-loose);
+    margin-bottom: var(--space-3);
   }
 </style>
