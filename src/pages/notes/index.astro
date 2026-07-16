@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+
+<Base title="随记">
+  <article class="container notes-page">
+    <header class="notes-header" data-fade>
+      <h1>随记</h1>
+      <p class="text-muted text-sm">随手记下的东西。短的，碎的，刚想到的。</p>
+    </header>
+
+    <div class="notes-list">
+      <p class="text-muted">还没有内容，但会有的。</p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .notes-header {
+    padding-block: var(--space-4) var(--space-8);
+  }
+
+  .notes-header h1 {
+    margin-bottom: var(--space-2);
+  }
+</style>

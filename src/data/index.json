@@ -29,5 +29,11 @@
     "eyebrow": "Vlog",
     "title": "短，长，慢。",
     "cta": { "href": "/vlog/", "label": "看视频" }
+  },
+  {
+    "eyebrow": "随记",
+    "title": "随手记下的东西",
+    "sub": "短的，碎的，刚想到的。",
+    "cta": { "href": "/notes/", "label": "去看看" }
   }
 ]
