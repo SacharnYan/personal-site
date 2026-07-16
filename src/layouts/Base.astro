@@ -11,7 +11,7 @@ interface Props {
   image?: string;   // OG 图片路径，默认 /photos/photo-01.jpg
 }
 
-const { title, description = '思想名片', image = '/photos/photo-01.jpg' } = Astro.props;
+const { title, description = '思想名片', image = '/og-default.jpg' } = Astro.props;
 const url = Astro.url;
 const siteName = '思想名片';
 const ogImage = url.origin + image;
