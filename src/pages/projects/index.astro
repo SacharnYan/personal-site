@@ -5,83 +5,62 @@ import Base from '../../layouts/Base.astro';
 <Base title="花艺课程表海报自动生成工具">
   <article class="container" data-fade>
     <header class="project-header">
-      <p class="block-eyebrow">Tool · 2026 · 在用</p>
+      <p class="block-eyebrow">Tool · 2026</p>
       <h1 class="project-title">
-        为花艺工作室做的一套课程表海报生成工具。
+        花艺课程表海报，从 4 小时缩到 1 分钟。
       </h1>
       <p class="project-sub">
-        改一个日期，全表 30+ 处自动更新。
+        为有花可期工作室做的一张小工具。改一处，整张海报自动跟着变。
       </p>
     </header>
 
-    <!-- ===== 背景 ===== -->
     <section class="project-section" data-fade>
-      <p class="block-eyebrow">背景</p>
+      <p class="block-eyebrow">问题</p>
       <p>
-        U-FLOWER 有花可期工作室有两套花艺培训体系：
-        <strong>零基础创业班</strong>（10 天 / 5 章 / 43+ 课）
-        和 <strong>创业全能班</strong>（12 天 / 6 章 / 55+ 课）。
+        工作室有两套花艺课程：零基础创业班和创业全能班。每次开新课，都要重做两张课程表海报发出去。
       </p>
       <p>
-        每次开新一期，需要重新排版两张海报发到学员群、朋友圈、小红书。
-        手工用 PPT 或 Canva 做，一张要 2-4 小时，<strong>两张就是 4-8 小时</strong>。
-      </p>
-      <p>
-        而且最容易出错的是：<strong>改一个日期忘改另一个</strong>。每张海报里有
-        30+ 处日期标注、5-6 个章节标题、100+ 个技能点，全靠人工对照。
+        之前用 PPT 或 Canva 做，一张海报 2-4 小时，两张就是半天。更麻烦的是每张海报里有 30 多处日期、5-6 个章节标题、100 多个技能点，改一处常常忘了另一处。
       </p>
     </section>
 
-    <!-- ===== 解决什么 ===== -->
     <section class="project-section" data-fade>
-      <p class="block-eyebrow">解决什么</p>
+      <p class="block-eyebrow">做法</p>
       <p>
-        抽离出"数据"和"模板"两个概念。设计师只负责定版式，
-        运营/讲师只负责改数据。<strong>改一处，全表自动同步</strong>。
+        把“内容”和“版式”分开。版式定好一次，以后只改数据。
       </p>
-      <ul class="project-list">
-        <li>改一个日期 → 全表 30+ 处日期自动更新</li>
-        <li>改一个章节名 → 章号 I/II/III/IV/V/VI 自动重排</li>
-        <li>改一个技能点 → 行高、间距、字体都自动重算</li>
-        <li>两套体系 70% 内容相同 → 共用一份数据源</li>
-      </ul>
+      <p>
+        运营改一个开课日期，全表 30 多处日期一起更新；改一个章节名，罗马序号自动重排；两套课程共用一份数据源，重复内容不用抄两遍。
+      </p>
     </section>
 
-    <!-- ===== 两张海报展示 ===== -->
     <section class="project-section" data-fade>
-      <p class="block-eyebrow">成果</p>
-      <p>两套体系的最终成片：</p>
+      <p class="block-eyebrow">结果</p>
+      <p>两张海报从 4-8 小时变成 1 分钟。保存即可发。</p>
 
       <figure class="project-figure">
         <img
           src="/projects/floral-schedule/01-zero-baseline.jpg"
-          alt="零基础创业班课程表海报，红色主调，10 天 5 章 43+ 课"
+          alt="零基础创业班课程表海报"
           loading="lazy"
         />
-        <figcaption>零基础创业班 · 10 天 / 5 章 / 43+ 课 · 纯花艺</figcaption>
+        <figcaption>零基础创业班 · 10 天 / 5 章 / 43+ 课</figcaption>
       </figure>
 
       <figure class="project-figure">
         <img
           src="/projects/floral-schedule/02-all-in-one.jpg"
-          alt="创业全能班课程表海报，绿色主调，12 天 6 章 55+ 课"
+          alt="创业全能班课程表海报"
           loading="lazy"
         />
-        <figcaption>创业全能班 · 12 天 / 6 章 / 55+ 课 · 花艺 + 气球双技能</figcaption>
+        <figcaption>创业全能班 · 12 天 / 6 章 / 55+ 课 · 花艺 + 气球</figcaption>
       </figure>
     </section>
 
-    <!-- ===== 还没解决的 ===== -->
     <section class="project-section" data-fade>
       <p class="block-eyebrow">下一步</p>
       <p>
-        现在的形态是个工具，<strong>不是产品</strong>。能用、好用，
-        但只有工作室内部少数人在用。
-        还在想：这类"重复劳动自动化"工具，到底值不值得做成
-        一个可以给所有花艺/教培/餐饮商家用的产品？
-      </p>
-      <p class="text-muted text-sm" style="margin-top: var(--space-3);">
-        如果你也在琢磨"自己工作的哪部分可以自动化"，欢迎聊聊。
+        现在它只是一个内部工具，不是产品。我还在想：这种“重复劳动自动化”的小工具，能不能做成让更多花艺、教培、餐饮商家都能用的东西？
       </p>
     </section>
   </article>
@@ -120,25 +99,6 @@ import Base from '../../layouts/Base.astro';
 
   .project-section p strong {
     font-weight: var(--weight-medium);
-  }
-
-  .project-list {
-    margin-top: var(--space-3);
-    padding-left: var(--space-3);
-  }
-  .project-list li {
-    font-size: var(--text-base);
-    line-height: var(--leading-loose);
-    color: var(--color-fg);
-    list-style: none;
-    position: relative;
-    padding-left: var(--space-3);
-  }
-  .project-list li::before {
-    content: '—';
-    position: absolute;
-    left: 0;
-    color: var(--color-fg-muted);
   }
 
   .project-figure {
