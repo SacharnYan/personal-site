@@ -50,7 +50,7 @@ const { Content } = await article.render();
   }
 
   .article-header {
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-6);
   }
 
   .article-date {
@@ -58,15 +58,15 @@ const { Content } = await article.render();
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--color-fg-muted);
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-3);
   }
 
   .article-header .article-title {
-    font-size: var(--text-xl);
+    font-size: var(--text-2xl);
     font-family: var(--font-display);
     font-weight: var(--weight-regular);
     line-height: var(--leading-tight);
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-3);
   }
 
   .article-tags {
@@ -84,48 +84,63 @@ const { Content } = await article.render();
   }
 
   .article-body {
+    font-family: var(--font-display);
     line-height: var(--leading-loose);
   }
 
   .article-body h2 {
-    font-size: var(--text-lg);
+    font-size: var(--text-xl);
     font-family: var(--font-display);
     font-weight: var(--weight-regular);
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .article-body h3 {
+    font-size: var(--text-lg);
+    font-family: var(--font-display);
+    font-weight: var(--weight-medium);
     margin-top: var(--space-8);
     margin-bottom: var(--space-3);
   }
 
-  .article-body h3 {
-    font-size: var(--text-base);
-    font-weight: var(--weight-medium);
-    margin-top: var(--space-6);
-    margin-bottom: var(--space-2);
-  }
-
   .article-body p {
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
     line-height: var(--leading-loose);
   }
 
   .article-body hr {
     border: 0;
     border-top: 1px solid var(--color-rule);
-    margin: var(--space-8) 0;
+    margin: var(--space-12) 0;
   }
 
   .article-body ul,
   .article-body ol {
-    margin-bottom: var(--space-3);
-    padding-left: var(--space-3);
+    margin-bottom: var(--space-4);
+    padding-left: var(--space-4);
   }
 
   .article-body li {
     line-height: var(--leading-loose);
-    margin-bottom: var(--space-1);
+    margin-bottom: var(--space-2);
     list-style: disc;
   }
 
   .article-body strong {
     font-weight: 600;
+  }
+
+  .article-body blockquote {
+    border-left: 2px solid var(--color-rule);
+    padding-left: var(--space-3);
+    margin: var(--space-6) 0;
+    color: var(--color-fg-muted);
+  }
+
+  .article-body blockquote p {
+    margin-bottom: var(--space-2);
   }
 </style>
