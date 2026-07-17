@@ -1,8 +1,8 @@
 /* ==========================================================================
    全局样式 — 仿 Steve Jobs Archive 的克制感
    核心原则：
-   - 纯白底、纯黑字、一种辅色（暖灰）
-   - 只用 6 个字号，2 个字重
+   - 纯白底、纯黑字、暖灰辅色
+   - 字号克制，行距透气
    - 留白单位用 8px 倍数
    - 不用卡片阴影、不用圆角、不用 emoji
    ========================================================================== */
@@ -14,22 +14,22 @@
   --color-fg-muted: #6b6b6b;
   --color-fg-faint: #b8b8b8;
   --color-rule: #e5e5e5;
-  --color-accent: #8b6f47; /* 暖棕褐色 — 比纯黑多一分温度 */
+  --color-accent: #8b6f47; /* 暖棕褐色 */
 
-  /* 字号 — 6 个就够 */
-  --text-xs: 0.75rem;   /* 12px — 元数据 */
-  --text-sm: 0.875rem;  /* 14px — 副标、标签 */
-  --text-base: 1rem;   /* 16px — 正文 */
-  --text-lg: 1.25rem;   /* 20px — 段落引文 */
-  --text-xl: 1.75rem;   /* 28px — 二级标题 */
-  --text-2xl: 2.5rem;   /* 40px — 一级标题 */
-  --text-3xl: 4rem;     /* 64px — hero */
+  /* 字号 */
+  --text-xs: 0.75rem;   /* 12px */
+  --text-sm: 0.875rem;  /* 14px */
+  --text-base: 1rem;   /* 16px */
+  --text-lg: 1.25rem;   /* 20px */
+  --text-xl: 1.75rem;   /* 28px */
+  --text-2xl: 2.5rem;   /* 40px */
+  --text-3xl: 4rem;     /* 64px */
 
-  /* 字重 — 只用两个 */
+  /* 字重 */
   --weight-regular: 400;
   --weight-medium: 500;
 
-  /* 间距 — 8px 倍数 */
+  /* 间距 */
   --space-1: 0.5rem;    /* 8 */
   --space-2: 1rem;      /* 16 */
   --space-3: 1.5rem;    /* 24 */
@@ -53,8 +53,8 @@
     'Helvetica Neue', Arial, sans-serif;
 
   /* 容器宽度 */
-  --measure: 38rem;        /* 单列阅读宽度 */
-  --container: 72rem;      /* 内容容器 */
+  --measure: 38rem;
+  --container: 72rem;
 }
 
 /* ===== reset ===== */
@@ -87,7 +87,8 @@ body {
 }
 
 img,
-svg {
+svg,
+video {
   max-width: 100%;
   display: block;
 }
@@ -100,10 +101,7 @@ a {
     color 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* 普通链接 hover：仅透明度
-   nav-link / block-cta / footer-link 有自己的 hover 样式，
-   这里的全局规则不应盖住它们。 */
-a:not(.nav-link):not(.block-cta):not(.footer-link):not(.logo):hover {
+a:not(.nav-link):not(.block-cta):not(.footer-link):not(.footer-button):not(.logo):not(.skip-link):hover {
   opacity: 0.6;
 }
 
@@ -167,7 +165,6 @@ button {
   border-bottom-color: var(--color-rule);
 }
 
-/* 兜底：不支持 backdrop-filter 的浏览器用纯白 */
 @supports not (backdrop-filter: blur(1px)) {
   .site-header {
     background: var(--color-bg);
@@ -185,8 +182,6 @@ button {
   width: 18px;
   height: 24px;
   background: var(--color-fg);
-  /* 简化的人形剪影：圆头 + 钟形身体
-     不加任何修饰符号 */
   border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
   position: relative;
   transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -256,15 +251,52 @@ button {
 /* ===== 主体 ===== */
 .site-main {
   flex: 1;
-  padding-block: var(--space-12) var(--space-16);
+  padding-top: var(--space-4);
 }
 
 /* ===== 页脚 ===== */
 .site-footer {
   border-top: 1px solid var(--color-rule);
-  padding: var(--space-6) var(--space-4);
-  font-size: var(--text-xs);
+  padding: var(--space-8) var(--space-4) var(--space-6);
+  font-size: var(--text-sm);
   color: var(--color-fg-muted);
+  text-align: center;
+}
+
+.footer-newsletter {
+  max-width: 520px;
+  margin-inline: auto;
+  margin-bottom: var(--space-6);
+}
+
+.footer-newsletter-text {
+  font-size: var(--text-xl);
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  color: var(--color-fg);
+  margin-bottom: var(--space-4);
+}
+
+.footer-button {
+  display: inline-block;
+  border: 1px solid var(--color-fg);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-fg);
+  transition: background 200ms, color 200ms;
+}
+.footer-button:hover {
+  background: var(--color-fg);
+  color: var(--color-bg);
+  opacity: 1;
+}
+
+.footer-divider {
+  border-top: 1px solid var(--color-rule);
+  max-width: var(--container);
+  margin-inline: auto;
+  margin-bottom: var(--space-6);
 }
 
 .footer-row {
@@ -272,12 +304,12 @@ button {
   gap: var(--space-4);
   justify-content: center;
   margin-bottom: var(--space-2);
+  flex-wrap: wrap;
 }
 
 .footer-row-meta {
-  justify-content: space-between;
-  max-width: var(--container);
-  margin-inline: auto;
+  color: var(--color-fg-faint);
+  font-size: var(--text-xs);
 }
 
 .footer-link {
@@ -345,71 +377,7 @@ p + p {
   margin: var(--space-8) 0;
 }
 
-/* ===== hero（首页大标题）===== */
-.hero {
-  padding-block: var(--space-12) var(--space-16);
-}
-
-.hero-title {
-  font-size: var(--text-2xl);
-  font-family: var(--font-display);
-  font-weight: var(--weight-regular);
-  line-height: var(--leading-tight);
-  max-width: 24ch;
-  margin-bottom: var(--space-6);
-}
-
-.hero-meta {
-  font-size: var(--text-sm);
-  color: var(--color-fg-muted);
-}
-
-/* ===== 内容块（SJA 风格的统一模板）===== */
-.block {
-  margin-bottom: var(--space-12);
-}
-
-.block-eyebrow {
-  font-size: var(--text-xs);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-fg-muted);
-  margin-bottom: var(--space-2);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--color-rule);
-}
-
-.block-title {
-  font-size: var(--text-xl);
-  font-family: var(--font-display);
-  font-weight: var(--weight-regular);
-  margin-bottom: var(--space-2);
-}
-
-.block-sub {
-  font-size: var(--text-sm);
-  color: var(--color-fg-muted);
-  margin-bottom: var(--space-3);
-}
-
-.block-cta {
-  font-size: var(--text-sm);
-  color: var(--color-fg);
-  border-bottom: 1px solid var(--color-fg);
-  padding-bottom: 2px;
-}
-.block-cta:hover {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
-  opacity: 1;
-}
-
-/* ===== fade-in 动效 =====
-   设计选择：
-   1. 初始 opacity 0.001 而非 0 — 爬虫/JS 失败仍能看到内容
-   2. 同时 translateY(24px) — 有存在感的上升幅度
-   3. 时长 1400ms — 能看到完整过程，不急不拖
-   4. 缓动 cubic-bezier(0.25, 0.1, 0.25, 1) — 平滑渐出，无弹性 */
+/* ===== fade-in 动效 ===== */
 [data-fade] {
   opacity: 0.001;
   transform: translateY(24px);
@@ -431,7 +399,8 @@ p + p {
   .logo-mark,
   .nav-link,
   .block-cta,
-  .footer-link {
+  .footer-link,
+  .footer-button {
     transition: none !important;
     transform: none !important;
   }
@@ -440,27 +409,20 @@ p + p {
   }
 }
 
-/* ===== 响应式 =====
-   移动端策略：
-   - 视口窄到 640px 时，靠左 + 大留白会让"右边空一半"
-     所以 hero 和 block-title 改为居中（保留节奏，不影响可读性）
-   - 间距统一缩小一档
-   - nav 允许横向滚动而不是挤压换行
-*/
+/* ===== 响应式 ===== */
 @media (max-width: 640px) {
   :root {
-    --text-2xl: 1.75rem;   /* 28px */
-    --text-xl: 1.5rem;     /* 24px */
+    --text-2xl: 1.75rem;
+    --text-xl: 1.5rem;
     --text-3xl: 2.5rem;
-    --space-12: 4rem;      /* 96 → 64 */
-    --space-16: 6rem;      /* 128 → 96 */
+    --space-12: 4rem;
+    --space-16: 6rem;
   }
 
   .site-header {
     padding: var(--space-2) var(--space-3);
   }
 
-  /* nav 在窄屏允许横向滚动，避免挤压换行 */
   .site-nav {
     overflow-x: auto;
     overflow-y: hidden;
@@ -476,40 +438,10 @@ p + p {
   }
 
   .site-main {
-    padding-block: var(--space-8) var(--space-12);
+    padding-top: var(--space-2);
   }
 
-  .hero {
-    padding-block: var(--space-6) var(--space-8);
-    text-align: center;
-  }
-  .hero-title {
-    margin-inline: auto;
-  }
-
-  /* block 标题在窄屏居中——避免大留白时右边空一大块 */
-  .block {
-    text-align: left;
-  }
-  .block-title {
-    text-align: left;
-  }
-  .block-eyebrow {
-    letter-spacing: 0.08em;
-  }
-
-  /* 段落和列表的左边距收紧 */
-  .project-section,
-  .container .measure {
-    padding-inline: 0;
-  }
-  .project-list {
-    padding-left: var(--space-2);
-  }
-
-  /* footer 文字不挤在一起 */
-  .footer-row {
-    flex-wrap: wrap;
-    gap: var(--space-3);
+  .footer-newsletter-text {
+    font-size: var(--text-xl);
   }
 }

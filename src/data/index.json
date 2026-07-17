@@ -3,6 +3,8 @@
     "eyebrow": "Projects",
     "title": "花艺课程表海报自动生成工具",
     "sub": "为 U-FLOWER 有花可期工作室做的内部工具。改一处，全表自动重排。",
+    "image": "/projects/floral-schedule/01-zero-baseline.jpg",
+    "image_alt": "零基础创业班课程表海报，红色主调，10 天 5 章 43+ 课",
     "cta": { "href": "/projects/", "label": "看完整故事" }
   },
   {
@@ -12,9 +14,9 @@
     "cta": { "href": "/writing/home/", "label": "读全文" }
   },
   {
-    "type": "photos",
     "eyebrow": "Photos",
     "title": "用眼睛收集到的安静时刻",
+    "sub": "街头、窗台、黄昏和陌生人的背影。",
     "images": [
       "/photos/photo-01.jpg",
       "/photos/photo-02.jpg",
@@ -28,6 +30,9 @@
   {
     "eyebrow": "Vlog",
     "title": "短，长，慢。",
+    "sub": "一些用镜头留下的时间。",
+    "image": "/vlog/vlog-01.mp4",
+    "is_video": true,
     "cta": { "href": "/vlog/", "label": "看视频" }
   },
   {
