@@ -179,12 +179,16 @@ import sections from '../data/index.json';
 
   .block-figure {
     margin: 0;
+    overflow: hidden;
+    max-height: 520px;
   }
 
   .block-figure img,
   .block-figure video {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
     display: block;
     border: 1px solid var(--color-rule);
   }
