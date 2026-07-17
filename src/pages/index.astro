@@ -16,70 +16,74 @@ import sections from '../data/index.json';
   </section>
 
   <div class="container blocks">
-    {sections.map((section, i) => {
-      // 照片六宫格
+    {sections.map((section) => {
+      // 照片六宫格：左文字，右照片墙
       if (section.type === 'photos' || section.images) {
         return (
-          <article class="block" data-fade>
-            <div class="block-meta">
+          <article class="block block-split" data-fade>
+            <div class="block-text">
               <p class="block-eyebrow">{section.eyebrow}</p>
               <h2 class="block-title">{section.title}</h2>
               {section.sub && <p class="block-sub">{section.sub}</p>}
               {section.cta && (
-                <a href={section.cta.href} class="block-cta">
+                <a href={section.cta.href} class="block-button">
                   {section.cta.label}
                 </a>
               )}
             </div>
-            <div class="photo-grid">
-              {section.images.map((src, j) => (
-                <img
-                  src={src}
-                  alt=""
-                  class="photo-grid-img"
-                  loading={j < 4 ? 'eager' : 'lazy'}
-                />
-              ))}
+            <div class="block-media">
+              <div class="photo-grid">
+                {section.images.map((src, j) => (
+                  <img
+                    src={src}
+                    alt=""
+                    class="photo-grid-img"
+                    loading={j < 4 ? 'eager' : 'lazy'}
+                  />
+                ))}
+              </div>
             </div>
           </article>
         );
       }
 
-      // 普通图文块
+      // 普通图文块：有图则左右分栏，无图则单列
       return (
-        <article class="block" class:list={[{ 'block-with-image': section.image }]} data-fade>
-          <div class="block-meta">
+        <article class="block" class:list={[{ 'block-split': section.image }]} data-fade>
+          <div class="block-text">
             <p class="block-eyebrow">{section.eyebrow}</p>
             <h2 class="block-title">{section.title}</h2>
             {section.sub && <p class="block-sub">{section.sub}</p>}
             {section.cta && (
-              <a href={section.cta.href} class="block-cta">
+              <a href={section.cta.href} class="block-button">
                 {section.cta.label}
               </a>
             )}
           </div>
           {section.image && (
-            <figure class="block-figure">
-              {section.is_video ? (
-                <video
-                  src={section.image}
-                  preload="metadata"
-                  playsinline
-                  muted
-                  loop
-                  class="block-video"
-                  data-autoplay="visible"
-                >
-                  您的浏览器不支持视频播放。
-                </video>
-              ) : (
-                <img
-                  src={section.image}
-                  alt={section.image_alt || ''}
-                  loading={i < 2 ? 'eager' : 'lazy'}
-                />
-              )}
-            </figure>
+            <div class="block-media">
+              <figure class="block-figure">
+                {section.is_video ? (
+                  <video
+                    src={section.image}
+                    preload="metadata"
+                    playsinline
+                    muted
+                    loop
+                    class="block-video"
+                    data-autoplay="visible"
+                  >
+                    您的浏览器不支持视频播放。
+                  </video>
+                ) : (
+                  <img
+                    src={section.image}
+                    alt={section.image_alt || ''}
+                    loading="lazy"
+                  />
+                )}
+              </figure>
+            </div>
           )}
         </article>
       );
@@ -122,7 +126,7 @@ import sections from '../data/index.json';
     border-top: 1px solid var(--color-rule);
   }
 
-  .block-meta {
+  .block-text {
     max-width: var(--measure);
   }
 
@@ -140,7 +144,7 @@ import sections from '../data/index.json';
   }
 
   .block-title {
-    font-size: var(--text-xl);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
     font-family: var(--font-display);
     font-weight: var(--weight-regular);
     line-height: var(--leading-tight);
@@ -151,26 +155,29 @@ import sections from '../data/index.json';
     font-size: var(--text-sm);
     color: var(--color-fg-muted);
     line-height: var(--leading-normal);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
   }
 
-  .block-cta {
+  .block-button {
     display: inline-block;
     font-size: var(--text-sm);
-    color: var(--color-fg);
-    border-bottom: 1px solid var(--color-fg);
-    padding-bottom: 1px;
-    transition: color 200ms, border-color 200ms;
+    color: var(--color-bg);
+    background: var(--color-fg);
+    padding: var(--space-2) var(--space-3);
+    transition: background 200ms, color 200ms;
   }
 
-  .block-cta:hover {
-    color: var(--color-accent);
-    border-bottom-color: var(--color-accent);
+  .block-button:hover {
+    background: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  .block-media {
+    width: 100%;
   }
 
   .block-figure {
-    margin: var(--space-4) 0 0;
-    width: 100%;
+    margin: 0;
   }
 
   .block-figure img,
@@ -192,8 +199,7 @@ import sections from '../data/index.json';
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 4px;
-    margin-top: var(--space-4);
-    max-width: 720px;
+    width: 100%;
   }
 
   .photo-grid-img {
@@ -204,22 +210,22 @@ import sections from '../data/index.json';
     border: 1px solid var(--color-rule);
   }
 
-  /* 大屏：带图 block 左右并排 */
+  /* 大屏：左右分栏，左 38% 右 62% */
   @media (min-width: 1024px) {
-    .block-with-image {
+    .block-split {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: start;
+      grid-template-columns: 38% 62%;
+      gap: 48px;
+      align-items: center;
     }
 
-    .block-with-image .block-meta {
-      padding-top: var(--space-2);
+    .block-split .block-text {
+      max-width: none;
+      padding-right: var(--space-4);
     }
 
-    .block-with-image .block-figure {
-      margin: 0;
-      max-width: 560px;
+    .block-split .block-media {
+      max-width: 640px;
       justify-self: end;
     }
   }
@@ -230,7 +236,7 @@ import sections from '../data/index.json';
     }
 
     .hero-title {
-      font-size: 2.25rem;
+      font-size: 2rem;
       letter-spacing: -0.01em;
     }
 
@@ -240,11 +246,6 @@ import sections from '../data/index.json';
 
     .photo-grid {
       grid-template-columns: repeat(2, 1fr);
-      max-width: 100%;
-    }
-
-    .block-figure {
-      max-width: 100%;
     }
   }
 </style>
