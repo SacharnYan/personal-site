@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <title>Cheng — correct strokes</title>
+  <rect width="32" height="32" fill="#ffffff"/>
+  <g stroke="#111111" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 8 L24 8"/>
+    <path d="M10 8 L8 14"/>
+    <path d="M13 8 L13 18"/>
+    <path d="M13 13 L24 11"/>
+    <path d="M13 18 C13 22, 20 22, 22 26"/>
+    <path d="M13 14 L8 24"/>
+    <path d="M18 20 L24 22"/>
+  </g>
+</svg>

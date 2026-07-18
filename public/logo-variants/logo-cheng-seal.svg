@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <title>Cheng seal — logo</title>
+  <rect width="32" height="32" fill="#ffffff"/>
+  <rect x="5" y="5" width="22" height="22" rx="1" stroke="#111111" stroke-width="1.6" fill="none"/>
+  <g stroke="#111111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M10 9 L22 9"/>
+    <path d="M16 9 L16 15"/>
+    <path d="M9 14 L23 14"/>
+    <path d="M20 14 C20 19, 13 19, 12 24"/>
+    <path d="M15 20 L21 24"/>
+  </g>
+</svg>

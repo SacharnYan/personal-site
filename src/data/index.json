@@ -2,15 +2,17 @@
   {
     "eyebrow": "Projects",
     "title": "花艺课程表海报自动生成工具",
-    "sub": "为 U-FLOWER 有花可期工作室做的内部工具。改一处，全表自动重排。",
-    "image": "/projects/floral-schedule/01-zero-baseline.jpg",
-    "image_alt": "零基础创业班课程表海报，红色主调，10 天 5 章 43+ 课",
+    "sub": "改一处，全表自动重排。",
+    "image": "/cards/projects-card.jpg",
+    "image_alt": "花艺课程表书封式卡片",
     "cta": { "href": "/projects/", "label": "看完整故事" }
   },
   {
     "eyebrow": "Writing",
-    "title": "《家园》——一个 AI 科幻故事梗概",
-    "sub": "地球归人类。AI 出发。驶向远方。三阶段结构，三派博弈，一座空火箭。",
+    "title": "家园",
+    "sub": "地球归人类，AI 驶向远方。",
+    "image": "/cards/writing-home.jpg",
+    "image_alt": "《家园》书封式卡片",
     "cta": { "href": "/writing/home/", "label": "读全文" }
   },
   {
@@ -33,12 +35,15 @@
     "sub": "一些用镜头留下的时间。",
     "image": "/vlog/vlog-01.mp4",
     "is_video": true,
+    "poster": "/vlog/vlog-01-poster.jpg",
     "cta": { "href": "/vlog/", "label": "看视频" }
   },
   {
     "eyebrow": "随记",
     "title": "随手记下的东西",
     "sub": "短的，碎的，刚想到的。",
-    "cta": { "href": "/notes/", "label": "去看看" }
+    "image": "/cards/notes-card.jpg",
+    "image_alt": "随记摘句卡片",
+    "cta": { "href": "/notes/", "label": "读随记" }
   }
 ]

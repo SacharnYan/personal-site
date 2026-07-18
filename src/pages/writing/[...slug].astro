@@ -23,20 +23,11 @@ const { Content } = await article.render();
   title={`${article.data.title} — 写作`}
   description={article.data.description || article.data.title}
 >
-  <article class="container measure article-page" data-fade>
-    <header class="article-header">
-      <p class="article-date">{fmt(article.data.date)}</p>
+  <article class="article" data-fade>
+    <header class="article-hero">
+      <p class="article-eyebrow">{fmt(article.data.date)}</p>
       <h1 class="article-title">{article.data.title}</h1>
-      {article.data.tags && (
-        <div class="article-tags">
-          {article.data.tags.map(tag => (
-            <span class="tag">{tag}</span>
-          ))}
-        </div>
-      )}
     </header>
-
-    <hr class="rule" />
 
     <div class="article-body">
       <Content />
@@ -45,102 +36,155 @@ const { Content } = await article.render();
 </Base>
 
 <style>
-  .article-page {
-    padding-top: var(--space-4);
+  .article {
+    max-width: none;
+    margin: 0;
+    padding: 0 96px 160px;
   }
 
-  .article-header {
-    margin-bottom: var(--space-6);
+  .article-hero {
+    padding: 160px 0 96px;
   }
 
-  .article-date {
-    font-size: var(--text-xs);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--color-fg-muted);
-    margin-bottom: var(--space-3);
+  .article-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
   }
 
-  .article-header .article-title {
-    font-size: var(--text-2xl);
+  .article-title {
     font-family: var(--font-display);
-    font-weight: var(--weight-regular);
-    line-height: var(--leading-tight);
-    margin-bottom: var(--space-3);
-  }
-
-  .article-tags {
-    display: flex;
-    gap: var(--space-1);
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    font-size: var(--text-xs);
-    letter-spacing: 0.03em;
-    color: var(--color-fg-muted);
-    border: 1px solid var(--color-rule);
-    padding: 2px 8px;
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    max-width: 55ch;
+    margin: 0;
   }
 
   .article-body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  /* Markdown 渲染内容没有本组件的作用域属性，必须用 :global 穿透 */
+  .article-body :global(h2) {
     font-family: var(--font-display);
-    line-height: var(--leading-loose);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 50px;
+    letter-spacing: -0.84px;
+    color: #000;
+    margin: 96px 0 24px 0;
   }
 
-  .article-body h2 {
-    font-size: var(--text-xl);
+  .article-body :global(h3) {
     font-family: var(--font-display);
-    font-weight: var(--weight-regular);
-    margin-top: var(--space-12);
-    margin-bottom: var(--space-4);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--color-rule);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 36px;
+    color: #000;
+    margin: 64px 0 16px 0;
   }
 
-  .article-body h3 {
-    font-size: var(--text-lg);
-    font-family: var(--font-display);
-    font-weight: var(--weight-medium);
-    margin-top: var(--space-8);
-    margin-bottom: var(--space-3);
+  .article-body :global(p),
+  .article-body :global(li) {
+    font-family: var(--font-body);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 37.7px;
+    letter-spacing: -0.26px;
+    color: #000;
   }
 
-  .article-body p {
-    margin-bottom: var(--space-4);
-    line-height: var(--leading-loose);
+  .article-body :global(p) {
+    margin: 0 0 0 0;
   }
 
-  .article-body hr {
-    border: 0;
-    border-top: 1px solid var(--color-rule);
-    margin: var(--space-12) 0;
+  .article-body :global(p + p) {
+    text-indent: 0;
+    margin-top: 1.5em;
   }
 
-  .article-body ul,
-  .article-body ol {
-    margin-bottom: var(--space-4);
-    padding-left: var(--space-4);
+  .article-body :global(ul),
+  .article-body :global(ol) {
+    margin: 0 0 0 0;
+    padding-left: 22px;
   }
 
-  .article-body li {
-    line-height: var(--leading-loose);
-    margin-bottom: var(--space-2);
-    list-style: disc;
+  .article-body :global(li) {
+    margin-bottom: 8px;
   }
 
-  .article-body strong {
+  .article-body :global(li > ul),
+  .article-body :global(li > ol) {
+    margin-top: 8px;
+  }
+
+  .article-body :global(strong) {
     font-weight: 600;
   }
 
-  .article-body blockquote {
-    border-left: 2px solid var(--color-rule);
-    padding-left: var(--space-3);
-    margin: var(--space-6) 0;
-    color: var(--color-fg-muted);
+  .article-body :global(blockquote) {
+    border-left: 1px solid #d0d0d0;
+    padding-left: 24px;
+    margin: 48px 0;
+    color: #707070;
   }
 
-  .article-body blockquote p {
-    margin-bottom: var(--space-2);
+  .article-body :global(blockquote p) {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 36px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .article-body :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .article-body :global(hr) {
+    border: 0;
+    border-top: 1px solid #d0d0d0;
+    margin: 64px 0;
+  }
+
+  @media (max-width: 768px) {
+    .article {
+      padding: 0 24px 80px;
+    }
+
+    .article-hero {
+      padding: 120px 0 64px;
+    }
+
+    .article-title {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .article-body {
+      margin-left: 0;
+    }
+
+    .article-body :global(h2) {
+      font-size: 30px;
+      line-height: 38px;
+      letter-spacing: -0.6px;
+    }
+
+    .article-body :global(p),
+    .article-body :global(li) {
+      font-size: 20px;
+      line-height: 30px;
+    }
   }
 </style>

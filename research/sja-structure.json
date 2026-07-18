@@ -1,0 +1,81 @@
+{
+  "structure": {
+    "tag": "DIV",
+    "className": "css-0",
+    "text": "Publications Letters to a Young Creator What it takes to ma",
+    "rect": {
+      "x": 96,
+      "y": 1405,
+      "w": 624,
+      "h": 249
+    },
+    "fontSize": "16px",
+    "color": "rgb(0, 0, 0)",
+    "textTransform": "none",
+    "children": [
+      {
+        "tag": "DIV",
+        "className": "css-1qflsub",
+        "text": "Publications",
+        "rect": {
+          "x": 96,
+          "y": 1405,
+          "w": 624,
+          "h": 38
+        },
+        "fontSize": "26px",
+        "color": "rgb(0, 0, 0)",
+        "textTransform": "none",
+        "children": []
+      },
+      {
+        "tag": "HGROUP",
+        "className": "css-1mrs8gm",
+        "text": "Letters to a Young Creator What it takes to make something ",
+        "rect": {
+          "x": 96,
+          "y": 1452,
+          "w": 624,
+          "h": 202
+        },
+        "fontSize": "42px",
+        "color": "rgb(0, 0, 0)",
+        "textTransform": "none",
+        "children": [
+          {
+            "tag": "H2",
+            "className": "css-hvqvrd",
+            "text": "Letters to a Young Creator",
+            "rect": {
+              "x": 96,
+              "y": 1452,
+              "w": 624,
+              "h": 50
+            },
+            "fontSize": "42px",
+            "color": "rgb(0, 0, 0)",
+            "textTransform": "none",
+            "children": []
+          },
+          {
+            "tag": "P",
+            "className": "css-1fkn4j8",
+            "text": "What it takes to make something great, from people who have ",
+            "rect": {
+              "x": 96,
+              "y": 1503,
+              "w": 624,
+              "h": 151
+            },
+            "fontSize": "42px",
+            "color": "rgb(112, 112, 112)",
+            "textTransform": "none",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "images": [],
+  "footerStructure": null
+}

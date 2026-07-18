@@ -2,118 +2,148 @@
 import Base from '../../layouts/Base.astro';
 ---
 
-<Base title="花艺课程表海报自动生成工具">
-  <article class="container" data-fade>
-    <header class="project-header">
-      <p class="block-eyebrow">Tool · 2026</p>
-      <h1 class="project-title">
-        花艺课程表海报，从 4 小时缩到 1 分钟。
-      </h1>
-      <p class="project-sub">
-        为有花可期工作室做的一张小工具。改一处，整张海报自动跟着变。
-      </p>
+<Base title="项目">
+  <article class="article" data-fade>
+    <header class="article-hero">
+      <p class="article-eyebrow">Tool · 2026</p>
+      <h1 class="article-title">花艺课程表海报，从 4 小时缩到 1 分钟。</h1>
     </header>
 
-    <section class="project-section" data-fade>
-      <p class="block-eyebrow">问题</p>
+    <div class="article-body">
       <p>
-        工作室有两套花艺课程：零基础创业班和创业全能班。每次开新课，都要重做两张课程表海报发出去。
+        工作室有两套花艺课程：零基础创业班和创业全能班。每次开新课，都要重做两张课程表海报发出去。之前用 PPT 或 Canva 做，一张海报 2-4 小时，两张就是半天。更麻烦的是每张海报里有 30 多处日期、5-6 个章节标题、100 多个技能点，改一处常常忘了另一处。
       </p>
-      <p>
-        之前用 PPT 或 Canva 做，一张海报 2-4 小时，两张就是半天。更麻烦的是每张海报里有 30 多处日期、5-6 个章节标题、100 多个技能点，改一处常常忘了另一处。
-      </p>
-    </section>
 
-    <section class="project-section" data-fade>
-      <p class="block-eyebrow">做法</p>
       <p>
-        把“内容”和“版式”分开。版式定好一次，以后只改数据。
+        把“内容”和“版式”分开。版式定好一次，以后只改数据。运营改一个开课日期，全表 30 多处日期一起更新；改一个章节名，罗马序号自动重排；两套课程共用一份数据源，重复内容不用抄两遍。
       </p>
+
       <p>
-        运营改一个开课日期，全表 30 多处日期一起更新；改一个章节名，罗马序号自动重排；两套课程共用一份数据源，重复内容不用抄两遍。
+        两张海报从 4-8 小时变成 1 分钟。保存即可发。
       </p>
-    </section>
 
-    <section class="project-section" data-fade>
-      <p class="block-eyebrow">结果</p>
-      <p>两张海报从 4-8 小时变成 1 分钟。保存即可发。</p>
-
-      <figure class="project-figure">
+      <figure class="article-figure">
         <img
           src="/projects/floral-schedule/01-zero-baseline.jpg"
           alt="零基础创业班课程表海报"
           loading="lazy"
         />
-        <figcaption>零基础创业班 · 10 天 / 5 章 / 43+ 课</figcaption>
       </figure>
 
-      <figure class="project-figure">
+      <figure class="article-figure">
         <img
           src="/projects/floral-schedule/02-all-in-one.jpg"
           alt="创业全能班课程表海报"
           loading="lazy"
         />
-        <figcaption>创业全能班 · 12 天 / 6 章 / 55+ 课 · 花艺 + 气球</figcaption>
       </figure>
-    </section>
 
-    <section class="project-section" data-fade>
-      <p class="block-eyebrow">下一步</p>
       <p>
         现在它只是一个内部工具，不是产品。我还在想：这种“重复劳动自动化”的小工具，能不能做成让更多花艺、教培、餐饮商家都能用的东西？
       </p>
-    </section>
+    </div>
   </article>
 </Base>
 
 <style>
-  .project-header {
-    padding-block: var(--space-8) var(--space-12);
+  .article {
+    max-width: none;
+    margin: 0;
+    padding: 0 96px 160px;
   }
 
-  .project-title {
-    font-size: var(--text-2xl);
+  .article-hero {
+    padding: 160px 0 96px;
+  }
+
+  .article-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .article-title {
     font-family: var(--font-display);
-    font-weight: var(--weight-regular);
-    line-height: var(--leading-tight);
-    max-width: 24ch;
-    margin-bottom: var(--space-3);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    max-width: 55ch;
+    margin: 0;
   }
 
-  .project-sub {
-    font-size: var(--text-lg);
-    color: var(--color-fg-muted);
-    font-family: var(--font-display);
+  .article-body {
+    max-width: 768px;
+    margin: 0 auto;
   }
 
-  .project-section {
-    padding-block: var(--space-8);
-    max-width: var(--measure);
+  .article-body p {
+    font-family: var(--font-body);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 37.7px;
+    letter-spacing: -0.26px;
+    color: #000;
+    margin: 0 0 0 0;
   }
 
-  .project-section .block-eyebrow {
-    border-top: 0;
-    padding-top: 0;
-    margin-bottom: var(--space-3);
+  .article-body p + p {
+    text-indent: 0;
+    margin-top: 1.5em;
   }
 
-  .project-section p strong {
-    font-weight: var(--weight-medium);
+  .article-body p:last-child {
+    margin-bottom: 0;
   }
 
-  .project-figure {
-    margin: var(--space-6) 0;
+  .article-figure {
+    margin: 64px 0;
+    width: min(calc(100vw - 192px), 1248px);
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
   }
-  .project-figure img {
+
+  .article-figure img {
     width: 100%;
     height: auto;
-    border: 1px solid var(--color-rule);
+    display: block;
   }
-  .project-figure figcaption {
-    margin-top: var(--space-2);
-    font-size: var(--text-xs);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--color-fg-muted);
+
+  @media (max-width: 768px) {
+    .article {
+      padding: 0 24px 80px;
+    }
+
+    .article-hero {
+      padding: 120px 0 64px;
+    }
+
+    .article-title {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .article-body {
+      margin-left: 0;
+    }
+
+    .article-body p {
+      font-size: 20px;
+      line-height: 30px;
+    }
+
+    .article-figure {
+      margin: 48px -24px;
+      width: calc(100% + 48px);
+      left: 0;
+      transform: none;
+    }
   }
 </style>

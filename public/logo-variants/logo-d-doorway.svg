@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <title>Logo doorway figure</title>
+  <rect width="32" height="32" fill="#ffffff"/>
+  <rect x="5" y="5" width="22" height="22" stroke="#111111" stroke-width="2.4" fill="none"/>
+  <circle cx="16" cy="13" r="2.8" fill="#111111"/>
+  <path d="M16 17 L16 25" stroke="#111111" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M11 24 L16 24 L21 24" stroke="#111111" stroke-width="2.4" stroke-linecap="round"/>
+</svg>

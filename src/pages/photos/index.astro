@@ -7,10 +7,10 @@ const photos = Array.from({ length: 9 }, (_, i) => ({
 ---
 
 <Base title="照片">
-  <article class="container photos-page">
-    <header class="photos-header" data-fade>
-      <h1>照片</h1>
-      <p class="text-muted text-sm">用眼睛收集到的安静时刻。</p>
+  <article class="article" data-fade>
+    <header class="article-hero">
+      <p class="article-eyebrow">Photos</p>
+      <h1 class="article-title">照片</h1>
     </header>
 
     <div class="gallery">
@@ -28,18 +28,41 @@ const photos = Array.from({ length: 9 }, (_, i) => ({
 </Base>
 
 <style>
-  .photos-header {
-    padding-block: var(--space-4) var(--space-8);
+  .article {
+    max-width: none;
+    margin: 0;
+    padding: 0 0 160px 96px;
   }
 
-  .photos-header h1 {
-    margin-bottom: var(--space-2);
+  .article-hero {
+    padding: 160px 0 96px;
+  }
+
+  .article-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .article-title {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    max-width: 55ch;
+    margin: 0;
   }
 
   .gallery {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-2);
+    gap: 4px;
   }
 
   .gallery-item {
@@ -53,10 +76,23 @@ const photos = Array.from({ length: 9 }, (_, i) => ({
     display: block;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
+    .article {
+      padding: 0 24px 80px;
+    }
+
+    .article-hero {
+      padding: 120px 0 64px;
+    }
+
+    .article-title {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
     .gallery {
       grid-template-columns: 1fr;
-      gap: var(--space-3);
     }
   }
 </style>

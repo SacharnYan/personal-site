@@ -1,0 +1,26 @@
+{
+  "eyebrow": {
+    "text": "What it takes to make something great, from people who have done it before",
+    "rect": {
+      "x": 96,
+      "y": 1502.78125,
+      "width": 624,
+      "height": 151.171875
+    },
+    "fontFamily": "__LoveFromSJA_c008cf, __LoveFromSJA_Fallback_c008cf, Georgia, serif",
+    "fontSize": "42px",
+    "fontWeight": "400",
+    "lineHeight": "50.4px",
+    "letterSpacing": "-0.84px",
+    "color": "rgb(112, 112, 112)",
+    "textTransform": "none",
+    "margin": "0px",
+    "padding": "0px"
+  },
+  "newsletterText": {
+    "text": "Subscribe for updates from the Archive.\nSign up for the newsletter\nAbout\nFAQ\nContact\nPrivacy Policy\nTerms & Conditions\n© Steve Jobs Archive 2026\nHome",
+    "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+    "fontSize": "16px",
+    "color": "rgb(0, 0, 0)"
+  }
+}

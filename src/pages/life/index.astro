@@ -3,20 +3,103 @@ import Base from '../../layouts/Base.astro';
 ---
 
 <Base title="生活">
-  <div class="container measure" data-fade>
-    <h1>生活记录</h1>
-    <p>生活的内容已整理到 <a href="/photos/" class="inline-link">照片</a> 页面。</p>
-  </div>
+  <article class="article" data-fade>
+    <header class="article-hero">
+      <p class="article-eyebrow">Life</p>
+      <h1 class="article-title">生活记录</h1>
+    </header>
+
+    <div class="article-body">
+      <p>生活的内容已整理到 <a href="/photos/" class="inline-link">照片</a> 页面。</p>
+    </div>
+  </article>
 </Base>
 
 <style>
-  .inline-link {
-    color: var(--color-fg);
-    border-bottom: 1px solid currentColor;
-    padding-bottom: 1px;
+  .article {
+    max-width: none;
+    margin: 0;
+    padding: 0 96px 160px;
   }
+
+  .article-hero {
+    padding: 160px 0 96px;
+  }
+
+  .article-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .article-title {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    max-width: 55ch;
+    margin: 0;
+  }
+
+  .article-body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  .article-body p {
+    font-family: var(--font-body);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 37.7px;
+    letter-spacing: -0.26px;
+    color: #000;
+    margin: 0 0 0 0;
+  }
+
+  .article-body p + p {
+    text-indent: 0;
+    margin-top: 1.5em;
+  }
+
+  .inline-link {
+    color: #000;
+    border-bottom: 1px solid #000;
+    transition: color 200ms, border-color 200ms;
+  }
+
   .inline-link:hover {
-    color: var(--color-accent);
-    border-bottom-color: var(--color-accent);
+    color: #707070;
+    border-bottom-color: #707070;
+  }
+
+  @media (max-width: 768px) {
+    .article {
+      padding: 0 24px 80px;
+    }
+
+    .article-hero {
+      padding: 120px 0 64px;
+    }
+
+    .article-title {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .article-body {
+      margin-left: 0;
+    }
+
+    .article-body p {
+      font-size: 20px;
+      line-height: 30px;
+    }
   }
 </style>

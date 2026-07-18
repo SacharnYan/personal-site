@@ -12,98 +12,138 @@ articles.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
 <Base title="写作">
-  <article class="container writing-page">
-    <header class="writing-header" data-fade>
-      <h1>写作</h1>
-      <p class="text-muted text-sm">记录项目、创作、学习与日常思考。</p>
+  <article class="article" data-fade>
+    <header class="article-hero">
+      <p class="article-eyebrow">Writing</p>
+      <h1 class="article-title">写作</h1>
     </header>
 
-    {articles.length === 0 && (
-      <p class="text-muted">还没有文章，但会有的。</p>
-    )}
-
-    <div class="article-list">
-      {articles.map((article) => (
-        <section class="article-item" data-fade>
-          <p class="article-date">{fmt(article.data.date)}</p>
-          <h2 class="article-title">
-            <a href={`/writing/${article.slug}/`}>{article.data.title}</a>
-          </h2>
-          {article.data.description && (
-            <p class="article-desc">{article.data.description}</p>
-          )}
-          {article.data.tags && (
-            <div class="article-tags">
-              {article.data.tags.map(tag => (
-                <span class="tag">{tag}</span>
-              ))}
-            </div>
-          )}
-        </section>
-      ))}
+    <div class="article-body">
+      <div class="article-list">
+        {articles.map((article) => (
+          <section class="article-item" data-fade>
+            <p class="article-date">{fmt(article.data.date)}</p>
+            <h2 class="article-item-title">
+              <a href={`/writing/${article.slug}/`}>{article.data.title}</a>
+            </h2>
+            {article.data.description && (
+              <p class="article-item-desc">{article.data.description}</p>
+            )}
+          </section>
+        ))}
+      </div>
     </div>
   </article>
 </Base>
 
 <style>
-  .writing-header {
-    padding-block: var(--space-4) var(--space-8);
+  .article {
+    max-width: none;
+    margin: 0;
+    padding: 0 0 160px 96px;
   }
 
-  .writing-header h1 {
-    margin-bottom: var(--space-2);
+  .article-hero {
+    padding: 160px 0 96px;
   }
 
-  .article-item {
-    margin-bottom: var(--space-6);
-    max-width: var(--measure);
-  }
-
-  .article-date {
-    font-size: var(--text-xs);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--color-fg-muted);
-    margin-bottom: var(--space-1);
+  .article-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
   }
 
   .article-title {
-    font-size: var(--text-lg);
     font-family: var(--font-display);
-    font-weight: var(--weight-regular);
-    line-height: var(--leading-tight);
-    margin-bottom: var(--space-1);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    max-width: 55ch;
+    margin: 0;
   }
 
-  .article-title a {
-    color: var(--color-fg);
+  .article-body {
+    max-width: 70ch;
+  }
+
+  .article-item {
+    padding: 48px 0;
+    border-bottom: 1px solid #d0d0d0;
+  }
+
+  .article-item:first-child {
+    border-top: 1px solid #d0d0d0;
+  }
+
+  .article-date {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 12px 0;
+  }
+
+  .article-item-title {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 50px;
+    letter-spacing: -0.84px;
+    margin: 0 0 12px 0;
+  }
+
+  .article-item-title a {
+    color: #000;
     border-bottom: 1px solid transparent;
-    transition: color 200ms, border-color 200ms;
+    transition: border-color 200ms, color 200ms;
   }
 
-  .article-title a:hover {
-    color: var(--color-accent);
-    border-bottom-color: var(--color-accent);
+  .article-item-title a:hover {
+    color: #707070;
+    border-bottom-color: #707070;
   }
 
-  .article-desc {
-    font-size: var(--text-sm);
-    color: var(--color-fg-muted);
-    line-height: var(--leading-normal);
-    margin-bottom: var(--space-2);
+  .article-item-desc {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 26px;
+    color: #707070;
+    margin: 0;
   }
 
-  .article-tags {
-    display: flex;
-    gap: var(--space-1);
-    flex-wrap: wrap;
-  }
+  @media (max-width: 768px) {
+    .article {
+      padding: 0 24px 80px;
+    }
 
-  .tag {
-    font-size: var(--text-xs);
-    letter-spacing: 0.03em;
-    color: var(--color-fg-muted);
-    border: 1px solid var(--color-rule);
-    padding: 2px 8px;
+    .article-hero {
+      padding: 120px 0 64px;
+    }
+
+    .article-title {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .article-item-title {
+      font-size: 26px;
+      line-height: 32px;
+      letter-spacing: -0.52px;
+    }
+
+    .article-item-desc {
+      font-size: 15px;
+      line-height: 24px;
+    }
   }
 </style>

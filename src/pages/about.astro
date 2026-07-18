@@ -3,82 +3,121 @@ import Base from '../layouts/Base.astro';
 ---
 
 <Base title="关于 — 思想名片" description="严树成 · 华为零售产品管理 · 南京">
-  <article class="container measure about-page" data-fade>
-    <h1 class="about-name">严树成</h1>
-    <p class="about-role">华为 · 零售产品管理 · 南京</p>
-    <p class="about-persona">INFJ · 绿老头 · 做产品、写东西、拍东西</p>
-    <hr class="rule" />
+  <article class="article" data-fade>
+    <header class="article-hero">
+      <p class="article-eyebrow">About</p>
+      <h1 class="article-title">终身学习，认真创造，自由表达。</h1>
+    </header>
 
-    <p>
-      在做的事：把 AI 用到零售门店的真实场景里——门店作业助手、线索管理、店长看板。
-    </p>
-    <p>
-      下班后在做的事：写点东西、拍点东西、搭这个站。<br />
-      之前做过一套花艺课程表海报自动生成工具——改一个日期，全表 30+ 处自动更新。
-    </p>
-    <p>
-      这个站叫思想名片，是我对外的一张数字卡片。<br />
-      设计想去掉所有不必要的修饰——纯白、衬线字、大留白、慢动效。
-    </p>
+    <div class="article-body">
+      <p>
+        我是严树成，在华为做零售产品管理，现居南京。白天的工作是把 AI 落到门店的真实场景里——门店作业助手、线索管理、店长看板，让一线的人真正用得起来。
+      </p>
 
-    <p class="text-sm">联系</p>
-    <ul class="contact-list">
-      <li>邮箱：<a href="mailto:sacharn@163.com" class="contact-link">sacharn@163.com</a></li>
-      <li>微信：<span class="contact-link">sacharn</span></li>
-      <li>GitHub：<a href="https://github.com/SacharnYan" class="contact-link" target="_blank" rel="noopener">SacharnYan</a></li>
-    </ul>
+      <p>
+        下班之后写东西、拍东西、搭这个站。之前为朋友的花艺工作室做过一套课程表海报自动生成工具，改一个开课日期，全表 30 多处自动更新。这种把重复劳动消灭掉的事，让我特别上瘾。
+      </p>
+
+      <p>
+        这个站叫思想名片。我想让它是一张对外敞开的数字卡片——纯白、衬线字、大留白、慢动效。不放太多东西，只放我真正想表达的东西。
+      </p>
+
+      <p>
+        如果邮件能讲清楚，请写信到 <a href="mailto:sacharn@163.com" class="inline-link">sacharn@163.com</a>；微信加 sacharn；代码在 <a href="https://github.com/SacharnYan" class="inline-link" target="_blank" rel="noopener">GitHub</a>。
+      </p>
+    </div>
   </article>
 </Base>
 
 <style>
-  .about-page {
-    padding-top: var(--space-4);
+  .article {
+    max-width: none;
+    margin: 0;
+    padding: 0 96px 160px;
   }
 
-  .about-name {
-    font-size: var(--text-2xl);
+  .article-hero {
+    padding: 160px 0 96px;
+  }
+
+  .article-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .article-title {
     font-family: var(--font-display);
-    font-weight: var(--weight-regular);
-    line-height: var(--leading-tight);
-    margin-bottom: var(--space-1);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    max-width: 55ch;
+    margin: 0;
   }
 
-  .about-role {
-    font-size: var(--text-sm);
-    color: var(--color-fg-muted);
-    letter-spacing: 0.02em;
+  .article-body {
+    max-width: 768px;
+    margin: 0 auto;
   }
 
-  .about-page p {
-    margin-bottom: var(--space-3);
-    line-height: var(--leading-loose);
+  .article-body p {
+    font-family: var(--font-body);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 37.7px;
+    letter-spacing: -0.26px;
+    color: #000;
+    margin: 0 0 0 0;
   }
 
-  .contact-list {
-    margin-top: var(--space-2);
+  .article-body p + p {
+    text-indent: 0;
+    margin-top: 1.5em;
   }
 
-  .contact-list li {
-    font-size: var(--text-sm);
-    line-height: var(--leading-loose);
-    color: var(--color-fg-muted);
+  .article-body p:last-child {
+    margin-bottom: 0;
   }
 
-  .contact-link {
-    color: var(--color-fg);
-    border-bottom: 1px solid var(--color-rule);
-    padding-bottom: 1px;
+  .inline-link {
+    color: #000;
+    border-bottom: 1px solid #000;
     transition: color 200ms, border-color 200ms;
   }
 
-  .contact-link:hover {
-    color: var(--color-accent);
-    border-bottom-color: var(--color-accent);
+  .inline-link:hover {
+    color: #707070;
+    border-bottom-color: #707070;
   }
 
-  .about-persona {
-    font-size: var(--text-sm);
-    color: var(--color-fg-muted);
-    letter-spacing: 0.02em;
+  @media (max-width: 768px) {
+    .article {
+      padding: 0 24px 80px;
+    }
+
+    .article-hero {
+      padding: 120px 0 64px;
+    }
+
+    .article-title {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .article-body {
+      margin-left: 0;
+    }
+
+    .article-body p {
+      font-size: 20px;
+      line-height: 30px;
+    }
   }
 </style>

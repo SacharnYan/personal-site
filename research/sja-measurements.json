@@ -1,0 +1,646 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "elements": [
+    {
+      "name": "logo-link",
+      "tag": "A",
+      "className": "css-1deooy6",
+      "text": "Home",
+      "rect": {
+        "x": 38,
+        "y": 33,
+        "width": 20,
+        "height": 30
+      },
+      "style": {
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "18.4px",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 238)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "menu-button",
+      "tag": "BUTTON",
+      "className": "css-x2qnon",
+      "text": "Menu",
+      "rect": {
+        "x": 96,
+        "y": 37,
+        "width": 55,
+        "height": 22
+      },
+      "style": {
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"avenir next\", avenir, \"segoe ui\", \"helvetica neue\", helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "22.4px",
+        "letterSpacing": "-0.28px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "flex",
+        "position": "relative",
+        "gridTemplateColumns": "none",
+        "gap": "4px"
+      }
+    },
+    {
+      "name": "hero-h1",
+      "tag": "H1",
+      "className": "css-xfsgau",
+      "text": "The Steve Jobs Archive is the authoritative home for Steve’s story and a resource for new generations eager to make thei",
+      "rect": {
+        "x": 96,
+        "y": 546,
+        "width": 1248,
+        "height": 289
+      },
+      "style": {
+        "fontFamily": "__LoveFromSJA_c008cf, __LoveFromSJA_Fallback_c008cf, Georgia, serif",
+        "fontSize": "54px",
+        "fontWeight": "400",
+        "lineHeight": "70.2px",
+        "letterSpacing": "-1.08px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px 0px 78.3px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "hero-section",
+      "tag": "DIV",
+      "className": "css-1g7lurd",
+      "text": "The Steve Jobs Archive is the authoritative home for Steve’s story and a resource for new generations eager to make thei",
+      "rect": {
+        "x": 96,
+        "y": 546,
+        "width": 1248,
+        "height": 570
+      },
+      "style": {
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "18.4px",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "354px 0px 0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "separator-0",
+      "tag": "HR",
+      "className": "css-17imfuq",
+      "text": null,
+      "rect": {
+        "x": 0,
+        "y": 1308,
+        "width": 1440,
+        "height": 1
+      },
+      "style": {
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "18.4px",
+        "letterSpacing": "normal",
+        "color": "rgb(128, 128, 128)",
+        "backgroundColor": "rgb(208, 208, 208)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "separator-1",
+      "tag": "HR",
+      "className": "css-17imfuq",
+      "text": null,
+      "rect": {
+        "x": 0,
+        "y": 1933,
+        "width": 1440,
+        "height": 1
+      },
+      "style": {
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "18.4px",
+        "letterSpacing": "normal",
+        "color": "rgb(128, 128, 128)",
+        "backgroundColor": "rgb(208, 208, 208)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "separator-2",
+      "tag": "HR",
+      "className": "css-17imfuq",
+      "text": null,
+      "rect": {
+        "x": 0,
+        "y": 2514,
+        "width": 1440,
+        "height": 1
+      },
+      "style": {
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "18.4px",
+        "letterSpacing": "normal",
+        "color": "rgb(128, 128, 128)",
+        "backgroundColor": "rgb(208, 208, 208)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "separator-3",
+      "tag": "HR",
+      "className": "css-17imfuq",
+      "text": null,
+      "rect": {
+        "x": 0,
+        "y": 3202,
+        "width": 1440,
+        "height": 1
+      },
+      "style": {
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "18.4px",
+        "letterSpacing": "normal",
+        "color": "rgb(128, 128, 128)",
+        "backgroundColor": "rgb(208, 208, 208)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "block-0-wrapper",
+      "tag": "DIV",
+      "className": "css-0",
+      "text": "Publications Letters to a Young Creator What it takes to make something great, from people who have done it before",
+      "rect": {
+        "x": 96,
+        "y": 1405,
+        "width": 624,
+        "height": 249
+      },
+      "style": {
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "18.4px",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "block-0-title",
+      "tag": "H2",
+      "className": "css-hvqvrd",
+      "text": "Letters to a Young Creator",
+      "rect": {
+        "x": 96,
+        "y": 1452,
+        "width": 624,
+        "height": 50
+      },
+      "style": {
+        "fontFamily": "__LoveFromSJA_c008cf, __LoveFromSJA_Fallback_c008cf, Georgia, serif",
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "block-0-subtitle",
+      "tag": "P",
+      "className": "css-1fkn4j8",
+      "text": "What it takes to make something great, from people who have done it before",
+      "rect": {
+        "x": 96,
+        "y": 1503,
+        "width": 624,
+        "height": 151
+      },
+      "style": {
+        "fontFamily": "__LoveFromSJA_c008cf, __LoveFromSJA_Fallback_c008cf, Georgia, serif",
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(112, 112, 112)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "block-1-wrapper",
+      "tag": "DIV",
+      "className": "css-0",
+      "text": "Stories Pixar: The Early Days A never-before-seen 1996 interview",
+      "rect": {
+        "x": 96,
+        "y": 2030,
+        "width": 624,
+        "height": 199
+      },
+      "style": {
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "18.4px",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "block-1-title",
+      "tag": "H2",
+      "className": "css-hvqvrd",
+      "text": "Pixar: The Early Days",
+      "rect": {
+        "x": 96,
+        "y": 2077,
+        "width": 624,
+        "height": 50
+      },
+      "style": {
+        "fontFamily": "__LoveFromSJA_c008cf, __LoveFromSJA_Fallback_c008cf, Georgia, serif",
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "block-1-subtitle",
+      "tag": "P",
+      "className": "css-1fkn4j8",
+      "text": "A never-before-seen 1996 interview",
+      "rect": {
+        "x": 96,
+        "y": 2128,
+        "width": 624,
+        "height": 101
+      },
+      "style": {
+        "fontFamily": "__LoveFromSJA_c008cf, __LoveFromSJA_Fallback_c008cf, Georgia, serif",
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(112, 112, 112)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "block-2-wrapper",
+      "tag": "DIV",
+      "className": "css-0",
+      "text": "Fellowship Announcing the 2025 SJA Fellows Meet our next class of inspiring young creators",
+      "rect": {
+        "x": 96,
+        "y": 2611,
+        "width": 624,
+        "height": 199
+      },
+      "style": {
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "18.4px",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "block-2-title",
+      "tag": "H2",
+      "className": "css-hvqvrd",
+      "text": "Announcing the 2025 SJA Fellows",
+      "rect": {
+        "x": 96,
+        "y": 2659,
+        "width": 624,
+        "height": 50
+      },
+      "style": {
+        "fontFamily": "__LoveFromSJA_c008cf, __LoveFromSJA_Fallback_c008cf, Georgia, serif",
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "block-2-subtitle",
+      "tag": "P",
+      "className": "css-1fkn4j8",
+      "text": "Meet our next class of inspiring young creators",
+      "rect": {
+        "x": 96,
+        "y": 2709,
+        "width": 624,
+        "height": 101
+      },
+      "style": {
+        "fontFamily": "__LoveFromSJA_c008cf, __LoveFromSJA_Fallback_c008cf, Georgia, serif",
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(112, 112, 112)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "block-3-wrapper",
+      "tag": "DIV",
+      "className": "css-0",
+      "text": "Stories Stay hungry, stay foolish Celebrating Steve’s timeless address",
+      "rect": {
+        "x": 96,
+        "y": 3299,
+        "width": 624,
+        "height": 199
+      },
+      "style": {
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "18.4px",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "block-3-title",
+      "tag": "H2",
+      "className": "css-hvqvrd",
+      "text": "Stay hungry, stay foolish",
+      "rect": {
+        "x": 96,
+        "y": 3347,
+        "width": 624,
+        "height": 50
+      },
+      "style": {
+        "fontFamily": "__LoveFromSJA_c008cf, __LoveFromSJA_Fallback_c008cf, Georgia, serif",
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "block-3-subtitle",
+      "tag": "P",
+      "className": "css-1fkn4j8",
+      "text": "Celebrating Steve’s timeless address",
+      "rect": {
+        "x": 96,
+        "y": 3397,
+        "width": 624,
+        "height": 101
+      },
+      "style": {
+        "fontFamily": "__LoveFromSJA_c008cf, __LoveFromSJA_Fallback_c008cf, Georgia, serif",
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(112, 112, 112)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "newsletter-text",
+      "tag": "DIV",
+      "className": "",
+      "text": "Skip to content Home Menu The Steve Jobs Archive is the authoritative home for Steve’s story and a resource for new gene",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 4302
+      },
+      "style": {
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "18.4px",
+        "letterSpacing": "normal",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "textTransform": "none",
+        "borderRadius": "0px",
+        "display": "block",
+        "position": "static",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    },
+    {
+      "name": "newsletter-button",
+      "tag": "BUTTON",
+      "className": "css-1ea4xip",
+      "text": "Sign up for the newsletter",
+      "rect": {
+        "x": 816,
+        "y": 3912,
+        "width": 34,
+        "height": 34
+      },
+      "style": {
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"avenir next\", avenir, \"segoe ui\", \"helvetica neue\", helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "22.4px",
+        "letterSpacing": "-0.28px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "24px 0px 0px",
+        "textTransform": "none",
+        "borderRadius": "100%",
+        "display": "flex",
+        "position": "relative",
+        "gridTemplateColumns": "none",
+        "gap": "normal"
+      }
+    }
+  ]
+}

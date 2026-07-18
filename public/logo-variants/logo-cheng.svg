@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <title>Cheng — logo</title>
+  <rect width="32" height="32" fill="#ffffff"/>
+  <g stroke="#111111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 6 L22 6"/>
+    <path d="M16 6 L16 16"/>
+    <path d="M8 12 L24 12"/>
+    <path d="M22 12 C22 18, 12 18, 10 26"/>
+    <path d="M14 20 L22 26"/>
+  </g>
+</svg>

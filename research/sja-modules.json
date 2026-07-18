@@ -1,0 +1,589 @@
+{
+  "modules": [
+    {
+      "index": 0,
+      "gridWrapper": {
+        "display": "grid",
+        "gridTemplateColumns": "48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px",
+        "maxWidth": "1920px"
+      },
+      "eyebrow": {
+        "tag": "DIV",
+        "className": "css-1qflsub",
+        "text": "Publications",
+        "rect": {
+          "x": 96,
+          "y": 1405,
+          "width": 624,
+          "height": 38
+        },
+        "fontSize": "26px",
+        "fontWeight": "400",
+        "lineHeight": "37.7px",
+        "letterSpacing": "-0.26px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px 0px 10px",
+        "borderRadius": "0px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "title": {
+        "tag": "H2",
+        "className": "css-hvqvrd",
+        "text": "Letters to a Young Creator",
+        "rect": {
+          "x": 96,
+          "y": 1452,
+          "width": 624,
+          "height": 50
+        },
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "borderRadius": "0px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "subtitle": {
+        "tag": "P",
+        "className": "css-1fkn4j8",
+        "text": "What it takes to make something great, from people who have done it before",
+        "rect": {
+          "x": 96,
+          "y": 1503,
+          "width": 624,
+          "height": 151
+        },
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(112, 112, 112)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "borderRadius": "0px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "cta": {
+        "tag": "A",
+        "className": "css-1kx1ev6",
+        "text": "Learn more",
+        "rect": {
+          "x": 96,
+          "y": 1686,
+          "width": 135,
+          "height": 48
+        },
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "26.1px",
+        "letterSpacing": "-0.36px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgb(245, 245, 245)",
+        "padding": "10px 23px",
+        "margin": "0px",
+        "borderRadius": "60px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "media": {
+        "figure": {
+          "tag": "FIGURE",
+          "className": "css-60ukur",
+          "text": "Play",
+          "rect": {
+            "x": 768,
+            "y": 1405,
+            "width": 576,
+            "height": 432
+          },
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "18.4px",
+          "letterSpacing": "normal",
+          "color": "rgb(0, 0, 0)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "padding": "0px",
+          "margin": "96px 0px",
+          "borderRadius": "0px",
+          "textTransform": "none",
+          "textDecoration": "none"
+        },
+        "img": null,
+        "video": {
+          "tag": "VIDEO",
+          "className": "",
+          "text": "",
+          "rect": {
+            "x": 768,
+            "y": 1405,
+            "width": 576,
+            "height": 432
+          },
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "18.4px",
+          "letterSpacing": "normal",
+          "color": "rgb(0, 0, 238)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "padding": "0px",
+          "margin": "0px",
+          "borderRadius": "0px",
+          "textTransform": "none",
+          "textDecoration": "none"
+        }
+      }
+    },
+    {
+      "index": 1,
+      "gridWrapper": {
+        "display": "grid",
+        "gridTemplateColumns": "48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px",
+        "maxWidth": "1920px"
+      },
+      "eyebrow": {
+        "tag": "DIV",
+        "className": "css-1qflsub",
+        "text": "Stories",
+        "rect": {
+          "x": 96,
+          "y": 2030,
+          "width": 624,
+          "height": 38
+        },
+        "fontSize": "26px",
+        "fontWeight": "400",
+        "lineHeight": "37.7px",
+        "letterSpacing": "-0.26px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px 0px 10px",
+        "borderRadius": "0px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "title": {
+        "tag": "H2",
+        "className": "css-hvqvrd",
+        "text": "Pixar: The Early Days",
+        "rect": {
+          "x": 96,
+          "y": 2077,
+          "width": 624,
+          "height": 50
+        },
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "borderRadius": "0px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "subtitle": {
+        "tag": "P",
+        "className": "css-1fkn4j8",
+        "text": "A never-before-seen 1996 interview",
+        "rect": {
+          "x": 96,
+          "y": 2128,
+          "width": 624,
+          "height": 101
+        },
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(112, 112, 112)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "borderRadius": "0px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "cta": {
+        "tag": "A",
+        "className": "css-1kx1ev6",
+        "text": "Watch now",
+        "rect": {
+          "x": 96,
+          "y": 2261,
+          "width": 133,
+          "height": 48
+        },
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "26.1px",
+        "letterSpacing": "-0.36px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgb(245, 245, 245)",
+        "padding": "10px 23px",
+        "margin": "0px",
+        "borderRadius": "60px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "media": {
+        "figure": {
+          "tag": "FIGURE",
+          "className": "css-60ukur",
+          "text": "",
+          "rect": {
+            "x": 768,
+            "y": 2030,
+            "width": 576,
+            "height": 389
+          },
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "18.4px",
+          "letterSpacing": "normal",
+          "color": "rgb(0, 0, 0)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "padding": "0px",
+          "margin": "96px 0px",
+          "borderRadius": "0px",
+          "textTransform": "none",
+          "textDecoration": "none"
+        },
+        "img": {
+          "tag": "IMG",
+          "className": "css-1u8qly9",
+          "text": "",
+          "rect": {
+            "x": 768,
+            "y": 2030,
+            "width": 576,
+            "height": 389
+          },
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "18.4px",
+          "letterSpacing": "normal",
+          "color": "rgb(0, 0, 238)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "padding": "0px",
+          "margin": "0px",
+          "borderRadius": "0px",
+          "textTransform": "none",
+          "textDecoration": "none",
+          "naturalWidth": 720,
+          "naturalHeight": 485,
+          "aspectRatio": "1.485",
+          "src": "https://res.cloudinary.com/dkpjmxbwo/image/upload/c_fill,w_1539/f_auto/q_auto/JoelBloom.Still005_1_cxgkhc?_a=DATAdtiuZAA"
+        },
+        "video": null
+      }
+    },
+    {
+      "index": 2,
+      "gridWrapper": {
+        "display": "grid",
+        "gridTemplateColumns": "48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px",
+        "maxWidth": "1920px"
+      },
+      "eyebrow": {
+        "tag": "DIV",
+        "className": "css-1qflsub",
+        "text": "Fellowship",
+        "rect": {
+          "x": 96,
+          "y": 2611,
+          "width": 624,
+          "height": 38
+        },
+        "fontSize": "26px",
+        "fontWeight": "400",
+        "lineHeight": "37.7px",
+        "letterSpacing": "-0.26px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px 0px 10px",
+        "borderRadius": "0px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "title": {
+        "tag": "H2",
+        "className": "css-hvqvrd",
+        "text": "Announcing the 2025 SJA Fellows",
+        "rect": {
+          "x": 96,
+          "y": 2659,
+          "width": 624,
+          "height": 50
+        },
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "borderRadius": "0px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "subtitle": {
+        "tag": "P",
+        "className": "css-1fkn4j8",
+        "text": "Meet our next class of inspiring young creators",
+        "rect": {
+          "x": 96,
+          "y": 2709,
+          "width": 624,
+          "height": 101
+        },
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(112, 112, 112)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "borderRadius": "0px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "cta": {
+        "tag": "A",
+        "className": "css-1kx1ev6",
+        "text": "Meet the Fellows",
+        "rect": {
+          "x": 96,
+          "y": 2842,
+          "width": 177,
+          "height": 48
+        },
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "26.1px",
+        "letterSpacing": "-0.36px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgb(245, 245, 245)",
+        "padding": "10px 23px",
+        "margin": "0px",
+        "borderRadius": "60px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "media": {
+        "figure": {
+          "tag": "FIGURE",
+          "className": "css-1u9niim",
+          "text": "",
+          "rect": {
+            "x": 768,
+            "y": 2515,
+            "width": 576,
+            "height": 687
+          },
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "18.4px",
+          "letterSpacing": "normal",
+          "color": "rgb(0, 0, 0)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "padding": "0px",
+          "margin": "0px",
+          "borderRadius": "0px",
+          "textTransform": "none",
+          "textDecoration": "none"
+        },
+        "img": {
+          "tag": "IMG",
+          "className": "css-1u8qly9",
+          "text": "",
+          "rect": {
+            "x": 768,
+            "y": 2515,
+            "width": 576,
+            "height": 687
+          },
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "18.4px",
+          "letterSpacing": "normal",
+          "color": "rgb(0, 0, 238)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "padding": "0px",
+          "margin": "0px",
+          "borderRadius": "0px",
+          "textTransform": "none",
+          "textDecoration": "none",
+          "naturalWidth": 720,
+          "naturalHeight": 858,
+          "aspectRatio": "0.839",
+          "src": "https://res.cloudinary.com/dkpjmxbwo/image/upload/c_fill,w_1539/f_auto/q_auto/Grid_logo_2025_Fellows_logo-centered-5_leu"
+        },
+        "video": null
+      }
+    },
+    {
+      "index": 3,
+      "gridWrapper": {
+        "display": "grid",
+        "gridTemplateColumns": "48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px 48px",
+        "maxWidth": "1920px"
+      },
+      "eyebrow": {
+        "tag": "DIV",
+        "className": "css-1qflsub",
+        "text": "Stories",
+        "rect": {
+          "x": 96,
+          "y": 3299,
+          "width": 624,
+          "height": 38
+        },
+        "fontSize": "26px",
+        "fontWeight": "400",
+        "lineHeight": "37.7px",
+        "letterSpacing": "-0.26px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px 0px 10px",
+        "borderRadius": "0px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "title": {
+        "tag": "H2",
+        "className": "css-hvqvrd",
+        "text": "Stay hungry, stay foolish",
+        "rect": {
+          "x": 96,
+          "y": 3347,
+          "width": 624,
+          "height": 50
+        },
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "borderRadius": "0px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "subtitle": {
+        "tag": "P",
+        "className": "css-1fkn4j8",
+        "text": "Celebrating Steve’s timeless address",
+        "rect": {
+          "x": 96,
+          "y": 3397,
+          "width": 624,
+          "height": 101
+        },
+        "fontSize": "42px",
+        "fontWeight": "400",
+        "lineHeight": "50.4px",
+        "letterSpacing": "-0.84px",
+        "color": "rgb(112, 112, 112)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "margin": "0px",
+        "borderRadius": "0px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "cta": {
+        "tag": "A",
+        "className": "css-1kx1ev6",
+        "text": "See more",
+        "rect": {
+          "x": 96,
+          "y": 3530,
+          "width": 120,
+          "height": 48
+        },
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "26.1px",
+        "letterSpacing": "-0.36px",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgb(245, 245, 245)",
+        "padding": "10px 23px",
+        "margin": "0px",
+        "borderRadius": "60px",
+        "textTransform": "none",
+        "textDecoration": "none"
+      },
+      "media": {
+        "figure": {
+          "tag": "FIGURE",
+          "className": "css-60ukur",
+          "text": "",
+          "rect": {
+            "x": 768,
+            "y": 3299,
+            "width": 576,
+            "height": 375
+          },
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "18.4px",
+          "letterSpacing": "normal",
+          "color": "rgb(0, 0, 0)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "padding": "0px",
+          "margin": "96px 0px",
+          "borderRadius": "0px",
+          "textTransform": "none",
+          "textDecoration": "none"
+        },
+        "img": {
+          "tag": "IMG",
+          "className": "css-1u8qly9",
+          "text": "",
+          "rect": {
+            "x": 768,
+            "y": 3299,
+            "width": 576,
+            "height": 375
+          },
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "18.4px",
+          "letterSpacing": "normal",
+          "color": "rgb(0, 0, 238)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "padding": "0px",
+          "margin": "0px",
+          "borderRadius": "0px",
+          "textTransform": "none",
+          "textDecoration": "none",
+          "naturalWidth": 720,
+          "naturalHeight": 468,
+          "aspectRatio": "1.538",
+          "src": "https://res.cloudinary.com/dkpjmxbwo/image/upload/c_fill,w_1539/f_auto/q_auto/v1/Stanford/Steve_Jobs_Stanford_Commenceme"
+        },
+        "video": null
+      }
+    }
+  ],
+  "footerData": null
+}

@@ -1,13 +1,12 @@
 ---
-// 基础布局：仿 Steve Jobs Archive 的极简克制感
-//   - 纯白底、纯黑字
-//   - 标题衬线，正文系统字体
-//   - 极重留白，hairline 分隔
-//   - 文字滚动到视口时淡入上浮
+// 基础布局：精确复刻 Steve Jobs Archive
+import '@fontsource/playfair-display/400.css';
+import '@fontsource/noto-serif-sc/400.css';
+
 interface Props {
   title: string;
   description?: string;
-  image?: string;   // OG 图片路径，默认 /og-default.jpg
+  image?: string;
 }
 
 const { title, description = '思想名片', image = '/og-default.jpg' } = Astro.props;
@@ -19,9 +18,8 @@ const navItems = [
   { href: '/writing/', label: '写作' },
   { href: '/notes/', label: '随记' },
   { href: '/photos/', label: '照片' },
-  { href: '/vlog/', label: 'vlog' },
+  { href: '/vlog/', label: '影像' },
 ];
-const currentPath = Astro.url.pathname;
 ---
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -31,7 +29,6 @@ const currentPath = Astro.url.pathname;
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Open Graph / 社交分享卡片 -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={url.href} />
     <meta property="og:title" content={title} />
@@ -52,76 +49,111 @@ const currentPath = Astro.url.pathname;
 
     <header class="site-header">
       <a href="/" class="logo" aria-label="首页">
-        <span class="logo-mark" aria-hidden="true"></span>
+        <img src="/logo-variants/logo-cheng-seal.svg" alt="" class="logo-mark" />
       </a>
-      <nav class="site-nav" aria-label="主导航">
-        <ul>
-          {navItems.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                class:list={[
-                  'nav-link',
-                  { 'is-active': currentPath.startsWith(item.href) },
-                ]}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-menu">
+        Menu
+        <svg class="menu-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+          <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.2" />
+        </svg>
+      </button>
     </header>
+
+    <div class="menu-overlay" id="site-menu" hidden>
+      <div class="menu-scrim"></div>
+      <div class="menu-panel">
+        <div class="menu-panel-head">
+          <a href="/" class="logo" aria-label="首页">
+            <img src="/logo-variants/logo-cheng-seal.svg" alt="" class="logo-mark" />
+          </a>
+          <button type="button" class="menu-close">Close</button>
+        </div>
+        <nav class="menu-nav" aria-label="全站菜单">
+          <ul class="menu-list">
+            {navItems.map((item) => (
+              <li>
+                <a href={item.href} class="menu-link">{item.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <ul class="menu-foot">
+          <li><a href="/about/" class="menu-foot-link">关于</a></li>
+          <li><a href="mailto:sacharn@163.com" class="menu-foot-link">联系</a></li>
+        </ul>
+      </div>
+    </div>
 
     <main id="main" class="site-main">
       <slot />
     </main>
 
     <footer class="site-footer">
-      <div class="footer-newsletter">
-        <p class="footer-newsletter-text">订阅更新。有新项目或文章时，我会写邮件告诉你。</p>
-        <a href="mailto:sacharn@163.com?subject=订阅思想名片更新" class="footer-button">邮件订阅</a>
+      <div class="footer-news">
+        <p class="footer-news-text">订阅更新。有新项目或文章时，我会写邮件告诉你。</p>
+        <a href="mailto:sacharn@163.com?subject=订阅思想名片更新" class="footer-arrow" aria-label="邮件订阅">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+            <path d="M1 6h13M10 1.5L14.5 6 10 10.5" stroke="currentColor" stroke-width="1.2" />
+          </svg>
+        </a>
       </div>
-      <div class="footer-divider" aria-hidden="true"></div>
-      <div class="footer-row">
-        <a href="/about/" class="footer-link">关于</a>
-        <a href="mailto:sacharn@163.com" class="footer-link">联系</a>
-        <a href="#" class="footer-link" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">返回顶部</a>
-      </div>
-      <div class="footer-row footer-row-meta">
-        <span>© {new Date().getFullYear()} 严树成</span>
+      <div class="footer-base">
+        <p class="footer-wordmark">思想<br />名片</p>
+        <ul class="footer-links">
+          <li><a href="/about/" class="footer-link">关于</a></li>
+          <li><a href="mailto:sacharn@163.com" class="footer-link">联系</a></li>
+          <li><a href="https://github.com/SacharnYan" class="footer-link" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+        <div class="footer-meta">
+          <a href="#" class="footer-link" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">返回顶部</a>
+          <p class="footer-copy">© {new Date().getFullYear()} 严树成</p>
+        </div>
       </div>
     </footer>
 
     <script>
-      // 首屏 fade-in：分批错开，肉眼能看到“陆续出现”
+      // SJA 式 Menu：全屏菜单开关
+      const menuToggle = document.querySelector('.menu-toggle');
+      const menuOverlay = document.querySelector('.menu-overlay');
+      const menuClose = document.querySelector('.menu-close');
+      const setMenu = (open) => {
+        menuToggle.setAttribute('aria-expanded', String(open));
+        if (open) {
+          menuOverlay.hidden = false;
+          requestAnimationFrame(() => requestAnimationFrame(() => menuOverlay.classList.add('is-open')));
+          document.body.style.overflow = 'hidden';
+        } else {
+          menuOverlay.classList.remove('is-open');
+          document.body.style.overflow = '';
+          setTimeout(() => { menuOverlay.hidden = true; }, 450);
+        }
+      };
+      menuToggle.addEventListener('click', () => setMenu(true));
+      menuClose.addEventListener('click', () => setMenu(false));
+      menuOverlay.querySelector('.menu-scrim').addEventListener('click', () => setMenu(false));
+      menuOverlay.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !menuOverlay.hidden) setMenu(false);
+      });
+
       const allFade = document.querySelectorAll('[data-fade]');
-      const scrollOnly = document.querySelectorAll('[data-fade].fade-on-scroll');
       const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      if (!isReduced) {
-        allFade.forEach((el, i) => {
-          if (el.classList.contains('fade-on-scroll')) return;
-          setTimeout(() => el.classList.add('is-visible'), 400 + i * 400);
-        });
-
-        const io = new IntersectionObserver(
-          (entries) => {
-            for (const entry of entries) {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                io.unobserve(entry.target);
-              }
-            }
-          },
-          { threshold: 0.05, rootMargin: '0px 0px -5% 0px' }
-        );
-        scrollOnly.forEach((el) => io.observe(el));
-      } else {
+      // SJA 式入场：滚动进入视口才播放，而不是加载时一次播完
+      if (isReduced || !('IntersectionObserver' in window)) {
         allFade.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const fadeIO = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              fadeIO.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
+        allFade.forEach((el) => fadeIO.observe(el));
       }
 
-      // 懒加载图片淡入
       document.querySelectorAll('img[loading="lazy"]').forEach((img) => {
         if (img.complete) return;
         img.style.opacity = '0';
@@ -129,14 +161,20 @@ const currentPath = Astro.url.pathname;
         img.addEventListener('load', () => { img.style.opacity = '1'; }, { once: true });
       });
 
-      // header 滚动时加 hairline 分隔
-      const header = document.querySelector('.site-header');
-      if (header) {
-        const onScroll = () => {
-          header.classList.toggle('is-scrolled', window.scrollY > 4);
-        };
-        onScroll();
-        window.addEventListener('scroll', onScroll, { passive: true });
+      // data-autoplay="visible" 的视频：进入视口自动静音播放，离开暂停
+      const autoVideos = document.querySelectorAll('video[data-autoplay="visible"]');
+      if (autoVideos.length && !isReduced && 'IntersectionObserver' in window) {
+        const videoIO = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            const v = entry.target;
+            if (entry.isIntersecting) {
+              v.play().catch(() => {});
+            } else {
+              v.pause();
+            }
+          });
+        }, { threshold: 0.25 });
+        autoVideos.forEach((v) => videoIO.observe(v));
       }
     </script>
   </body>
