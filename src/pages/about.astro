@@ -1,5 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
+
+const timeline = [
+  { date: '2025–现在', stage: '工作', place: '华为终端 BG · 零售产品' },
+  { date: '2022–2025', stage: '工作', place: '华为终端 BG · 服务产品' },
+  { date: '2019–2022', stage: '研究生', place: '南京邮电大学 · 电子与通信工程' },
+  { date: '2014–2018', stage: '本科', place: '南京工程学院 · 电子与信息工程' },
+  { date: '2011–2014', stage: '高中', place: '江苏省口岸中学' },
+  { date: '2008–2011', stage: '初中', place: '泰州实验学校' },
+  { date: '2002–2008', stage: '小学', place: '蔡堡中心小学、陈堡中心小学' },
+  { date: '2000–2002', stage: '幼儿园', place: '蔡堡中心幼儿园' },
+  { date: '1996', stage: '出生', place: '江苏省兴化市' },
+];
 ---
 
 <Base title="关于 — 思想名片" description="严树成 · 华为零售产品管理 · 南京">
@@ -18,9 +30,27 @@ import Base from '../layouts/Base.astro';
         下班之后写东西、拍东西、搭这个站。之前为朋友的花艺工作室做过一套课程表海报自动生成工具，改一个开课日期，全表 30 多处自动更新。这种把重复劳动消灭掉的事，让我特别上瘾。
       </p>
 
+      <h2 class="section-title">经历</h2>
+
+      <div class="timeline">
+        {timeline.map((item) => (
+          <div class="timeline-item">
+            <p class="timeline-date">{item.date}</p>
+            <div class="timeline-main">
+              <p class="timeline-stage">{item.stage}</p>
+              <p class="timeline-place">{item.place}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <h2 class="section-title">这个站</h2>
+
       <p>
         这个站叫思想名片。我想让它是一张对外敞开的数字卡片——纯白、衬线字、大留白、慢动效。不放太多东西，只放我真正想表达的东西。
       </p>
+
+      <h2 class="section-title">联系</h2>
 
       <p>
         如果邮件能讲清楚，请写信到 <a href="mailto:sacharn@163.com" class="inline-link">sacharn@163.com</a>；微信加 sacharn；代码在 <a href="https://github.com/SacharnYan" class="inline-link" target="_blank" rel="noopener">GitHub</a>。
@@ -66,7 +96,7 @@ import Base from '../layouts/Base.astro';
     margin: 0 auto;
   }
 
-  .article-body p {
+  .article-body > p {
     font-family: var(--font-body);
     font-size: 24px;
     font-weight: 400;
@@ -76,13 +106,59 @@ import Base from '../layouts/Base.astro';
     margin: 0 0 0 0;
   }
 
-  .article-body p + p {
+  .article-body > p + p {
     text-indent: 0;
     margin-top: 1.5em;
   }
 
-  .article-body p:last-child {
-    margin-bottom: 0;
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 50px;
+    letter-spacing: -0.84px;
+    color: #000;
+    margin: 96px 0 32px 0;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid #d0d0d0;
+  }
+
+  .timeline-item:first-child {
+    border-top: 1px solid #d0d0d0;
+  }
+
+  .timeline-date {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #707070;
+    margin: 0;
+    padding-top: 2px;
+  }
+
+  .timeline-stage {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    color: #000;
+    margin: 0;
+  }
+
+  .timeline-place {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #707070;
+    margin: 2px 0 0 0;
   }
 
   .inline-link {
@@ -115,9 +191,33 @@ import Base from '../layouts/Base.astro';
       margin-left: 0;
     }
 
-    .article-body p {
+    .article-body > p {
       font-size: 19px;
       line-height: 33px;
+    }
+
+    .section-title {
+      font-size: 30px;
+      line-height: 38px;
+      letter-spacing: -0.6px;
+      margin: 72px 0 24px 0;
+    }
+
+    .timeline-item {
+      grid-template-columns: 1fr;
+      gap: 4px;
+      padding: 18px 0;
+    }
+
+    .timeline-date {
+      font-size: 14px;
+      line-height: 22px;
+      padding-top: 0;
+    }
+
+    .timeline-stage {
+      font-size: 17px;
+      line-height: 26px;
     }
   }
 </style>
