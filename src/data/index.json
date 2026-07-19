@@ -1,11 +1,11 @@
 [
   {
     "eyebrow": "Projects",
-    "title": "花艺课程表海报自动生成工具",
-    "sub": "改一处，全表自动重排。",
-    "image": "/cards/projects-card.jpg",
-    "image_alt": "花艺课程表书封式卡片",
-    "cta": { "href": "/projects/", "label": "看完整故事" }
+    "title": "湖心亭看雪",
+    "sub": "把「上下一白」做成可以划进去的湖。",
+    "image": "/projects/snow/card.jpg",
+    "image_alt": "雪夜西湖：小舟驶向湖心亭",
+    "cta": { "href": "/snow/", "label": "进入场景" }
   },
   {
     "eyebrow": "Writing",

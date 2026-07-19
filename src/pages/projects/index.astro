@@ -11,14 +11,6 @@ import Base from '../../layouts/Base.astro';
 
     <div class="article-body">
       <div class="article-list">
-        <a class="project-item" href="#floral">
-          <img class="project-thumb" src="/cards/projects-card.jpg" alt="" loading="lazy" />
-          <span class="project-item-text">
-            <span class="project-item-eyebrow">Tool · 2026</span>
-            <span class="project-item-title">花艺课程表海报</span>
-            <span class="project-item-desc">改一处，全表自动重排。</span>
-          </span>
-        </a>
         <a class="project-item" href="#snow">
           <img class="project-thumb" src="/projects/snow/card.jpg" alt="" loading="lazy" />
           <span class="project-item-text">
@@ -27,9 +19,50 @@ import Base from '../../layouts/Base.astro';
             <span class="project-item-desc">把「上下一白」做成可以划进去的湖。</span>
           </span>
         </a>
+        <a class="project-item" href="#floral">
+          <img class="project-thumb" src="/cards/projects-card.jpg" alt="" loading="lazy" />
+          <span class="project-item-text">
+            <span class="project-item-eyebrow">Tool · 2026</span>
+            <span class="project-item-title">花艺课程表海报</span>
+            <span class="project-item-desc">改一处，全表自动重排。</span>
+          </span>
+        </a>
       </div>
     </div>
   </article>
+
+  <article class="article" id="snow" data-fade>
+    <header class="article-hero article-hero--sub">
+      <p class="article-eyebrow">Interactive · 2026</p>
+      <h1 class="article-title">湖心亭看雪，把「上下一白」做成可以划进去的湖。</h1>
+    </header>
+
+    <div class="article-body">
+      <p>
+        张岱写雪，最妙是那几个量词：长堤一痕、湖心亭一点、与余舟一芥、舟中人两三粒。我用 AI 生成了一座三维的雪夜西湖，把这几个「一」做成可以划进去的场景。
+      </p>
+
+      <p>
+        拖动环顾，空格或长按「划桨」行舟。大雪三日，湖中人鸟声俱绝，你一个人往湖心亭去。
+      </p>
+
+      <figure class="article-figure">
+        <a href="/snow/" aria-label="进入湖心亭看雪互动场景">
+          <img
+            src="/projects/snow/card.jpg"
+            alt="雪夜西湖：小舟驶向湖心亭"
+            loading="lazy"
+          />
+        </a>
+      </figure>
+
+      <p>
+        <a class="project-link" href="/snow/">独往湖心亭 →</a>
+      </p>
+    </div>
+  </article>
+
+  <hr class="project-divider" />
 
   <article class="article" id="floral" data-fade>
     <header class="article-hero article-hero--sub">
@@ -60,39 +93,6 @@ import Base from '../../layouts/Base.astro';
 
       <p>
         现在它只是一个内部工具，不是产品。我还在想：这种“重复劳动自动化”的小工具，能不能做成让更多花艺、教培、餐饮商家都能用的东西？
-      </p>
-    </div>
-  </article>
-
-  <hr class="project-divider" />
-
-  <article class="article" id="snow" data-fade>
-    <header class="article-hero article-hero--sub">
-      <p class="article-eyebrow">Interactive · 2026</p>
-      <h1 class="article-title">湖心亭看雪，把「上下一白」做成可以划进去的湖。</h1>
-    </header>
-
-    <div class="article-body">
-      <p>
-        张岱写雪，最妙是那几个量词：长堤一痕、湖心亭一点、与余舟一芥、舟中人两三粒。我用 AI 生成了一座三维的雪夜西湖，把这几个「一」做成可以划进去的场景。
-      </p>
-
-      <p>
-        拖动环顾，空格或长按「划桨」行舟。大雪三日，湖中人鸟声俱绝，你一个人往湖心亭去。
-      </p>
-
-      <figure class="article-figure">
-        <a href="/snow/" aria-label="进入湖心亭看雪互动场景">
-          <img
-            src="/projects/snow/card.jpg"
-            alt="雪夜西湖：小舟驶向湖心亭"
-            loading="lazy"
-          />
-        </a>
-      </figure>
-
-      <p>
-        <a class="project-link" href="/snow/">独往湖心亭 →</a>
       </p>
     </div>
   </article>
