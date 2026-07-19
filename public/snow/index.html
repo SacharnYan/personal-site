@@ -62,6 +62,15 @@
     transition: background .25s, border-color .25s, box-shadow .25s;
   }
   button:hover { background: rgba(233,240,245,.24); }
+  a.sitelink {
+    display: block; text-align: center; text-decoration: none;
+    font-size: 13px; letter-spacing: .28em; text-indent: .28em;
+    color: #e8eef2; background: rgba(233,240,245,.10);
+    border: 1px solid rgba(233,240,245,.35); border-radius: 3px;
+    padding: 10px 16px; backdrop-filter: blur(4px);
+    transition: background .25s, border-color .25s;
+  }
+  a.sitelink:hover { background: rgba(233,240,245,.24); }
   #btnRow.held { background: rgba(255,176,96,.30); border-color: rgba(255,196,130,.65); }
   #btnPavilion { display: none; }
   #btnPavilion.glow { box-shadow: 0 0 16px rgba(255,178,100,.5); border-color: rgba(255,196,130,.75); }
@@ -76,10 +85,10 @@
   #endCard { background: rgba(13,20,27,.86); backdrop-filter: blur(6px); z-index: 25; }
   .overlay.hidden { opacity: 0; pointer-events: none; }
 
-  .vwrap { direction: rtl; display: flex; align-items: center; gap: clamp(22px, 4vw, 56px); height: 48vh; }
+  .vwrap { direction: rtl; display: flex; align-items: center; gap: clamp(22px, 4vw, 56px); height: 56vh; }
   .vwrap h1, .vwrap h2 {
-    writing-mode: vertical-rl; font-weight: 600; color: #ecf1f4;
-    font-size: clamp(40px, 8.5vh, 78px); letter-spacing: .22em;
+    writing-mode: vertical-rl; white-space: nowrap; font-weight: 600; color: #ecf1f4;
+    font-size: clamp(38px, 7.5vh, 66px); letter-spacing: .22em;
   }
   .vwrap h2 { font-size: clamp(30px, 6vh, 54px); }
   .vwrap .quote {
@@ -111,9 +120,10 @@
 
 <div id="brand">湖心亭看雪<span>张岱</span><i>痴</i></div>
 <div id="stage"></div>
-<div id="hint">拖动 环顾 · 滚轮 远近 · 空格或长按「划桨」行舟</div>
+<div id="hint">拖动 环顾 · 点击水面 行舟 · 滚轮 远近</div>
 
 <div id="ctrls">
+  <a class="sitelink" href="/projects/snow/" title="返回网站">回网站</a>
   <button id="btnRow">划桨</button>
   <button id="btnAerial">俯瞰全湖</button>
   <button id="btnPavilion">登亭小坐</button>
@@ -126,7 +136,7 @@
     <div class="sub">张岱 · 陶庵梦忆</div>
   </div>
   <button id="btnStart">独往湖心亭</button>
-  <div class="tip">拖动环顾 · 空格或长按「划桨」行舟 · 滚轮远近</div>
+  <div class="tip">拖动环顾 · 点击水面行舟 · 空格或长按「划桨」 · 滚轮远近</div>
   <div id="loadError">three.js 未能加载，请确认 three.min.js 与本页面在同一目录。</div>
 </div>
 

@@ -18,7 +18,8 @@ const timeline = [
   <article class="article" data-fade>
     <header class="article-hero">
       <p class="article-eyebrow">About</p>
-      <h1 class="article-title">终身学习，认真创造，自由表达。</h1>
+      <h1 class="article-title">终身学习，认真创造，</h1>
+      <p class="article-sub">自由表达。</p>
     </header>
 
     <div class="article-body">
@@ -90,6 +91,16 @@ const timeline = [
     letter-spacing: -1.2px;
     color: #000;
     max-width: 55ch;
+    margin: 0;
+  }
+
+  .article-sub {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #707070;
     margin: 0;
   }
 
@@ -183,7 +194,8 @@ const timeline = [
       padding: 120px 0 64px;
     }
 
-    .article-title {
+    .article-title,
+    .article-sub {
       font-size: 36px;
       line-height: 44px;
       letter-spacing: -0.72px;

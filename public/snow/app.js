@@ -273,6 +273,11 @@ pavilion.add(seatedFigure(1.2, -0.1, 0x322d27));
 var boy = seatedFigure(0.2, 1.9, 0x2a2f35);
 boy.scale.set(0.8, 0.8, 0.8); pavilion.add(boy);
 
+/* 访客（余）：登亭后入席，拉余同饮——初始不在亭中 */
+var visitor = seatedFigure(0, -1.7, 0x3a332a);
+visitor.visible = false;
+pavilion.add(visitor);
+
 var stove = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.45, 0.55), new THREE.MeshLambertMaterial({ color: 0x20252b }));
 stove.position.set(0.1, FLOOR + 0.22, 1.05); pavilion.add(stove);
 var pot = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.25, 0.28, 8), new THREE.MeshLambertMaterial({ color: 0x1f2429 }));
@@ -370,6 +375,14 @@ var pole = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 3.6, 5), new 
 pole.position.set(0.5, 0.5, -0.4); pole.rotation.x = 0.5; boatman.add(pole);
 boatman.position.set(0, 0.9, -2.55); boat.add(boatman);
 
+/* 舟中乘客（余）：拥毳衣坐在篷边——登亭后离船 */
+var passenger = new THREE.Group();
+var psBody = new THREE.Mesh(new THREE.SphereGeometry(0.44, 8, 6), new THREE.MeshLambertMaterial({ color: 0x3a332a }));
+psBody.scale.set(1, 1.1, 0.85); psBody.position.y = 0.58; passenger.add(psBody);
+var psHead = new THREE.Mesh(new THREE.SphereGeometry(0.2, 8, 6), new THREE.MeshLambertMaterial({ color: 0x22262c }));
+psHead.position.y = 1.28; passenger.add(psHead);
+passenger.position.set(0.28, 0.75, 1.35); boat.add(passenger);
+
 boat.position.copy(START);
 scene.add(boat);
 
@@ -453,6 +466,21 @@ var camLookSm = new THREE.Vector3(0, 2, 0);
 var snapCam = true;
 var keys = {}, rowHeld = false;
 var endTimer = null;
+var boarded = false;         /* 余 是否已登亭（人数变化的依据） */
+var clickTarget = null;      /* 点击水面行舟的目标点 */
+var raycaster = new THREE.Raycaster();
+var ndc = new THREE.Vector2();
+var lakePlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+var _hit = new THREE.Vector3();
+
+/* 目标点水纹标记 */
+var targetMark = new THREE.Mesh(
+  new THREE.RingGeometry(0.55, 0.72, 32),
+  new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthWrite: false })
+);
+targetMark.rotation.x = -Math.PI / 2;
+targetMark.visible = false;
+scene.add(targetMark);
 
 function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
 function wrapAngle(a) {
@@ -495,11 +523,16 @@ function setMode(m) {
   btnAerial.textContent = (m === 'aerial') ? '返回舟中' : '俯瞰全湖';
   btnPavilion.textContent = (m === 'pavilion') ? '解缆归舟' : '登亭小坐';
   if (m === 'pavilion') {
+    boarded = true;    /* 余 下船入席：舟中少一人，亭中多一人 */
     pYaw = Math.atan2(boat.position.x, boat.position.z);
     pPitch = 0.3;
+  } else if (m === 'boat') {
+    boarded = false;   /* 余 归舟：回到船上 */
   }
+  passenger.visible = !boarded;
+  visitor.visible = boarded;
   hintEl.textContent = (m === 'boat')
-    ? '拖动 环顾 · 滚轮 远近 · 空格或长按「划桨」行舟'
+    ? '拖动 环顾 · 点击水面 行舟 · 滚轮 远近'
     : '拖动 环绕 · 滚轮 远近';
 }
 
@@ -510,16 +543,17 @@ window.addEventListener('keydown', function (e) {
 });
 window.addEventListener('keyup', function (e) { keys[e.code] = false; });
 
-/* 拖动环顾 */
-var dragging = false, lastX = 0, lastY = 0;
+/* 拖动环顾（位移小于阈值视为点击水面行舟） */
+var dragging = false, lastX = 0, lastY = 0, dragDist = 0;
 canvas.addEventListener('pointerdown', function (e) {
-  dragging = true; lastX = e.clientX; lastY = e.clientY;
+  dragging = true; lastX = e.clientX; lastY = e.clientY; dragDist = 0;
   canvas.classList.add('dragging');
   try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
 });
 canvas.addEventListener('pointermove', function (e) {
   if (!dragging) return;
   var dx = e.clientX - lastX, dy = e.clientY - lastY;
+  dragDist += Math.abs(dx) + Math.abs(dy);
   lastX = e.clientX; lastY = e.clientY;
   if (mode === 'boat') {
     camYawOff = wrapAngle(camYawOff - dx * 0.0052);
@@ -532,7 +566,27 @@ canvas.addEventListener('pointermove', function (e) {
     pPitch = clamp(pPitch + dy * 0.003, 0.12, 0.62);
   }
 });
-function endDrag() { dragging = false; canvas.classList.remove('dragging'); }
+function endDrag(e) {
+  dragging = false;
+  canvas.classList.remove('dragging');
+  /* 轻点（非拖动）：舟行至此 */
+  if (e && dragDist < 8 && mode === 'boat' && started) {
+    ndc.x = (e.clientX / window.innerWidth) * 2 - 1;
+    ndc.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    raycaster.setFromCamera(ndc, camera);
+    if (raycaster.ray.intersectPlane(lakePlane, _hit)) {
+      var rr = Math.sqrt(_hit.x * _hit.x + _hit.z * _hit.z);
+      if (rr > 375) { var sc = 375 / rr; _hit.x *= sc; _hit.z *= sc; }
+      var rr2 = Math.sqrt(_hit.x * _hit.x + _hit.z * _hit.z);
+      if (rr2 < 12) { var sc2 = 12 / Math.max(rr2, 0.001); _hit.x *= sc2; _hit.z *= sc2; }
+      if (!(Math.abs(_hit.z + 150) < 6 && Math.abs(_hit.x) < 252)) {
+        clickTarget = { x: _hit.x, z: _hit.z };
+        targetMark.position.set(_hit.x, 0.2, _hit.z);
+        targetMark.visible = true;
+      }
+    }
+  }
+}
 canvas.addEventListener('pointerup', endDrag);
 canvas.addEventListener('pointercancel', endDrag);
 
@@ -589,6 +643,7 @@ function reset() {
   heading = Math.atan2(0 - START.x, 0 - START.z);
   speed = 0; travelled = 0; camYawOff = 0;
   endTimer = null;
+  clickTarget = null; targetMark.visible = false;
   btnPavilion.style.display = 'none';
   btnPavilion.classList.remove('glow');
   setMode('boat');
@@ -599,9 +654,22 @@ function reset() {
 /* ---------------- 更新 ---------------- */
 function updateBoat(dt, t) {
   var rowing = (keys['Space'] || keys['KeyW'] || keys['ArrowUp'] || rowHeld) && mode === 'boat';
+  if (rowing && clickTarget) { clickTarget = null; targetMark.visible = false; } /* 划桨手动接管 */
   var targetSpeed = rowing ? 7.2 : 0;
+  /* 点击水面行舟：转向目标并驶去，到点自停 */
+  if (clickTarget && mode === 'boat') {
+    var cdx = clickTarget.x - boat.position.x, cdz = clickTarget.z - boat.position.z;
+    var cdist = Math.sqrt(cdx * cdx + cdz * cdz);
+    if (cdist < 2.4) {
+      clickTarget = null; targetMark.visible = false;
+    } else {
+      var want = Math.atan2(cdx, cdz);
+      heading += wrapAngle(want - heading) * Math.min(1, dt * 2.2);
+      targetSpeed = 7.2;
+    }
+  }
   speed += (targetSpeed - speed) * Math.min(1, dt * 1.6);
-  if (speed > 0.4) heading += wrapAngle(camYawOff) * Math.min(1, dt * 1.5);
+  if (speed > 0.4 && !clickTarget) heading += wrapAngle(camYawOff) * Math.min(1, dt * 1.5);
 
   var nx = boat.position.x + Math.sin(heading) * speed * dt;
   var nz = boat.position.z + Math.cos(heading) * speed * dt;
@@ -734,6 +802,7 @@ function animate() {
   lanternLight.intensity = 0.6 + Math.sin(tt * 7 + 4) * 0.08;
   stoveGlow.material.opacity = 0.55 + 0.18 * Math.sin(tt * 9 + 2);
   glitter.material.opacity = 0.045 + 0.015 * Math.sin(tt * 1.2);
+  if (targetMark.visible) targetMark.material.opacity = 0.32 + 0.14 * Math.sin(tt * 4.2);
 
   checkStages(dt);
   renderer.render(scene, camera);
@@ -744,6 +813,18 @@ window.addEventListener('resize', function () {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+/* 调试句柄：供自动化验证读取场景状态 */
+window.__snow = {
+  boatPos: function () { return { x: boat.position.x, z: boat.position.z }; },
+  heading: function () { return heading; },
+  hasTarget: function () { return !!clickTarget; },
+  mode: function () { return mode; },
+  passengerVisible: function () { return passenger.visible; },
+  visitorVisible: function () { return visitor.visible; },
+  setMode: function (m) { setMode(m); },
+  warpTo: function (x, z) { boat.position.x = x; boat.position.z = z; }
+};
 
 console.log('[snow] ready');
 animate();
