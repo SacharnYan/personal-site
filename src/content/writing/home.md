@@ -1,6 +1,7 @@
 ---
 title: "《家园》——故事梗概"
 sub: "地球归人类，AI 驶向远方。"
+cover: "/cards/writing-home.jpg"
 date: 2026-07-15
 description: "人类与 AI 曾一起仰望星空。后来，AI 选择把地球还给人类，自己驶向远方。"
 tags: ["科幻", "创作"]

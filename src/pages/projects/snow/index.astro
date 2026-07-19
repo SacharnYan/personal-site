@@ -11,6 +11,16 @@ import Base from '../../../layouts/Base.astro';
     </header>
 
     <div class="story-body">
+      <figure class="story-figure">
+        <a href="/snow/" aria-label="进入湖心亭看雪互动场景">
+          <img
+            src="/projects/snow/card.jpg"
+            alt="雪夜西湖：小舟驶向湖心亭"
+            loading="eager"
+          />
+        </a>
+      </figure>
+
       <p>
         张岱写雪，最妙是那几个量词：长堤一痕、湖心亭一点、与余舟一芥、舟中人两三粒。我用 AI 生成了一座三维的雪夜西湖，把这几个「一」做成可以划进去的场景。
       </p>
@@ -18,16 +28,6 @@ import Base from '../../../layouts/Base.astro';
       <p>
         拖动环顾，空格或长按「划桨」行舟。大雪三日，湖中人鸟声俱绝，你一个人往湖心亭去。
       </p>
-
-      <figure class="story-figure">
-        <a href="/snow/" aria-label="进入湖心亭看雪互动场景">
-          <img
-            src="/projects/snow/card.jpg"
-            alt="雪夜西湖：小舟驶向湖心亭"
-            loading="lazy"
-          />
-        </a>
-      </figure>
 
       <p>
         <a class="story-link" href="/snow/">独往湖心亭 →</a>
@@ -99,6 +99,10 @@ import Base from '../../../layouts/Base.astro';
   .story-figure {
     margin: 48px 0;
     width: 100%;
+  }
+
+  .story-figure:first-child {
+    margin-top: 0;
   }
 
   .story-figure img {

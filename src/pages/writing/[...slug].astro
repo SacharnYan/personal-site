@@ -30,6 +30,12 @@ const { Content } = await article.render();
       {article.data.sub && <p class="article-sub">{article.data.sub}</p>}
     </header>
 
+    {article.data.cover && (
+      <figure class="article-cover">
+        <img src={article.data.cover} alt="" loading="eager" />
+      </figure>
+    )}
+
     <div class="article-body">
       <Content />
     </div>
@@ -46,7 +52,18 @@ const { Content } = await article.render();
   .article-hero {
     max-width: 768px;
     margin: 0 auto;
-    padding: 160px 0 96px;
+    padding: 160px 0 72px;
+  }
+
+  .article-cover {
+    max-width: 768px;
+    margin: 0 auto 48px;
+  }
+
+  .article-cover img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
   .article-eyebrow {

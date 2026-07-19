@@ -2,37 +2,37 @@
 import Base from '../../../layouts/Base.astro';
 ---
 
-<Base title="花艺课程表海报" description="改一处，全表自动重排——从 4 小时缩到 1 分钟。">
+<Base title="花艺课程表海报" description="把做海报，变成改数据。">
   <article class="story" data-fade>
     <header class="story-hero">
       <p class="story-eyebrow">Tool · 2026</p>
       <h1 class="story-title">花艺课程表海报</h1>
-      <p class="story-sub">从 4 小时缩到 1 分钟。</p>
+      <p class="story-sub">把做海报，变成改数据。</p>
     </header>
 
     <div class="story-body">
-      <p>
-        工作室有两套花艺课程：零基础创业班和创业全能班。每次开新课，都要重做两张课程表海报发出去。之前用 PPT 或 Canva 做，一张海报 2-4 小时，两张就是半天。更麻烦的是每张海报里有 30 多处日期、5-6 个章节标题、100 多个技能点，改一处常常忘了另一处。
-      </p>
-
-      <p>
-        把“内容”和“版式”分开。版式定好一次，以后只改数据。运营改一个开课日期，全表 30 多处日期一起更新；改一个章节名，罗马序号自动重排；两套课程共用一份数据源，重复内容不用抄两遍。
-      </p>
-
-      <p>
-        两张海报从 4-8 小时变成 1 分钟。保存即可发。
-      </p>
-
       <figure class="story-figure">
         <img
           src="/cards/projects-card.jpg"
           alt="零基础创业班与创业全能班课程表海报"
-          loading="lazy"
+          loading="eager"
         />
       </figure>
 
       <p>
-        现在它只是一个内部工具，不是产品。我还在想：这种“重复劳动自动化”的小工具，能不能做成让更多花艺、教培、餐饮商家都能用的东西？
+        朋友的花艺工作室有两套课程：零基础创业班和创业全能班。每开一期新课，都要做两张课程表海报，发到学员群、朋友圈和小红书。我给他们做了一个小工具：改一份数据，两张海报自己排好。
+      </p>
+
+      <p>
+        难的不是排版，是改。每张海报里有三十多处日期、五六个章节、一百多个技能点。用 PPT 或 Canva 做，一处改动要对着全文改几十处，漏一处就是错一处。两张做下来，大半天就没了。
+      </p>
+
+      <p>
+        解法是把数据和版式分开。版式用 HTML 和 CSS 定一次；内容全部收进一份数据文件：日期、章节名、技能点都在里面。改一个日期，全表三十多处一起更新；改一个章节名，罗马序号自己重排。两套课程七成内容相同，共用一份数据，不用抄两遍。
+      </p>
+
+      <p>
+        现在开新一期，改完数据、保存，两张海报就是成片。原来大半天的活，现在一分钟。它还只是个内部工具，只有工作室在用。我还在想：这种把重复劳动做成数据的小工具，能不能变成更多小商家都能用的东西。
       </p>
     </div>
   </article>
@@ -103,6 +103,10 @@ import Base from '../../../layouts/Base.astro';
     width: 100%;
   }
 
+  .story-figure:first-child {
+    margin-top: 0;
+  }
+
   .story-figure img {
     width: 100%;
     height: auto;
@@ -132,6 +136,10 @@ import Base from '../../../layouts/Base.astro';
 
     .story-figure {
       margin: 40px 0;
+    }
+
+    .story-figure:first-child {
+      margin-top: 0;
     }
   }
 </style>
