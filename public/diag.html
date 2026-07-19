@@ -3,52 +3,101 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>诊断 · sacharn.site</title>
+<title>诊断 v2 · sacharn.site</title>
 <style>
   body { font: 16px/2 -apple-system, "PingFang SC", sans-serif; padding: 24px; color: #111; }
   .ok { color: #0a7d2c; }
   .bad { color: #c0392b; }
   code { background: #f0f0f0; padding: 1px 6px; border-radius: 4px; font-size: 13px; word-break: break-all; }
+  hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
 </style>
 </head>
 <body>
-<p>① 如果你能看到这行字：<b class="ok">网络与 HTML 加载正常</b>。看不到则网络不通。</p>
-<p id="css" class="bad">② CSS 检测中……（若本行变绿则 CSS 正常）</p>
-<p id="js">③ 经典 JS：未执行</p>
-<p id="mod">④ Module JS：未执行（老内核预期行为，不影响显示）</p>
-<p id="img">⑤ 图片加载：检测中……</p>
-<p id="fetch">⑥ 拉取 /notes/ 页面：检测中……</p>
-<p>⑦ 你的浏览器：<code id="ua"></code></p>
-<p id="ver">⑧ 站点版本：检测中……</p>
+<p><b>诊断 v2</b>（请把整页截图发我）</p>
 
-<style>#css { color: #0a7d2c; }</style>
+<p>① 能看到本行：<b class="ok">网络与 HTML 正常</b></p>
+<p id="mod">② Module JS：未执行</p>
+<p id="ua">③ UA：…</p>
+<p id="notesver">④ /notes/ 的 HTML 版本：检测中……</p>
+<p id="err">⑤ 脚本错误捕获：暂无</p>
+<p id="fade">⑥ 模拟 notes 淡入逻辑：检测中……</p>
+<p id="api">⑦ 关键 API：检测中……</p>
+<hr>
+<div data-fade id="fade-target" style="padding:12px;background:#f6f6f6;border-radius:8px">
+  ⑧ 如果你能看到这段灰底文字：淡入显示链路正常
+</div>
+
 <script>
-  document.getElementById('css').textContent = '② CSS 加载正常（本行由页面内样式变绿）';
-  document.getElementById('js').innerHTML = '③ 经典 JS：<b class="ok">执行正常</b>';
-  document.getElementById('ua').textContent = navigator.userAgent;
-  var im = new Image();
-  im.onload = function () { document.getElementById('img').innerHTML = '⑤ 图片加载：<b class="ok">正常</b>'; };
-  im.onerror = function () { document.getElementById('img').innerHTML = '⑤ 图片加载：<b class="bad">失败</b>'; };
-  im.src = '/favicon-32.png?_=' + Date.now();
+  window.__errs = [];
+  window.addEventListener('error', function (e) {
+    window.__errs.push(e.message + ' @' + (e.filename || '').split('/').pop() + ':' + e.lineno);
+    document.getElementById('err').innerHTML = '⑤ 脚本错误捕获：<b class="bad">' + window.__errs.join('<br>') + '</b>';
+  });
+</script>
+
+<script type="module">
+  document.getElementById('mod').innerHTML = '② Module JS：<b class="ok">能执行</b>';
+</script>
+
+<script>
+  document.getElementById('ua').innerHTML = '③ UA：<code>' + navigator.userAgent + '</code>';
+
+  /* 关键 API 探测 */
+  var apis = [];
+  apis.push(['IntersectionObserver', 'IntersectionObserver' in window]);
+  apis.push(['NodeList.forEach', 'forEach' in NodeList.prototype]);
+  apis.push(['matchMedia', 'matchMedia' in window]);
+  apis.push(['classList', 'classList' in document.body]);
+  apis.push(['fetch', 'fetch' in window]);
+  apis.push(['Promise', 'Promise' in window]);
+  document.getElementById('api').innerHTML = '⑦ 关键 API：' + apis.map(function (a) {
+    return a[0] + '=' + (a[1] ? '<b class="ok">有</b>' : '<b class="bad">无</b>');
+  }).join('，');
+
+  /* 模拟 notes 页的 fade 逻辑（与线上主脚本同款） */
+  try {
+    var allFade = document.querySelectorAll('[data-fade]');
+    var isReduced = false;
+    try { isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    if (isReduced || !('IntersectionObserver' in window)) {
+      for (var i = 0; i < allFade.length; i++) allFade[i].classList.add('is-visible');
+    } else {
+      var fadeIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            fadeIO.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      for (var j = 0; j < allFade.length; j++) fadeIO.observe(allFade[j]);
+    }
+    setTimeout(function () {
+      var t = document.getElementById('fade-target');
+      var shown = t.classList.contains('is-visible');
+      document.getElementById('fade').innerHTML = '⑥ 模拟 notes 淡入逻辑：' + (shown ? '<b class="ok">is-visible 已添加</b>' : '<b class="bad">is-visible 未添加</b>');
+    }, 1500);
+  } catch (e) {
+    document.getElementById('fade').innerHTML = '⑥ 模拟 notes 淡入逻辑：<b class="bad">抛错 ' + e.message + '</b>';
+  }
+
+  /* /notes/ HTML 版本检测：新版含 noModule 特征 */
   fetch('/notes/?_=' + Date.now()).then(function (r) {
     return r.text().then(function (t) {
-      var has = t.indexOf('阳光，微风吹拂青草') > -1;
-      document.getElementById('fetch').innerHTML = '⑥ 拉取 /notes/：HTTP ' + r.status + (has ? '，<b class="ok">含正文</b>' : '，<b class="bad">未找到正文</b>');
+      var isNew = t.indexOf('noModule') > -1;
+      var hasBody = t.indexOf('阳光，微风吹拂青草') > -1;
+      document.getElementById('notesver').innerHTML = '④ /notes/ 的 HTML：' +
+        (isNew ? '<b class="ok">新版（含修复）</b>' : '<b class="bad">旧版缓存！这就是原因</b>') +
+        '，正文' + (hasBody ? '<b class="ok">在</b>' : '<b class="bad">缺</b>');
     });
   }).catch(function (e) {
-    document.getElementById('fetch').innerHTML = '⑥ 拉取 /notes/：<b class="bad">失败 ' + e + '</b>';
-  });
-  fetch('/_astro/about.DwyWiyoU.css?_=' + Date.now()).then(function (r) {
-    return r.text().then(function (t) {
-      var fresh = t.indexOf('[data-fade]{opacity:1}') > -1;
-      document.getElementById('ver').innerHTML = '⑧ 站点版本：' + (fresh ? '<b class="ok">已是最新（fade 修复版）</b>' : '<b class="bad">仍是旧缓存版本，请清缓存/换浏览器</b>');
-    });
-  }).catch(function () {
-    document.getElementById('ver').innerHTML = '⑧ 站点版本：检测失败';
+    document.getElementById('notesver').innerHTML = '④ /notes/ 拉取失败：<b class="bad">' + e + '</b>';
   });
 </script>
-<script type="module">
-  document.getElementById('mod').innerHTML = '④ Module JS：<b class="ok">执行正常（现代内核）</b>';
-</script>
+
+<style>
+  [data-fade] { opacity: 0.001; transform: translateY(24px); transition: opacity 1.4s; }
+  [data-fade].is-visible { opacity: 1; transform: none; }
+</style>
 </body>
 </html>
