@@ -11,20 +11,22 @@ import Base from '../../layouts/Base.astro';
 
     <div class="article-body">
       <div class="article-list">
-        <section class="article-item">
-          <p class="article-date">Tool · 2026</p>
-          <h2 class="article-item-title">
-            <a href="#floral">花艺课程表海报，从 4 小时缩到 1 分钟。</a>
-          </h2>
-          <p class="article-item-desc">改一处，全表自动重排。</p>
-        </section>
-        <section class="article-item">
-          <p class="article-date">Interactive · 2026</p>
-          <h2 class="article-item-title">
-            <a href="#snow">湖心亭看雪，把「上下一白」做成可以划进去的湖。</a>
-          </h2>
-          <p class="article-item-desc">AI 生成的三维雪夜西湖，可以划舟进去。</p>
-        </section>
+        <a class="project-item" href="#floral">
+          <img class="project-thumb" src="/cards/projects-card.jpg" alt="" loading="lazy" />
+          <span class="project-item-text">
+            <span class="project-item-eyebrow">Tool · 2026</span>
+            <span class="project-item-title">花艺课程表海报</span>
+            <span class="project-item-desc">改一处，全表自动重排。</span>
+          </span>
+        </a>
+        <a class="project-item" href="#snow">
+          <img class="project-thumb" src="/projects/snow/card.jpg" alt="" loading="lazy" />
+          <span class="project-item-text">
+            <span class="project-item-eyebrow">Interactive · 2026</span>
+            <span class="project-item-title">湖心亭看雪</span>
+            <span class="project-item-desc">把「上下一白」做成可以划进去的湖。</span>
+          </span>
+        </a>
       </div>
     </div>
   </article>
@@ -171,52 +173,66 @@ import Base from '../../layouts/Base.astro';
     display: block;
   }
 
-  .article-item {
-    padding: 48px 0;
+  .project-item {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 36px 0;
     border-bottom: 1px solid #d0d0d0;
+    text-decoration: none;
   }
 
-  .article-item:first-child {
+  .project-item:first-child {
     border-top: 1px solid #d0d0d0;
   }
 
-  .article-date {
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 22px;
-    letter-spacing: -0.28px;
-    color: #707070;
-    margin: 0 0 12px 0;
+  .project-thumb {
+    width: 192px;
+    height: 128px;
+    object-fit: cover;
+    display: block;
+    flex: none;
   }
 
-  .article-item-title {
+  .project-item-text {
+    display: block;
+    min-width: 0;
+  }
+
+  .project-item-eyebrow {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: -0.26px;
+    color: #707070;
+    margin-bottom: 8px;
+  }
+
+  .project-item-title {
+    display: block;
     font-family: var(--font-display);
-    font-size: 42px;
+    font-size: 28px;
     font-weight: 400;
-    line-height: 50px;
-    letter-spacing: -0.84px;
-    margin: 0 0 12px 0;
-  }
-
-  .article-item-title a {
+    line-height: 36px;
+    letter-spacing: -0.56px;
     color: #000;
-    border-bottom: 1px solid transparent;
-    transition: border-color 200ms, color 200ms;
+    margin-bottom: 8px;
+    transition: color 200ms;
   }
 
-  .article-item-title a:hover {
+  .project-item:hover .project-item-title {
     color: #707070;
-    border-bottom-color: #707070;
   }
 
-  .article-item-desc {
+  .project-item-desc {
+    display: block;
     font-family: var(--font-body);
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 400;
-    line-height: 26px;
+    line-height: 24px;
     color: #707070;
-    margin: 0;
   }
 
   .project-divider {
@@ -272,15 +288,26 @@ import Base from '../../layouts/Base.astro';
       margin: 40px 0;
     }
 
-    .article-item-title {
-      font-size: 26px;
-      line-height: 32px;
-      letter-spacing: -0.52px;
+    .project-item {
+      gap: 20px;
+      padding: 28px 0;
     }
 
-    .article-item-desc {
-      font-size: 15px;
-      line-height: 24px;
+    .project-thumb {
+      width: 128px;
+      height: 85px;
+    }
+
+    .project-item-title {
+      font-size: 22px;
+      line-height: 28px;
+      letter-spacing: -0.44px;
+      margin-bottom: 6px;
+    }
+
+    .project-item-desc {
+      font-size: 14px;
+      line-height: 22px;
     }
 
     .project-divider {
