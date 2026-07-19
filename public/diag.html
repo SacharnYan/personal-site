@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>诊断 · sacharn.site</title>
+<style>
+  body { font: 16px/2 -apple-system, "PingFang SC", sans-serif; padding: 24px; color: #111; }
+  .ok { color: #0a7d2c; }
+  .bad { color: #c0392b; }
+  code { background: #f0f0f0; padding: 1px 6px; border-radius: 4px; font-size: 13px; word-break: break-all; }
+</style>
+</head>
+<body>
+<p>① 如果你能看到这行字：<b class="ok">网络与 HTML 加载正常</b>。看不到则网络不通。</p>
+<p id="css" class="bad">② CSS 检测中……（若本行变绿则 CSS 正常）</p>
+<p id="js">③ 经典 JS：未执行</p>
+<p id="mod">④ Module JS：未执行（老内核预期行为，不影响显示）</p>
+<p id="img">⑤ 图片加载：检测中……</p>
+<p id="fetch">⑥ 拉取 /notes/ 页面：检测中……</p>
+<p>⑦ 你的浏览器：<code id="ua"></code></p>
+<p id="ver">⑧ 站点版本：检测中……</p>
+
+<style>#css { color: #0a7d2c; }</style>
+<script>
+  document.getElementById('css').textContent = '② CSS 加载正常（本行由页面内样式变绿）';
+  document.getElementById('js').innerHTML = '③ 经典 JS：<b class="ok">执行正常</b>';
+  document.getElementById('ua').textContent = navigator.userAgent;
+  var im = new Image();
+  im.onload = function () { document.getElementById('img').innerHTML = '⑤ 图片加载：<b class="ok">正常</b>'; };
+  im.onerror = function () { document.getElementById('img').innerHTML = '⑤ 图片加载：<b class="bad">失败</b>'; };
+  im.src = '/favicon-32.png?_=' + Date.now();
+  fetch('/notes/?_=' + Date.now()).then(function (r) {
+    return r.text().then(function (t) {
+      var has = t.indexOf('阳光，微风吹拂青草') > -1;
+      document.getElementById('fetch').innerHTML = '⑥ 拉取 /notes/：HTTP ' + r.status + (has ? '，<b class="ok">含正文</b>' : '，<b class="bad">未找到正文</b>');
+    });
+  }).catch(function (e) {
+    document.getElementById('fetch').innerHTML = '⑥ 拉取 /notes/：<b class="bad">失败 ' + e + '</b>';
+  });
+  fetch('/_astro/about.DwyWiyoU.css?_=' + Date.now()).then(function (r) {
+    return r.text().then(function (t) {
+      var fresh = t.indexOf('[data-fade]{opacity:1}') > -1;
+      document.getElementById('ver').innerHTML = '⑧ 站点版本：' + (fresh ? '<b class="ok">已是最新（fade 修复版）</b>' : '<b class="bad">仍是旧缓存版本，请清缓存/换浏览器</b>');
+    });
+  }).catch(function () {
+    document.getElementById('ver').innerHTML = '⑧ 站点版本：检测失败';
+  });
+</script>
+<script type="module">
+  document.getElementById('mod').innerHTML = '④ Module JS：<b class="ok">执行正常（现代内核）</b>';
+</script>
+</body>
+</html>
