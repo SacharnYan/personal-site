@@ -311,7 +311,13 @@ button {
 }
 
 /* ===== Fade ===== */
+/* 渐进增强：默认可见；仅当 JS 正常加载（html.js）时才启用入场动画，
+   这样 JS 被拦截/报错时内容直接显示，绝不空白 */
 [data-fade] {
+  opacity: 1;
+}
+
+html.js [data-fade] {
   opacity: 0.001;
   transform: translateY(24px);
   transition:
@@ -320,13 +326,13 @@ button {
   will-change: opacity, transform;
 }
 
-[data-fade].is-visible {
+html.js [data-fade].is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-fade] {
+  html.js [data-fade] {
     transition: none;
     transform: none;
     opacity: 1;

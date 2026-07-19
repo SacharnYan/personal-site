@@ -44,9 +44,9 @@ import sections from '../data/index.json';
               <figure class="module-figure">
                 {section.is_video ? (
                   <video
-                    src={section.image}
+                    data-src={section.image}
                     poster={section.poster}
-                    preload="metadata"
+                    preload="none"
                     playsinline
                     muted
                     loop

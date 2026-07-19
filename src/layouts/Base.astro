@@ -25,6 +25,10 @@ const navItems = [
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
+    <script is:inline>
+      /* 只在支持 ES module 的浏览器里启用入场动画；老旧/兼容模式浏览器直接显示内容 */
+      if ('noModule' in HTMLScriptElement.prototype) document.documentElement.classList.add('js');
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <title>{title}</title>
@@ -162,12 +166,14 @@ const navItems = [
       });
 
       // data-autoplay="visible" 的视频：进入视口自动静音播放，离开暂停
+      // 视频用 data-src 延迟加载：首次进入视口才下载，避免首屏拖大文件
       const autoVideos = document.querySelectorAll('video[data-autoplay="visible"]');
       if (autoVideos.length && !isReduced && 'IntersectionObserver' in window) {
         const videoIO = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             const v = entry.target;
             if (entry.isIntersecting) {
+              if (!v.src && v.dataset.src) v.src = v.dataset.src;
               v.play().catch(() => {});
             } else {
               v.pause();
@@ -175,6 +181,9 @@ const navItems = [
           });
         }, { threshold: 0.25 });
         autoVideos.forEach((v) => videoIO.observe(v));
+      } else {
+        /* 不支持 IO / 减弱动效：立即加载并静音循环 */
+        autoVideos.forEach((v) => { if (!v.src && v.dataset.src) v.src = v.dataset.src; });
       }
     </script>
   </body>
