@@ -5,6 +5,32 @@ import Base from '../../layouts/Base.astro';
 <Base title="项目">
   <article class="article" data-fade>
     <header class="article-hero">
+      <p class="article-eyebrow">Projects</p>
+      <h1 class="article-title">项目</h1>
+    </header>
+
+    <div class="article-body">
+      <div class="article-list">
+        <section class="article-item">
+          <p class="article-date">Tool · 2026</p>
+          <h2 class="article-item-title">
+            <a href="#floral">花艺课程表海报，从 4 小时缩到 1 分钟。</a>
+          </h2>
+          <p class="article-item-desc">改一处，全表自动重排。</p>
+        </section>
+        <section class="article-item">
+          <p class="article-date">Interactive · 2026</p>
+          <h2 class="article-item-title">
+            <a href="#snow">湖心亭看雪，把「上下一白」做成可以划进去的湖。</a>
+          </h2>
+          <p class="article-item-desc">AI 生成的三维雪夜西湖，可以划舟进去。</p>
+        </section>
+      </div>
+    </div>
+  </article>
+
+  <article class="article" id="floral" data-fade>
+    <header class="article-hero article-hero--sub">
       <p class="article-eyebrow">Tool · 2026</p>
       <h1 class="article-title">花艺课程表海报，从 4 小时缩到 1 分钟。</h1>
     </header>
@@ -24,16 +50,8 @@ import Base from '../../layouts/Base.astro';
 
       <figure class="article-figure">
         <img
-          src="/projects/floral-schedule/01-zero-baseline.jpg"
-          alt="零基础创业班课程表海报"
-          loading="lazy"
-        />
-      </figure>
-
-      <figure class="article-figure">
-        <img
-          src="/projects/floral-schedule/02-all-in-one.jpg"
-          alt="创业全能班课程表海报"
+          src="/cards/projects-card.jpg"
+          alt="零基础创业班与创业全能班课程表海报"
           loading="lazy"
         />
       </figure>
@@ -46,8 +64,8 @@ import Base from '../../layouts/Base.astro';
 
   <hr class="project-divider" />
 
-  <article class="article" data-fade>
-    <header class="article-hero">
+  <article class="article" id="snow" data-fade>
+    <header class="article-hero article-hero--sub">
       <p class="article-eyebrow">Interactive · 2026</p>
       <h1 class="article-title">湖心亭看雪，把「上下一白」做成可以划进去的湖。</h1>
     </header>
@@ -82,11 +100,19 @@ import Base from '../../layouts/Base.astro';
   .article {
     max-width: none;
     margin: 0;
-    padding: 0 96px 160px;
+    padding: 0 96px 0;
+  }
+
+  .article:last-of-type {
+    padding-bottom: 160px;
   }
 
   .article-hero {
     padding: 160px 0 96px;
+  }
+
+  .article-hero--sub {
+    padding: 96px 0 72px;
   }
 
   .article-eyebrow {
@@ -135,17 +161,62 @@ import Base from '../../layouts/Base.astro';
   }
 
   .article-figure {
-    margin: 64px 0;
-    width: min(calc(100vw - 192px), 1248px);
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 48px 0;
+    width: 100%;
   }
 
   .article-figure img {
     width: 100%;
     height: auto;
     display: block;
+  }
+
+  .article-item {
+    padding: 48px 0;
+    border-bottom: 1px solid #d0d0d0;
+  }
+
+  .article-item:first-child {
+    border-top: 1px solid #d0d0d0;
+  }
+
+  .article-date {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 12px 0;
+  }
+
+  .article-item-title {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 50px;
+    letter-spacing: -0.84px;
+    margin: 0 0 12px 0;
+  }
+
+  .article-item-title a {
+    color: #000;
+    border-bottom: 1px solid transparent;
+    transition: border-color 200ms, color 200ms;
+  }
+
+  .article-item-title a:hover {
+    color: #707070;
+    border-bottom-color: #707070;
+  }
+
+  .article-item-desc {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 26px;
+    color: #707070;
+    margin: 0;
   }
 
   .project-divider {
@@ -167,11 +238,19 @@ import Base from '../../layouts/Base.astro';
 
   @media (max-width: 768px) {
     .article {
-      padding: 0 24px 80px;
+      padding: 0 24px 0;
+    }
+
+    .article:last-of-type {
+      padding-bottom: 80px;
     }
 
     .article-hero {
       padding: 120px 0 64px;
+    }
+
+    .article-hero--sub {
+      padding: 72px 0 48px;
     }
 
     .article-title {
@@ -190,10 +269,18 @@ import Base from '../../layouts/Base.astro';
     }
 
     .article-figure {
-      margin: 48px -24px;
-      width: calc(100% + 48px);
-      left: 0;
-      transform: none;
+      margin: 40px 0;
+    }
+
+    .article-item-title {
+      font-size: 26px;
+      line-height: 32px;
+      letter-spacing: -0.52px;
+    }
+
+    .article-item-desc {
+      font-size: 15px;
+      line-height: 24px;
     }
 
     .project-divider {
