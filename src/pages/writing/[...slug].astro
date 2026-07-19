@@ -27,6 +27,7 @@ const { Content } = await article.render();
     <header class="article-hero">
       <p class="article-eyebrow">{fmt(article.data.date)}</p>
       <h1 class="article-title">{article.data.title}</h1>
+      {article.data.sub && <p class="article-sub">{article.data.sub}</p>}
     </header>
 
     <div class="article-body">
@@ -43,6 +44,8 @@ const { Content } = await article.render();
   }
 
   .article-hero {
+    max-width: 768px;
+    margin: 0 auto;
     padding: 160px 0 96px;
   }
 
@@ -64,6 +67,16 @@ const { Content } = await article.render();
     letter-spacing: -1.2px;
     color: #000;
     max-width: 55ch;
+    margin: 0;
+  }
+
+  .article-sub {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #707070;
     margin: 0;
   }
 
@@ -165,7 +178,8 @@ const { Content } = await article.render();
       padding: 120px 0 64px;
     }
 
-    .article-title {
+    .article-title,
+    .article-sub {
       font-size: 36px;
       line-height: 44px;
       letter-spacing: -0.72px;
