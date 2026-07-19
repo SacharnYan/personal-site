@@ -43,6 +43,39 @@ import Base from '../../layouts/Base.astro';
       </p>
     </div>
   </article>
+
+  <hr class="project-divider" />
+
+  <article class="article" data-fade>
+    <header class="article-hero">
+      <p class="article-eyebrow">Interactive · 2026</p>
+      <h1 class="article-title">湖心亭看雪，把「上下一白」做成可以划进去的湖。</h1>
+    </header>
+
+    <div class="article-body">
+      <p>
+        张岱写雪，最妙是那几个量词：长堤一痕、湖心亭一点、与余舟一芥、舟中人两三粒。我用 AI 生成了一座三维的雪夜西湖，把这几个「一」做成可以划进去的场景。
+      </p>
+
+      <p>
+        拖动环顾，空格或长按「划桨」行舟。大雪三日，湖中人鸟声俱绝，你一个人往湖心亭去。
+      </p>
+
+      <figure class="article-figure">
+        <a href="/snow/" aria-label="进入湖心亭看雪互动场景">
+          <img
+            src="/projects/snow/card.jpg"
+            alt="雪夜西湖：小舟驶向湖心亭"
+            loading="lazy"
+          />
+        </a>
+      </figure>
+
+      <p>
+        <a class="project-link" href="/snow/">独往湖心亭 →</a>
+      </p>
+    </div>
+  </article>
 </Base>
 
 <style>
@@ -115,6 +148,23 @@ import Base from '../../layouts/Base.astro';
     display: block;
   }
 
+  .project-divider {
+    border: none;
+    border-top: 1px solid #d0d0d0;
+    margin: 0 96px;
+  }
+
+  .project-link {
+    color: #000;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    transition: color 200ms;
+  }
+
+  .project-link:hover {
+    color: #707070;
+  }
+
   @media (max-width: 768px) {
     .article {
       padding: 0 24px 80px;
@@ -144,6 +194,10 @@ import Base from '../../layouts/Base.astro';
       width: calc(100% + 48px);
       left: 0;
       transform: none;
+    }
+
+    .project-divider {
+      margin: 0 24px;
     }
   }
 </style>
