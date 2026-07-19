@@ -1,0 +1,137 @@
+---
+import Base from '../../../layouts/Base.astro';
+---
+
+<Base title="花艺课程表海报" description="改一处，全表自动重排——从 4 小时缩到 1 分钟。">
+  <article class="story" data-fade>
+    <header class="story-hero">
+      <p class="story-eyebrow">Tool · 2026</p>
+      <h1 class="story-title">花艺课程表海报</h1>
+      <p class="story-sub">从 4 小时缩到 1 分钟。</p>
+    </header>
+
+    <div class="story-body">
+      <p>
+        工作室有两套花艺课程：零基础创业班和创业全能班。每次开新课，都要重做两张课程表海报发出去。之前用 PPT 或 Canva 做，一张海报 2-4 小时，两张就是半天。更麻烦的是每张海报里有 30 多处日期、5-6 个章节标题、100 多个技能点，改一处常常忘了另一处。
+      </p>
+
+      <p>
+        把“内容”和“版式”分开。版式定好一次，以后只改数据。运营改一个开课日期，全表 30 多处日期一起更新；改一个章节名，罗马序号自动重排；两套课程共用一份数据源，重复内容不用抄两遍。
+      </p>
+
+      <p>
+        两张海报从 4-8 小时变成 1 分钟。保存即可发。
+      </p>
+
+      <figure class="story-figure">
+        <img
+          src="/cards/projects-card.jpg"
+          alt="零基础创业班与创业全能班课程表海报"
+          loading="lazy"
+        />
+      </figure>
+
+      <p>
+        现在它只是一个内部工具，不是产品。我还在想：这种“重复劳动自动化”的小工具，能不能做成让更多花艺、教培、餐饮商家都能用的东西？
+      </p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .story {
+    padding: 0 96px 160px;
+  }
+
+  .story-hero {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 160px 0 72px;
+  }
+
+  .story-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .story-title {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    margin: 0;
+  }
+
+  .story-sub {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #707070;
+    margin: 0;
+  }
+
+  .story-body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  .story-body p {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: 0;
+    color: #000;
+    margin: 0;
+  }
+
+  .story-body p + p {
+    margin-top: 1.5em;
+  }
+
+  .story-figure {
+    margin: 48px 0;
+    width: 100%;
+  }
+
+  .story-figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .story {
+      padding: 0 24px 80px;
+    }
+
+    .story-hero {
+      padding: 120px 0 56px;
+    }
+
+    .story-title,
+    .story-sub {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .story-body p {
+      font-size: 19px;
+      line-height: 33px;
+    }
+
+    .story-figure {
+      margin: 40px 0;
+    }
+  }
+</style>

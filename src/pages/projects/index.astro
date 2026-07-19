@@ -11,7 +11,7 @@ import Base from '../../layouts/Base.astro';
 
     <div class="article-body">
       <div class="article-list">
-        <a class="project-item" href="#snow">
+        <a class="project-item" href="/projects/snow/">
           <img class="project-thumb" src="/projects/snow/card.jpg" alt="" loading="lazy" />
           <span class="project-item-text">
             <span class="project-item-eyebrow">Interactive · 2026</span>
@@ -19,7 +19,7 @@ import Base from '../../layouts/Base.astro';
             <span class="project-item-desc">把「上下一白」做成可以划进去的湖。</span>
           </span>
         </a>
-        <a class="project-item" href="#floral">
+        <a class="project-item" href="/projects/floral/">
           <img class="project-thumb" src="/cards/projects-card.jpg" alt="" loading="lazy" />
           <span class="project-item-text">
             <span class="project-item-eyebrow">Tool · 2026</span>
@@ -30,91 +30,17 @@ import Base from '../../layouts/Base.astro';
       </div>
     </div>
   </article>
-
-  <article class="article" id="snow" data-fade>
-    <header class="article-hero article-hero--sub">
-      <p class="article-eyebrow">Interactive · 2026</p>
-      <h1 class="article-title">湖心亭看雪，把「上下一白」做成可以划进去的湖。</h1>
-    </header>
-
-    <div class="article-body">
-      <p>
-        张岱写雪，最妙是那几个量词：长堤一痕、湖心亭一点、与余舟一芥、舟中人两三粒。我用 AI 生成了一座三维的雪夜西湖，把这几个「一」做成可以划进去的场景。
-      </p>
-
-      <p>
-        拖动环顾，空格或长按「划桨」行舟。大雪三日，湖中人鸟声俱绝，你一个人往湖心亭去。
-      </p>
-
-      <figure class="article-figure">
-        <a href="/snow/" aria-label="进入湖心亭看雪互动场景">
-          <img
-            src="/projects/snow/card.jpg"
-            alt="雪夜西湖：小舟驶向湖心亭"
-            loading="lazy"
-          />
-        </a>
-      </figure>
-
-      <p>
-        <a class="project-link" href="/snow/">独往湖心亭 →</a>
-      </p>
-    </div>
-  </article>
-
-  <hr class="project-divider" />
-
-  <article class="article" id="floral" data-fade>
-    <header class="article-hero article-hero--sub">
-      <p class="article-eyebrow">Tool · 2026</p>
-      <h1 class="article-title">花艺课程表海报，从 4 小时缩到 1 分钟。</h1>
-    </header>
-
-    <div class="article-body">
-      <p>
-        工作室有两套花艺课程：零基础创业班和创业全能班。每次开新课，都要重做两张课程表海报发出去。之前用 PPT 或 Canva 做，一张海报 2-4 小时，两张就是半天。更麻烦的是每张海报里有 30 多处日期、5-6 个章节标题、100 多个技能点，改一处常常忘了另一处。
-      </p>
-
-      <p>
-        把“内容”和“版式”分开。版式定好一次，以后只改数据。运营改一个开课日期，全表 30 多处日期一起更新；改一个章节名，罗马序号自动重排；两套课程共用一份数据源，重复内容不用抄两遍。
-      </p>
-
-      <p>
-        两张海报从 4-8 小时变成 1 分钟。保存即可发。
-      </p>
-
-      <figure class="article-figure">
-        <img
-          src="/cards/projects-card.jpg"
-          alt="零基础创业班与创业全能班课程表海报"
-          loading="lazy"
-        />
-      </figure>
-
-      <p>
-        现在它只是一个内部工具，不是产品。我还在想：这种“重复劳动自动化”的小工具，能不能做成让更多花艺、教培、餐饮商家都能用的东西？
-      </p>
-    </div>
-  </article>
 </Base>
 
 <style>
   .article {
     max-width: none;
     margin: 0;
-    padding: 0 96px 0;
-  }
-
-  .article:last-of-type {
-    padding-bottom: 160px;
+    padding: 0 96px 160px;
   }
 
   .article-hero {
     padding: 160px 0 96px;
-  }
-
-  .article-hero--sub {
-    padding: 96px 0 72px;
   }
 
   .article-eyebrow {
@@ -141,36 +67,6 @@ import Base from '../../layouts/Base.astro';
   .article-body {
     max-width: 768px;
     margin: 0 auto;
-  }
-
-  .article-body p {
-    font-family: var(--font-body);
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 42px;
-    letter-spacing: 0;
-    color: #000;
-    margin: 0 0 0 0;
-  }
-
-  .article-body p + p {
-    text-indent: 0;
-    margin-top: 1.5em;
-  }
-
-  .article-body p:last-child {
-    margin-bottom: 0;
-  }
-
-  .article-figure {
-    margin: 48px 0;
-    width: 100%;
-  }
-
-  .article-figure img {
-    width: 100%;
-    height: auto;
-    display: block;
   }
 
   .project-item {
@@ -235,38 +131,13 @@ import Base from '../../layouts/Base.astro';
     color: #707070;
   }
 
-  .project-divider {
-    border: none;
-    border-top: 1px solid #d0d0d0;
-    margin: 0 96px;
-  }
-
-  .project-link {
-    color: #000;
-    text-decoration: underline;
-    text-underline-offset: 6px;
-    transition: color 200ms;
-  }
-
-  .project-link:hover {
-    color: #707070;
-  }
-
   @media (max-width: 768px) {
     .article {
-      padding: 0 24px 0;
-    }
-
-    .article:last-of-type {
-      padding-bottom: 80px;
+      padding: 0 24px 80px;
     }
 
     .article-hero {
       padding: 120px 0 64px;
-    }
-
-    .article-hero--sub {
-      padding: 72px 0 48px;
     }
 
     .article-title {
@@ -277,15 +148,6 @@ import Base from '../../layouts/Base.astro';
 
     .article-body {
       margin-left: 0;
-    }
-
-    .article-body p {
-      font-size: 19px;
-      line-height: 33px;
-    }
-
-    .article-figure {
-      margin: 40px 0;
     }
 
     .project-item {
@@ -308,10 +170,6 @@ import Base from '../../layouts/Base.astro';
     .project-item-desc {
       font-size: 14px;
       line-height: 22px;
-    }
-
-    .project-divider {
-      margin: 0 24px;
     }
   }
 </style>
