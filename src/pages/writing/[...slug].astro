@@ -23,8 +23,8 @@ const { Content } = await article.render();
   title={`${article.data.title} — 写作`}
   description={article.data.description || article.data.title}
 >
-  <article class="article" data-fade>
-    <header class="article-hero">
+  <article class="article">
+    <header class="article-hero" data-fade>
       <p class="article-eyebrow">{fmt(article.data.date)}</p>
       <h1 class="article-title">{article.data.title}</h1>
       {article.data.sub && <p class="article-sub">{article.data.sub}</p>}
