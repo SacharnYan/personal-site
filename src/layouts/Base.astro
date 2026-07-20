@@ -26,8 +26,9 @@ const navItems = [
   <head>
     <meta charset="UTF-8" />
     <script is:inline>
-      /* 只在支持 ES module 的浏览器里启用入场动画；老旧/兼容模式浏览器直接显示内容 */
-      if ('noModule' in HTMLScriptElement.prototype) document.documentElement.classList.add('js');
+      /* 只在支持 classList 的浏览器里启用入场动画（主脚本是 ES5 经典脚本，不依赖 module）；
+         更老的浏览器不标记 js，内容直接可见 */
+      if ('classList' in document.documentElement) document.documentElement.classList.add('js');
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
@@ -115,38 +116,45 @@ const navItems = [
       </div>
     </footer>
 
-    <script>
-      /* 结构原则：淡入显示是最高优先级，放在最前并独立防护；
-         任何后续逻辑（菜单/图片/视频）报错都不能影响内容显示。
-         兼容老内核：不用 NodeList.forEach、不裸调 matchMedia。 */
+    <script is:inline>
+      /* 经典脚本（非 module）：任何支持 ES5 的浏览器都会执行，不依赖 Astro 打包与 module 支持。
+         结构原则：淡入显示是最高优先级，放在最前并独立防护；
+         任何后续逻辑（菜单/图片/视频）报错都不能影响内容显示。 */
 
-      /* 1) 淡入显示（最高优先级） */
+      /* 1) 淡入显示（最高优先级）
+            不用 IntersectionObserver：部分手机内核的 IO 会空回调（isIntersecting 全 false）
+            或只回调一次后失效。改用 getBoundingClientRect + scroll 检测，ES5 时代即支持。 */
       (function () {
         try {
           var allFade = document.querySelectorAll('[data-fade]');
+          if (!allFade.length) return;
+          var isReduced = false;
+          try { isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
           var showAll = function () {
             for (var i = 0; i < allFade.length; i++) allFade[i].classList.add('is-visible');
           };
-          var isReduced = false;
-          try { isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
-          if (isReduced || !('IntersectionObserver' in window)) {
-            showAll();
-            return;
-          }
-          var ioFired = false;
-          var fadeIO = new IntersectionObserver(function (entries) {
-            ioFired = true;
-            entries.forEach(function (entry) {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                fadeIO.unobserve(entry.target);
-              }
-            });
-          }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
-          for (var i = 0; i < allFade.length; i++) fadeIO.observe(allFade[i]);
-          /* 部分定制 WebView 的 IO 注册后永不回调：
-             规范要求 observe 后立即回调，2 秒无回调即判定失效，全部直接显示 */
-          setTimeout(function () { if (!ioFired) showAll(); }, 2000);
+          if (isReduced) { showAll(); return; }
+          var reveal = function () {
+            var vh = window.innerHeight || document.documentElement.clientHeight;
+            for (var i = 0; i < allFade.length; i++) {
+              var el = allFade[i];
+              if (el.classList.contains('is-visible')) continue;
+              /* top 进入视口 92% 线即显示；已滚过的（top 为负）也一并显示，
+                 快速拖动进度条跳屏时中间内容不会残留隐藏 */
+              if (el.getBoundingClientRect().top < vh * 0.92) el.classList.add('is-visible');
+            }
+          };
+          reveal();
+          var ticking = false;
+          var onScroll = function () {
+            if (ticking) return;
+            ticking = true;
+            setTimeout(function () { ticking = false; reveal(); }, 100);
+          };
+          window.addEventListener('scroll', onScroll);
+          window.addEventListener('resize', onScroll);
+          /* 兜底：2 秒后再全面检查一次 */
+          setTimeout(reveal, 2000);
         } catch (e) {
           /* 任何异常：立即移除 js 标记，CSS 层恢复全部可见 */
           document.documentElement.classList.remove('js');
@@ -155,38 +163,46 @@ const navItems = [
 
       /* 2) SJA 式 Menu：全屏菜单开关 */
       try {
-        const menuToggle = document.querySelector('.menu-toggle');
-        const menuOverlay = document.querySelector('.menu-overlay');
-        const menuClose = document.querySelector('.menu-close');
-        const setMenu = (open) => {
+        var menuToggle = document.querySelector('.menu-toggle');
+        var menuOverlay = document.querySelector('.menu-overlay');
+        var menuClose = document.querySelector('.menu-close');
+        var setMenu = function (open) {
           menuToggle.setAttribute('aria-expanded', String(open));
           if (open) {
             menuOverlay.hidden = false;
-            requestAnimationFrame(() => requestAnimationFrame(() => menuOverlay.classList.add('is-open')));
+            requestAnimationFrame(function () {
+              requestAnimationFrame(function () { menuOverlay.classList.add('is-open'); });
+            });
             document.body.style.overflow = 'hidden';
           } else {
             menuOverlay.classList.remove('is-open');
             document.body.style.overflow = '';
-            setTimeout(() => { menuOverlay.hidden = true; }, 450);
+            setTimeout(function () { menuOverlay.hidden = true; }, 450);
           }
         };
-        menuToggle.addEventListener('click', () => setMenu(true));
-        menuClose.addEventListener('click', () => setMenu(false));
-        menuOverlay.querySelector('.menu-scrim').addEventListener('click', () => setMenu(false));
-        menuOverlay.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
-        document.addEventListener('keydown', (e) => {
+        menuToggle.addEventListener('click', function () { setMenu(true); });
+        menuClose.addEventListener('click', function () { setMenu(false); });
+        menuOverlay.querySelector('.menu-scrim').addEventListener('click', function () { setMenu(false); });
+        var menuLinks = menuOverlay.querySelectorAll('a');
+        for (var mi = 0; mi < menuLinks.length; mi++) {
+          menuLinks[mi].addEventListener('click', function () { setMenu(false); });
+        }
+        document.addEventListener('keydown', function (e) {
           if (e.key === 'Escape' && !menuOverlay.hidden) setMenu(false);
         });
       } catch (e) { /* 菜单失效不影响内容 */ }
 
       /* 3) 懒加载图片淡入 */
       try {
-        document.querySelectorAll('img[loading="lazy"]').forEach((img) => {
-          if (img.complete) return;
-          img.style.opacity = '0';
-          img.style.transition = 'opacity 800ms cubic-bezier(0.16, 1, 0.3, 1)';
-          img.addEventListener('load', () => { img.style.opacity = '1'; }, { once: true });
-        });
+        var lazyImgs = document.querySelectorAll('img[loading="lazy"]');
+        for (var li = 0; li < lazyImgs.length; li++) {
+          (function (img) {
+            if (img.complete) return;
+            img.style.opacity = '0';
+            img.style.transition = 'opacity 800ms cubic-bezier(0.16, 1, 0.3, 1)';
+            img.addEventListener('load', function () { img.style.opacity = '1'; });
+          })(lazyImgs[li]);
+        }
       } catch (e) {}
 
       /* 4) data-autoplay="visible" 的视频：进入视口自动静音播放，离开暂停
@@ -194,22 +210,28 @@ const navItems = [
       try {
         var isReducedV = false;
         try { isReducedV = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
-        const autoVideos = document.querySelectorAll('video[data-autoplay="visible"]');
+        var autoVideos = document.querySelectorAll('video[data-autoplay="visible"]');
+        var loadVideo = function (v) { if (!v.src && v.dataset && v.dataset.src) v.src = v.dataset.src; };
         if (autoVideos.length && !isReducedV && 'IntersectionObserver' in window) {
-          const videoIO = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-              const v = entry.target;
-              if (entry.isIntersecting) {
-                if (!v.src && v.dataset.src) v.src = v.dataset.src;
-                v.play().catch(() => {});
+          var videoIO = new IntersectionObserver(function (entries) {
+            for (var vi = 0; vi < entries.length; vi++) {
+              var v = entries[vi].target;
+              if (entries[vi].isIntersecting) {
+                loadVideo(v);
+                var p = v.play();
+                if (p && p.catch) p.catch(function () {});
               } else {
                 v.pause();
               }
-            });
+            }
           }, { threshold: 0.25 });
-          autoVideos.forEach((v) => videoIO.observe(v));
+          for (var vo = 0; vo < autoVideos.length; vo++) videoIO.observe(autoVideos[vo]);
+          /* IO 失效兜底：3 秒后仍未加载的视频直接加载（不自动播放，交给用户点播） */
+          setTimeout(function () {
+            for (var vf = 0; vf < autoVideos.length; vf++) loadVideo(autoVideos[vf]);
+          }, 3000);
         } else {
-          autoVideos.forEach((v) => { if (!v.src && v.dataset.src) v.src = v.dataset.src; });
+          for (var ve = 0; ve < autoVideos.length; ve++) loadVideo(autoVideos[ve]);
         }
       } catch (e) {}
     </script>
