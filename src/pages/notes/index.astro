@@ -27,6 +27,9 @@ const fmt = (d) => {
               <p>{line.trim()}</p>
             ))}
           </div>
+          {note.image && (
+            <img class="note-image" src={note.image} alt={note.image_alt || ''} loading="lazy" />
+          )}
         </section>
       ))}
     </div>
@@ -116,6 +119,13 @@ const fmt = (d) => {
 
   .note-text p:last-child {
     margin-bottom: 0;
+  }
+
+  .note-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 24px;
   }
 
   @media (max-width: 768px) {
