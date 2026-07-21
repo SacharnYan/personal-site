@@ -466,6 +466,7 @@ var camLookSm = new THREE.Vector3(0, 2, 0);
 var snapCam = true;
 var keys = {}, rowHeld = false;
 var endTimer = null;
+var endShown = false;        /* 结束卡显示中：暂停渲染，降低 GPU 负载 */
 var boarded = false;         /* 余 是否已登亭（人数变化的依据） */
 var clickTarget = null;      /* 点击水面行舟的目标点 */
 var raycaster = new THREE.Raycaster();
@@ -633,10 +634,12 @@ document.getElementById('btnStart').addEventListener('click', function () {
 });
 document.getElementById('btnAgain').addEventListener('click', function () {
   endCard.classList.add('hidden');
+  endShown = false;
   reset();
 });
 document.getElementById('btnStay').addEventListener('click', function () {
   endCard.classList.add('hidden');
+  endShown = false;
 });
 function reset() {
   boat.position.copy(START);
@@ -748,7 +751,7 @@ function checkStages(dt) {
   if (endTimer !== null) {
     if (mode === 'pavilion') { endTimer = null; return; }
     endTimer -= dt;
-    if (endTimer <= 0) { endTimer = null; endCard.classList.remove('hidden'); }
+    if (endTimer <= 0) { endTimer = null; endCard.classList.remove('hidden'); endShown = true; }
   }
 }
 
@@ -805,7 +808,7 @@ function animate() {
   if (targetMark.visible) targetMark.material.opacity = 0.32 + 0.14 * Math.sin(tt * 4.2);
 
   checkStages(dt);
-  renderer.render(scene, camera);
+  if (!endShown) renderer.render(scene, camera);
 }
 
 window.addEventListener('resize', function () {
