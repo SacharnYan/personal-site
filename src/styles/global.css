@@ -383,3 +383,29 @@ html.js [data-fade].is-visible {
     margin-left: 0;
   }
 }
+
+/* ===== 全站提示 toast（mailto 兜底等） ===== */
+#site-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%) translateY(8px);
+  z-index: 200;
+  max-width: calc(100vw - 48px);
+  padding: 10px 22px;
+  background: #000;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+
+#site-toast.show {
+  opacity: 0.92;
+  transform: translateX(-50%) translateY(0);
+}

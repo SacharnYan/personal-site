@@ -87,7 +87,7 @@ const navItems = [
         </nav>
         <ul class="menu-foot">
           <li><a href="/about/" class="menu-foot-link">关于</a></li>
-          <li><a href="mailto:sacharn@163.com" class="menu-foot-link">联系</a></li>
+          <li><a href="mailto:sacharn@163.com" class="menu-foot-link" data-mail="sacharn@163.com">联系</a></li>
         </ul>
       </div>
     </div>
@@ -99,7 +99,7 @@ const navItems = [
     <footer class="site-footer">
       <div class="footer-news">
         <p class="footer-news-text">订阅更新。有新项目或文章时，我会写邮件告诉你。</p>
-        <a href="mailto:sacharn@163.com?subject=订阅思想名片更新" class="footer-arrow" aria-label="邮件订阅">
+        <a href="mailto:sacharn@163.com?subject=订阅思想名片更新" class="footer-arrow" aria-label="邮件订阅" data-mail="sacharn@163.com">
           <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
             <path d="M1 6h13M10 1.5L14.5 6 10 10.5" stroke="currentColor" stroke-width="1.2" />
           </svg>
@@ -109,7 +109,7 @@ const navItems = [
         <p class="footer-copy">© {new Date().getFullYear()} 严树成</p>
         <ul class="footer-links">
           <li><a href="/about/" class="footer-link">关于</a></li>
-          <li><a href="mailto:sacharn@163.com" class="footer-link">联系</a></li>
+          <li><a href="mailto:sacharn@163.com" class="footer-link" data-mail="sacharn@163.com">联系</a></li>
           <li><a href="https://github.com/SacharnYan" class="footer-link" target="_blank" rel="noopener">GitHub</a></li>
         </ul>
         <a href="#" class="footer-link footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">返回顶部</a>
@@ -232,6 +232,48 @@ const navItems = [
           }, 3000);
         } else {
           for (var ve = 0; ve < autoVideos.length; ve++) loadVideo(autoVideos[ve]);
+        }
+      } catch (e) {}
+
+      /* 5) mailto 兜底：手机无邮件应用/部分内置浏览器点 mailto 毫无反应，
+            点击时同步复制邮箱并浮出提示。不阻止默认行为，桌面照常打开邮件客户端。 */
+      try {
+        var copyText = function (t) {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(t).then(null, function () {});
+            return;
+          }
+          var ta = document.createElement('textarea');
+          ta.value = t;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); } catch (e) {}
+          document.body.removeChild(ta);
+        };
+        var toastTimer = null;
+        var showToast = function (msg) {
+          var el = document.getElementById('site-toast');
+          if (!el) {
+            el = document.createElement('div');
+            el.id = 'site-toast';
+            el.setAttribute('role', 'status');
+            document.body.appendChild(el);
+          }
+          el.textContent = msg;
+          el.classList.add('show');
+          if (toastTimer) clearTimeout(toastTimer);
+          toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2600);
+        };
+        var mailLinks = document.querySelectorAll('[data-mail]');
+        for (var ml = 0; ml < mailLinks.length; ml++) {
+          (function (a) {
+            a.addEventListener('click', function () {
+              copyText(a.getAttribute('data-mail'));
+              showToast('已复制邮箱 ' + a.getAttribute('data-mail') + '，来信即可订阅');
+            });
+          })(mailLinks[ml]);
         }
       } catch (e) {}
     </script>
