@@ -1,0 +1,179 @@
+---
+import Base from '../../layouts/Base.astro';
+import photos from '../../data/photos.json';
+
+export function getStaticPaths() {
+  return photos.map((p, i) => ({
+    params: { id: p.id },
+    props: {
+      photo: p,
+      prev: i > 0 ? photos[i - 1] : null,
+      next: i < photos.length - 1 ? photos[i + 1] : null,
+    },
+  }));
+}
+
+const { photo, prev, next } = Astro.props;
+---
+
+<Base title={`${photo.title} · 照片`} description={photo.title} image={photo.src}>
+  <div class="pd">
+    <nav class="pd-bar" aria-label="照片导航">
+      <a href="/photos/" class="pd-bar-link">← 照片墙</a>
+      {next
+        ? <a href={`/photos/${next.id}/`} class="pd-bar-link">下一张 →</a>
+        : <span class="pd-bar-link pd-bar-dim">已是最后一张</span>}
+    </nav>
+
+    <figure class="pd-figure" data-fade>
+      <img src={photo.src} alt={photo.title} loading="eager" />
+    </figure>
+
+    <header class="pd-head" data-fade>
+      <h1 class="pd-title">{photo.title}</h1>
+      {photo.date && <p class="pd-date">{photo.date}</p>}
+    </header>
+
+    <nav class="pd-nav" aria-label="上一张 / 下一张" data-fade>
+      {prev ? (
+        <a href={`/photos/${prev.id}/`} class="pd-thumb">
+          <img src={prev.src} alt={prev.title} loading="lazy" />
+          <span class="pd-thumb-label">← {prev.title}</span>
+        </a>
+      ) : <span></span>}
+      {next ? (
+        <a href={`/photos/${next.id}/`} class="pd-thumb pd-thumb-right">
+          <span class="pd-thumb-label">{next.title} →</span>
+          <img src={next.src} alt={next.title} loading="lazy" />
+        </a>
+      ) : <span></span>}
+    </nav>
+  </div>
+</Base>
+
+<style>
+  .pd {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px 120px;
+  }
+
+  .pd-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 140px 0 48px;
+  }
+
+  .pd-bar-link {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+    transition: opacity 200ms ease;
+  }
+
+  .pd-bar-link:hover {
+    opacity: 0.5;
+  }
+
+  .pd-bar-dim {
+    color: var(--color-fg-faint);
+  }
+
+  .pd-figure {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .pd-figure img {
+    display: block;
+    max-width: 100%;
+    max-height: 76vh;
+    width: auto;
+    height: auto;
+  }
+
+  .pd-head {
+    text-align: center;
+    padding: 40px 0 0;
+  }
+
+  .pd-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #000;
+    margin: 0;
+  }
+
+  .pd-date {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-fg-muted);
+    margin: 12px 0 0;
+  }
+
+  .pd-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-top: 88px;
+  }
+
+  .pd-thumb {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-decoration: none;
+    color: #000;
+    transition: opacity 200ms ease;
+  }
+
+  .pd-thumb:hover {
+    opacity: 0.6;
+  }
+
+  .pd-thumb img {
+    width: 96px;
+    height: 72px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .pd-thumb-label {
+    font-family: var(--font-body);
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .pd {
+      padding: 0 24px 80px;
+    }
+
+    .pd-bar {
+      padding: 104px 0 32px;
+    }
+
+    .pd-head {
+      padding-top: 32px;
+    }
+
+    .pd-title {
+      font-size: 22px;
+    }
+
+    .pd-nav {
+      margin-top: 56px;
+    }
+
+    .pd-thumb img {
+      width: 72px;
+      height: 54px;
+    }
+  }
+</style>

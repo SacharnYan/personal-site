@@ -1,9 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-
-const photos = Array.from({ length: 9 }, (_, i) => ({
-  src: `/photos/photo-${String(i + 1).padStart(2, '0')}.jpg`,
-}));
+import photos from '../../data/photos.json';
 ---
 
 <Base title="照片">
@@ -15,13 +12,13 @@ const photos = Array.from({ length: 9 }, (_, i) => ({
 
     <div class="gallery">
       {photos.map((photo, i) => (
-        <figure class="gallery-item" data-fade>
+        <a class="gallery-item" data-fade href={`/photos/${photo.id}/`} aria-label={photo.title}>
           <img
             src={photo.src}
-            alt=""
+            alt={photo.title}
             loading={i < 4 ? 'eager' : 'lazy'}
           />
-        </figure>
+        </a>
       ))}
     </div>
   </article>
@@ -68,6 +65,12 @@ const photos = Array.from({ length: 9 }, (_, i) => ({
   .gallery-item {
     margin: 0;
     overflow: hidden;
+    display: block;
+    transition: opacity 300ms ease;
+  }
+
+  .gallery-item:hover {
+    opacity: 0.85;
   }
 
   .gallery-item img {
