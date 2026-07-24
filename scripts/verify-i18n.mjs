@@ -164,6 +164,40 @@ const r404 = await pg.request.get('http://localhost:4597/en/404/');
 const t404 = await r404.text();
 check('EN 404 存在且英文', r404.status() === 200 && t404.includes('Page not found'));
 
+// 12) 语言自动识别：首访按浏览器语言跳镜像（只跳一次）；手动选择被记住
+const ctxEn = await browser.newContext({ locale: 'en-US', viewport: { width: 1440, height: 900 } });
+const pEn = await ctxEn.newPage();
+await pEn.goto('http://localhost:4597/', { waitUntil: 'domcontentloaded' });
+await pEn.waitForTimeout(400);
+check('英文环境首访自动跳 /en/', pEn.url().endsWith('/en/'), pEn.url());
+const storedEn = await pEn.evaluate(() => localStorage.getItem('site-lang'));
+check('首次检测已写入记忆', storedEn === 'en', String(storedEn));
+await pEn.goto('http://localhost:4597/writing/', { waitUntil: 'domcontentloaded' });
+await pEn.waitForTimeout(400);
+check('记忆后访问中文页不再跳', pEn.url().endsWith('/writing/'), pEn.url());
+await ctxEn.close();
+
+const ctxEn2 = await browser.newContext({ locale: 'en-US', viewport: { width: 1440, height: 900 } });
+const pEn2 = await ctxEn2.newPage();
+await pEn2.goto('http://localhost:4597/writing/home/', { waitUntil: 'domcontentloaded' });
+await pEn2.waitForTimeout(400);
+check('英文环境深链跳 /en/writing/home/', pEn2.url().endsWith('/en/writing/home/'), pEn2.url());
+await ctxEn2.close();
+
+const ctxZh = await browser.newContext({ locale: 'zh-CN', viewport: { width: 1440, height: 900 } });
+const pZh = await ctxZh.newPage();
+await pZh.goto('http://localhost:4597/', { waitUntil: 'domcontentloaded' });
+await pZh.waitForTimeout(400);
+check('中文环境停留中文首页', !pZh.url().includes('/en/'), pZh.url());
+await pZh.evaluate(() => document.querySelector('.menu-toggle').click());
+await pZh.waitForTimeout(600);
+await pZh.evaluate(() => document.querySelector('.menu-lang').click());
+await pZh.waitForTimeout(600);
+check('手动切换到达英文页', pZh.url().includes('/en/'), pZh.url());
+const storedZh = await pZh.evaluate(() => localStorage.getItem('site-lang'));
+check('手动选择已记忆 en', storedZh === 'en', String(storedZh));
+await ctxZh.close();
+
 // 截图供过目
 await pg.goto('http://localhost:4597/en/', { waitUntil: 'networkidle' });
 await pg.waitForTimeout(1200);

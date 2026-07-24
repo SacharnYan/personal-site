@@ -35,6 +35,42 @@ const year = new Date().getFullYear();
   <head>
     <meta charset="UTF-8" />
     <script is:inline>
+      /* 语言自动识别：首次访问按浏览器语言选择镜像（非中文环境跳 /en/），
+         只跳一次；用户手动点过语言切换后记住选择，之后不再自动跳。
+         ES5 经典脚本，任何异常静默跳过（不跳转、不影响内容）。 */
+      (function () {
+        try {
+          var KEY = 'site-lang';
+          var store = {
+            get: function () { try { return window.localStorage.getItem(KEY); } catch (e) { return null; } },
+            set: function (v) { try { window.localStorage.setItem(KEY, v); } catch (e) {} }
+          };
+          /* 手动切换：记住目标语言（捕获阶段，跳转前写入） */
+          document.addEventListener('click', function (ev) {
+            var t = ev.target || ev.srcElement;
+            while (t && t !== document) {
+              if (typeof t.className === 'string' && (' ' + t.className + ' ').indexOf(' menu-lang ') > -1) {
+                var h = t.getAttribute('href') || '';
+                store.set(h.indexOf('/en/') === 0 || h === '/en' ? 'en' : 'zh');
+                return;
+              }
+              t = t.parentNode;
+            }
+          }, true);
+          if (store.get()) return; /* 已完成首次检测或用户已手动选择 */
+          var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
+          if (nav.indexOf('zh') === 0) { store.set('zh'); return; }
+          store.set('en');
+          var path = window.location.pathname;
+          var onEn = path === '/en' || path.indexOf('/en/') === 0;
+          if (!onEn) {
+            var target = path === '/' ? '/en/' : '/en' + path;
+            window.location.replace(target + window.location.search + window.location.hash);
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script is:inline>
       /* 只在支持 classList 的浏览器里启用入场动画（主脚本是 ES5 经典脚本，不依赖 module）；
          更老的浏览器不标记 js，内容直接可见 */
       if ('classList' in document.documentElement) document.documentElement.classList.add('js');

@@ -44,6 +44,12 @@ dist/                  # build 产物（不提交）
   - `switchPath(lang, pathname)` — 菜单语言切换器的目标地址
   - `fmtDate(lang, date)` — 中文 `2024.01.20` / 英文 `Jan 20, 2024`
 
+### 语言自动识别
+
+`Base.astro` 头部内联脚本：首次访问时非中文浏览器环境自动跳到 `/en/` 镜像
+（`location.replace`，渲染前完成，不留历史记录）；用户手动点过菜单里的语言切换后，
+选择写入 `localStorage(site-lang)`，之后不再自动跳。检测只发生一次，深链同样生效。
+
 ### 写作（重点）
 
 - 中文文章：`src/content/writing/<slug>.md`
