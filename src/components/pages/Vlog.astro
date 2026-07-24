@@ -1,0 +1,128 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, type Lang } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const isEn = lang === 'en';
+
+const clips = [
+  { src: '/vlog/vlog-01.mp4', poster: '/vlog/vlog-01-poster-full.jpg', label: '湖上的雾 · 2026.06.20', label_en: 'Mist over the Lake · Jun 20, 2026' },
+  { src: '/vlog/vlog-02.mp4', poster: '/vlog/vlog-02-poster-full.jpg', label: '过河的狗 · 2026.06.20', label_en: 'A Dog Crossing the River · Jun 20, 2026' },
+];
+---
+
+<Base title={t(lang, 'vlog.title')} lang={lang}>
+  <article class="article">
+    <header class="article-hero" data-fade>
+      <p class="article-eyebrow">Vlog</p>
+      <h1 class="article-title">{t(lang, 'vlog.title')}</h1>
+    </header>
+
+    <div class="article-body">
+      {clips.map((clip) => (
+        <section class="vlog-item" data-fade>
+          <p class="vlog-label">{isEn ? clip.label_en : clip.label}</p>
+          <div class="vlog-player">
+            <video
+              controls
+              preload="none"
+              playsinline
+              src={clip.src}
+              poster={clip.poster}
+            >
+              {t(lang, 'video.unsupported')}
+            </video>
+          </div>
+        </section>
+      ))}
+    </div>
+  </article>
+</Base>
+
+<style>
+  .article {
+    max-width: none;
+    margin: 0;
+    padding: 0 96px 160px;
+  }
+
+  .article-hero {
+    padding: 160px 0 96px;
+  }
+
+  .article-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .article-title {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    max-width: 55ch;
+    margin: 0;
+  }
+
+  .article-body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  .vlog-item {
+    padding: 48px 0;
+    border-bottom: 1px solid #d0d0d0;
+  }
+
+  .vlog-item:first-child {
+    border-top: 1px solid #d0d0d0;
+  }
+
+  .vlog-label {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    max-width: 432px;
+    margin: 0 auto 16px;
+  }
+
+  .vlog-player {
+    max-width: 432px;
+    margin: 0 auto;
+  }
+
+  .vlog-player video {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 9 / 16;
+    display: block;
+    background: #000;
+  }
+
+  @media (max-width: 768px) {
+    .article {
+      padding: 0 24px 80px;
+    }
+
+    .article-hero {
+      padding: 120px 0 64px;
+    }
+
+    .article-title {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+  }
+</style>

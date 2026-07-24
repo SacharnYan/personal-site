@@ -1,8 +1,11 @@
 ---
 title: "我的食粮清单"
+title_en: "My List of Nourishment"
 sub: "看过什么，就成为什么。"
+sub_en: "You become what you consume."
 date: 2023-06-18
 description: "值得反复看的书、纪录片、视频和演讲，分八类收在一起。"
+description_en: "Books, documentaries, videos, and talks worth revisiting, gathered in eight categories."
 tags: ["清单", "输入"]
 ---
 

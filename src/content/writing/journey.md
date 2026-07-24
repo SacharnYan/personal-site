@@ -1,8 +1,11 @@
 ---
 title: "探秘之旅"
+title_en: "A Journey of Riddles"
 sub: "谜面藏在源码的 //TODO 里。"
+sub_en: "The riddle hides in the source code's //TODO."
 date: 2021-08-20
 description: "网上冲浪遇到一个谜语人，把密码一层层藏在编码里，等人破解。"
+description_en: "Met a riddler online who hid a password layer by layer in encodings, waiting for someone to crack it."
 tags: ["趣事", "技术"]
 ---
 

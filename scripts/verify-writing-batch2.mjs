@@ -28,7 +28,7 @@ const check = (name, ok, detail) => { if (!ok) failed++; console.log(`${ok ? 'PA
 /* 列表：10 篇，journey 在 2021 段、intake 在 2023 段 */
 await page.goto(`http://localhost:${PORT}/writing/`, { waitUntil: 'networkidle' });
 const list = await page.$$eval('.article-item', items => items.map(i => i.querySelector('.article-item-title').textContent.trim()));
-check('写作列表共 10 篇', list.length === 10, `实际 ${list.length}`);
+check('写作列表共 11 篇', list.length === 11, `实际 ${list.length}`);
 check('探秘之旅与食粮清单在列表中', list.includes('探秘之旅') && list.includes('我的食粮清单'), list.join(' | '));
 
 /* journey：3 张正文图加载成功 + 代码块 + 无 emoji 残留 */

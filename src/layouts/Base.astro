@@ -1,28 +1,37 @@
 ---
-// 基础布局：精确复刻 Steve Jobs Archive
+// 基础布局：精确复刻 Steve Jobs Archive；双语化：中文在根路径，英文在 /en/ 镜像
 import '@fontsource/playfair-display/400.css';
 import '@fontsource/noto-serif-sc/400.css';
+import { t, href, switchPath, type Lang } from '../i18n/ui';
 
 interface Props {
   title: string;
   description?: string;
   image?: string;
+  lang?: Lang;
 }
 
-const { title, description = '思想名片', image = '/og-default.jpg' } = Astro.props;
+const { title, lang = 'zh' } = Astro.props;
 const url = Astro.url;
-const siteName = '思想名片';
-const ogImage = url.origin + image;
+const siteName = t(lang, 'site.name');
+const description = Astro.props.description ?? t(lang, 'site.desc');
+const ogImage = url.origin + (Astro.props.image ?? '/og-default.jpg');
 const navItems = [
-  { href: '/projects/', label: '项目' },
-  { href: '/writing/', label: '写作' },
-  { href: '/notes/', label: '随记' },
-  { href: '/photos/', label: '照片' },
-  { href: '/vlog/', label: '影像' },
+  { href: href(lang, '/projects/'), label: t(lang, 'nav.projects') },
+  { href: href(lang, '/writing/'), label: t(lang, 'nav.writing') },
+  { href: href(lang, '/notes/'), label: t(lang, 'nav.notes') },
+  { href: href(lang, '/photos/'), label: t(lang, 'nav.photos') },
+  { href: href(lang, '/vlog/'), label: t(lang, 'nav.vlog') },
 ];
+const homeHref = href(lang, '/');
+const aboutHref = href(lang, '/about/');
+const otherPath = switchPath(lang, url.pathname);
+const zhUrl = url.origin + (lang === 'zh' ? url.pathname : otherPath);
+const enUrl = url.origin + (lang === 'en' ? url.pathname : otherPath);
+const year = new Date().getFullYear();
 ---
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
   <head>
     <meta charset="UTF-8" />
     <script is:inline>
@@ -45,18 +54,21 @@ const navItems = [
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content={siteName} />
-    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <link rel="canonical" href={url.href} />
+    <link rel="alternate" hreflang="zh-CN" href={zhUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="x-default" href={zhUrl} />
   </head>
-  <body>
-    <a href="#main" class="skip-link">跳到内容</a>
+  <body data-toast-mail={t(lang, 'toast.mail')}>
+    <a href="#main" class="skip-link">{t(lang, 'a11y.skip')}</a>
 
     <header class="site-header">
-      <a href="/" class="logo" aria-label="首页">
+      <a href={homeHref} class="logo" aria-label={t(lang, 'a11y.home')}>
         <img src="/logo-variants/logo-spiral.svg" alt="" class="logo-mark" />
       </a>
       <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-menu">
@@ -71,12 +83,12 @@ const navItems = [
       <div class="menu-scrim"></div>
       <div class="menu-panel">
         <div class="menu-panel-head">
-          <a href="/" class="logo" aria-label="首页">
+          <a href={homeHref} class="logo" aria-label={t(lang, 'a11y.home')}>
             <img src="/logo-variants/logo-spiral.svg" alt="" class="logo-mark" />
           </a>
           <button type="button" class="menu-close">Close</button>
         </div>
-        <nav class="menu-nav" aria-label="全站菜单">
+        <nav class="menu-nav" aria-label={t(lang, 'a11y.menu')}>
           <ul class="menu-list">
             {navItems.map((item) => (
               <li>
@@ -86,8 +98,9 @@ const navItems = [
           </ul>
         </nav>
         <ul class="menu-foot">
-          <li><a href="/about/" class="menu-foot-link">关于</a></li>
-          <li><a href="mailto:sacharn@163.com" class="menu-foot-link" data-mail="sacharn@163.com">联系</a></li>
+          <li><a href={aboutHref} class="menu-foot-link">{t(lang, 'foot.about')}</a></li>
+          <li><a href="mailto:sacharn@163.com" class="menu-foot-link" data-mail="sacharn@163.com">{t(lang, 'foot.contact')}</a></li>
+          <li><a href={otherPath} class="menu-foot-link menu-lang" aria-label={t(lang, 'lang.switchAria')} hreflang={lang === 'zh' ? 'en' : 'zh-CN'}>{t(lang, 'lang.switch')}</a></li>
         </ul>
       </div>
     </div>
@@ -98,21 +111,21 @@ const navItems = [
 
     <footer class="site-footer">
       <div class="footer-news">
-        <p class="footer-news-text">订阅更新。有新项目或文章时，我会写邮件告诉你。</p>
-        <a href="mailto:sacharn@163.com?subject=订阅思想名片更新" class="footer-arrow" aria-label="邮件订阅" data-mail="sacharn@163.com">
+        <p class="footer-news-text">{t(lang, 'foot.news')}</p>
+        <a href={`mailto:sacharn@163.com?subject=${encodeURIComponent(t(lang, 'mail.subject'))}`} class="footer-arrow" aria-label={t(lang, 'foot.subscribe')} data-mail="sacharn@163.com">
           <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
             <path d="M1 6h13M10 1.5L14.5 6 10 10.5" stroke="currentColor" stroke-width="1.2" />
           </svg>
         </a>
       </div>
       <div class="footer-base">
-        <p class="footer-copy">© {new Date().getFullYear()} 严树成</p>
+        <p class="footer-copy">{t(lang, 'foot.copy', { year })}</p>
         <ul class="footer-links">
-          <li><a href="/about/" class="footer-link">关于</a></li>
-          <li><a href="mailto:sacharn@163.com" class="footer-link" data-mail="sacharn@163.com">联系</a></li>
+          <li><a href={aboutHref} class="footer-link">{t(lang, 'foot.about')}</a></li>
+          <li><a href="mailto:sacharn@163.com" class="footer-link" data-mail="sacharn@163.com">{t(lang, 'foot.contact')}</a></li>
           <li><a href="https://github.com/SacharnYan" class="footer-link" target="_blank" rel="noopener">GitHub</a></li>
         </ul>
-        <a href="#" class="footer-link footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">返回顶部</a>
+        <a href="#" class="footer-link footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">{t(lang, 'foot.top')}</a>
       </div>
     </footer>
 
@@ -236,8 +249,10 @@ const navItems = [
       } catch (e) {}
 
       /* 5) mailto 兜底：手机无邮件应用/部分内置浏览器点 mailto 毫无反应，
-            点击时同步复制邮箱并浮出提示。不阻止默认行为，桌面照常打开邮件客户端。 */
+            点击时同步复制邮箱并浮出提示。不阻止默认行为，桌面照常打开邮件客户端。
+            提示语模板在 body[data-toast-mail]，按页面语言输出。 */
       try {
+        var toastTpl = document.body.getAttribute('data-toast-mail') || 'Copied {mail}';
         var copyText = function (t) {
           if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(t).then(null, function () {});
@@ -270,8 +285,9 @@ const navItems = [
         for (var ml = 0; ml < mailLinks.length; ml++) {
           (function (a) {
             a.addEventListener('click', function () {
-              copyText(a.getAttribute('data-mail'));
-              showToast('已复制邮箱 ' + a.getAttribute('data-mail') + '，来信即可订阅');
+              var mail = a.getAttribute('data-mail');
+              copyText(mail);
+              showToast(toastTpl.replace('{mail}', mail));
             });
           })(mailLinks[ml]);
         }

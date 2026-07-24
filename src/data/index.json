@@ -5,7 +5,13 @@
     "sub": "把「上下一白」做成可以划进去的湖。",
     "image": "/projects/snow/card.jpg",
     "image_alt": "雪夜西湖：小舟驶向湖心亭",
-    "cta": { "href": "/snow/", "label": "进入场景" }
+    "cta": { "href": "/snow/", "label": "进入场景" },
+    "en": {
+      "title": "Snow at Huxin Pavilion",
+      "sub": "Zhang Dai's \"all in white\", made into a lake you can row into.",
+      "image_alt": "West Lake on a snowy night: a small boat heading for Huxin Pavilion",
+      "cta_label": "Enter the scene"
+    }
   },
   {
     "eyebrow": "Writing",
@@ -13,7 +19,14 @@
     "sub": "地球归人类，AI 驶向远方。",
     "image": "/cards/writing-home.jpg",
     "image_alt": "《家园》书封式卡片",
-    "cta": { "href": "/writing/home/", "label": "读全文" }
+    "cta": { "href": "/writing/home/", "label": "读全文" },
+    "en": {
+      "title": "Home",
+      "sub": "Earth returns to humankind; the AI sails away.",
+      "image_alt": "Cover card of \"Home\"",
+      "cta_label": "Read",
+      "cta_href": "/en/writing/home/"
+    }
   },
   {
     "eyebrow": "Photos",
@@ -27,7 +40,12 @@
       "/photos/photo-05.jpg",
       "/photos/photo-06.jpg"
     ],
-    "cta": { "href": "/photos/", "label": "全部照片" }
+    "cta": { "href": "/photos/", "label": "全部照片" },
+    "en": {
+      "title": "Quiet moments, collected by eye",
+      "sub": "Streets, windowsills, dusk, and the backs of strangers.",
+      "cta_label": "All photos"
+    }
   },
   {
     "eyebrow": "Vlog",
@@ -36,7 +54,12 @@
     "image": "/vlog/vlog-01.mp4",
     "is_video": true,
     "poster": "/vlog/vlog-01-poster.jpg",
-    "cta": { "href": "/vlog/", "label": "看视频" }
+    "cta": { "href": "/vlog/", "label": "看视频" },
+    "en": {
+      "title": "Short. Long. Slow.",
+      "sub": "Time kept through the lens.",
+      "cta_label": "Watch"
+    }
   },
   {
     "eyebrow": "随记",
@@ -44,6 +67,13 @@
     "sub": "短的，碎的，刚想到的。",
     "image": "/cards/notes-card.jpg",
     "image_alt": "随记摘句卡片",
-    "cta": { "href": "/notes/", "label": "读随记" }
+    "cta": { "href": "/notes/", "label": "读随记" },
+    "en": {
+      "eyebrow": "Notes",
+      "title": "Things jotted down",
+      "sub": "Short, fragmentary, freshly thought.",
+      "image_alt": "Notes excerpt card",
+      "cta_label": "Read notes"
+    }
   }
 ]

@@ -1,7 +1,9 @@
 ---
 title: "花弄影"
+title_en: "Flowers Toying with Shadows"
 date: 2019-11-21
 description: "一首短诗：烟花、雁过、风过。"
+description_en: "A short poem: fireworks, passing geese, passing wind."
 tags: ["诗"]
 ---
 

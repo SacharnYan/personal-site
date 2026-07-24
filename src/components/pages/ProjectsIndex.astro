@@ -1,0 +1,195 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, href, type Lang } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const isEn = lang === 'en';
+
+const items = [
+  {
+    path: '/projects/snow/',
+    img: '/projects/snow/card.jpg',
+    eyebrow: 'Interactive · 2026',
+    title: '湖心亭看雪',
+    title_en: 'Snow at Huxin Pavilion',
+    desc: '把「上下一白」做成可以划进去的湖。',
+    desc_en: 'Zhang Dai\'s "all in white", made into a lake you can row into.',
+  },
+  {
+    path: '/projects/floral/',
+    img: '/cards/projects-card.jpg',
+    eyebrow: 'Tool · 2026',
+    title: '花艺课程表海报',
+    title_en: 'Floral Course Schedule Posters',
+    desc: '改一份数据，两张海报自己排好。',
+    desc_en: 'Edit one data file, and both posters lay themselves out.',
+  },
+];
+---
+
+<Base title={t(lang, 'projects.title')} lang={lang}>
+  <article class="article">
+    <header class="article-hero" data-fade>
+      <p class="article-eyebrow">Projects</p>
+      <h1 class="article-title">{t(lang, 'projects.title')}</h1>
+    </header>
+
+    <div class="article-body">
+      <div class="article-list">
+        {items.map((item) => (
+          <a class="project-item" href={href(lang, item.path)}>
+            <img class="project-thumb" src={item.img} alt="" loading="lazy" />
+            <span class="project-item-text">
+              <span class="project-item-eyebrow">{item.eyebrow}</span>
+              <span class="project-item-title">{isEn ? item.title_en : item.title}</span>
+              <span class="project-item-desc">{isEn ? item.desc_en : item.desc}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .article {
+    max-width: none;
+    margin: 0;
+    padding: 0 96px 160px;
+  }
+
+  .article-hero {
+    padding: 160px 0 96px;
+  }
+
+  .article-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .article-title {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    max-width: 55ch;
+    margin: 0;
+  }
+
+  .article-body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  .project-item {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 36px 0;
+    border-bottom: 1px solid #d0d0d0;
+    text-decoration: none;
+  }
+
+  .project-item:first-child {
+    border-top: 1px solid #d0d0d0;
+  }
+
+  .project-thumb {
+    width: 192px;
+    height: 128px;
+    object-fit: cover;
+    display: block;
+    flex: none;
+  }
+
+  .project-item-text {
+    display: block;
+    min-width: 0;
+  }
+
+  .project-item-eyebrow {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: -0.26px;
+    color: #707070;
+    margin-bottom: 8px;
+  }
+
+  .project-item-title {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 36px;
+    letter-spacing: -0.56px;
+    color: #000;
+    margin-bottom: 8px;
+    transition: color 200ms;
+  }
+
+  .project-item:hover .project-item-title {
+    color: #707070;
+  }
+
+  .project-item-desc {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #707070;
+  }
+
+  @media (max-width: 768px) {
+    .article {
+      padding: 0 24px 80px;
+    }
+
+    .article-hero {
+      padding: 120px 0 64px;
+    }
+
+    .article-title {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .article-body {
+      margin-left: 0;
+    }
+
+    .project-item {
+      gap: 20px;
+      padding: 28px 0;
+    }
+
+    .project-thumb {
+      width: 128px;
+      height: 85px;
+    }
+
+    .project-item-title {
+      font-size: 22px;
+      line-height: 28px;
+      letter-spacing: -0.44px;
+      margin-bottom: 6px;
+    }
+
+    .project-item-desc {
+      font-size: 14px;
+      line-height: 22px;
+    }
+  }
+</style>

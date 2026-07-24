@@ -1,0 +1,172 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, fmtDate, type Lang } from '../../i18n/ui';
+import notes from '../../data/notes.json';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const isEn = lang === 'en';
+/* 有任一条随记缺英译时，英文页才显示"保留原文"提示条 */
+const showNotice = isEn && notes.some((n) => !n.text_en);
+---
+
+<Base title={t(lang, 'notes.title')} lang={lang}>
+  <article class="article">
+    <header class="article-hero" data-fade>
+      <p class="article-eyebrow">Notes</p>
+      <h1 class="article-title">{t(lang, 'notes.title')}</h1>
+      {showNotice && <p class="article-notice">{t(lang, 'notes.notice')}</p>}
+    </header>
+
+    <div class="article-body">
+      {notes.length === 0 && (
+        <p class="empty">{t(lang, 'notes.empty')}</p>
+      )}
+      {notes.map((note) => {
+        const body = isEn && note.text_en ? note.text_en : note.text;
+        return (
+          <section class="note-item" data-fade>
+            <p class="note-date">{fmtDate(lang, note.date)}</p>
+            <div class="note-text">
+              {body.split('\n').filter(l => l.trim()).map(line => (
+                <p>{line.trim()}</p>
+              ))}
+            </div>
+            {note.image && (
+              <img class="note-image" src={note.image} alt={note.image_alt || ''} loading="lazy" />
+            )}
+          </section>
+        );
+      })}
+    </div>
+  </article>
+</Base>
+
+<style>
+  .article {
+    max-width: none;
+    margin: 0;
+    padding: 0 96px 160px;
+  }
+
+  .article-hero {
+    padding: 160px 0 96px;
+  }
+
+  .article-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .article-title {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    max-width: 55ch;
+    margin: 0;
+  }
+
+  .article-notice {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #707070;
+    max-width: 55ch;
+    margin: 24px 0 0 0;
+  }
+
+  .article-body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  .empty {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: 0;
+    color: #707070;
+    padding: 48px 0;
+  }
+
+  .note-item {
+    padding: 48px 0;
+    border-bottom: 1px solid #d0d0d0;
+  }
+
+  .note-item:first-child {
+    border-top: 1px solid #d0d0d0;
+  }
+
+  .note-date {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 12px 0;
+  }
+
+  .note-text p {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: 0;
+    color: #000;
+    margin: 0 0 0 0;
+  }
+
+  .note-text p + p {
+    text-indent: 0;
+    margin-top: 1.5em;
+  }
+
+  .note-text p:last-child {
+    margin-bottom: 0;
+  }
+
+  .note-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .article {
+      padding: 0 24px 80px;
+    }
+
+    .article-hero {
+      padding: 120px 0 64px;
+    }
+
+    .article-title {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .article-body {
+      margin-left: 0;
+    }
+
+    .empty,
+    .note-text p {
+      font-size: 19px;
+      line-height: 33px;
+    }
+  }
+</style>

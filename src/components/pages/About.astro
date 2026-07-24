@@ -1,0 +1,246 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, type Lang } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const isEn = lang === 'en';
+
+const timeline = [
+  { date: '2025–现在', date_en: '2025–Now', stage: '工作', stage_en: 'Work', place: '华为终端 BG · 零售产品', place_en: 'Huawei Device BG · Retail Product' },
+  { date: '2022–2025', date_en: '2022–2025', stage: '工作', stage_en: 'Work', place: '华为终端 BG · 服务产品', place_en: 'Huawei Device BG · Services Product' },
+  { date: '2019–2022', date_en: '2019–2022', stage: '研究生', stage_en: 'Grad School', place: '南京邮电大学 · 电子与通信工程', place_en: 'Nanjing Univ. of Posts & Telecom · Electronic & Communication Engineering' },
+  { date: '2014–2018', date_en: '2014–2018', stage: '本科', stage_en: 'Undergrad', place: '南京工程学院 · 电子与信息工程', place_en: 'Nanjing Institute of Technology · Electronic & Information Engineering' },
+  { date: '2011–2014', date_en: '2011–2014', stage: '高中', stage_en: 'High School', place: '江苏省口岸中学', place_en: "Kou'an High School, Jiangsu" },
+  { date: '2008–2011', date_en: '2008–2011', stage: '初中', stage_en: 'Middle School', place: '泰州实验学校', place_en: 'Taizhou Experimental School' },
+  { date: '2002–2008', date_en: '2002–2008', stage: '小学', stage_en: 'Primary School', place: '蔡堡中心小学、陈堡中心小学', place_en: 'Caibao & Chenbao Primary Schools' },
+  { date: '2000–2002', date_en: '2000–2002', stage: '幼儿园', stage_en: 'Kindergarten', place: '蔡堡中心幼儿园', place_en: 'Caibao Central Kindergarten' },
+  { date: '1996', date_en: '1996', stage: '出生', stage_en: 'Born', place: '江苏省兴化市', place_en: 'Xinghua, Jiangsu' },
+];
+---
+
+<Base
+  title={isEn ? 'About — Sacharn' : '关于 — 思想名片'}
+  description={isEn ? 'Shucheng Yan · Retail Product Management at Huawei · Nanjing' : '严树成 · 华为零售产品管理 · 南京'}
+  lang={lang}
+>
+  <article class="article">
+    <header class="article-hero" data-fade>
+      <p class="article-eyebrow">About</p>
+      <h1 class="article-title">{t(lang, 'about.title1')}</h1>
+      <p class="article-sub">{t(lang, 'about.title2')}</p>
+    </header>
+
+    <div class="article-body">
+      <p>{t(lang, 'about.intro1')}</p>
+
+      <p>{t(lang, 'about.intro2')}</p>
+
+      <h2 class="section-title">{t(lang, 'about.secPath')}</h2>
+
+      <div class="timeline">
+        {timeline.map((item) => (
+          <div class="timeline-item">
+            <p class="timeline-date">{isEn ? item.date_en : item.date}</p>
+            <div class="timeline-main">
+              <p class="timeline-stage">{isEn ? item.stage_en : item.stage}</p>
+              <p class="timeline-place">{isEn ? item.place_en : item.place}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <h2 class="section-title">{t(lang, 'about.secSite')}</h2>
+
+      <p>{t(lang, 'about.siteText')}</p>
+
+      <h2 class="section-title">{t(lang, 'about.secContact')}</h2>
+
+      {isEn ? (
+        <p>
+          If an email says it best, write to <a href="mailto:sacharn@163.com" class="inline-link">sacharn@163.com</a>; WeChat: sacharn; code on <a href="https://github.com/SacharnYan" class="inline-link" target="_blank" rel="noopener">GitHub</a>.
+        </p>
+      ) : (
+        <p>
+          如果邮件能讲清楚，请写信到 <a href="mailto:sacharn@163.com" class="inline-link">sacharn@163.com</a>；微信加 sacharn；代码在 <a href="https://github.com/SacharnYan" class="inline-link" target="_blank" rel="noopener">GitHub</a>。
+        </p>
+      )}
+    </div>
+  </article>
+</Base>
+
+<style>
+  .article {
+    max-width: none;
+    margin: 0;
+    padding: 0 96px 160px;
+  }
+
+  .article-hero {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 160px 0 96px;
+  }
+
+  .article-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .article-title {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    max-width: 55ch;
+    margin: 0;
+  }
+
+  .article-sub {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #707070;
+    margin: 0;
+  }
+
+  .article-body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  .article-body > p {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: 0;
+    color: #000;
+    margin: 0 0 0 0;
+  }
+
+  .article-body > p + p {
+    text-indent: 0;
+    margin-top: 1.5em;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 50px;
+    letter-spacing: -0.84px;
+    color: #000;
+    margin: 96px 0 32px 0;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid #d0d0d0;
+  }
+
+  .timeline-item:first-child {
+    border-top: 1px solid #d0d0d0;
+  }
+
+  .timeline-date {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #707070;
+    margin: 0;
+    padding-top: 2px;
+  }
+
+  .timeline-stage {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    color: #000;
+    margin: 0;
+  }
+
+  .timeline-place {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #707070;
+    margin: 2px 0 0 0;
+  }
+
+  .inline-link {
+    color: #000;
+    border-bottom: 1px solid #000;
+    transition: color 200ms, border-color 200ms;
+  }
+
+  .inline-link:hover {
+    color: #707070;
+    border-bottom-color: #707070;
+  }
+
+  @media (max-width: 768px) {
+    .article {
+      padding: 0 24px 80px;
+    }
+
+    .article-hero {
+      padding: 120px 0 64px;
+    }
+
+    .article-title,
+    .article-sub {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .article-body {
+      margin-left: 0;
+    }
+
+    .article-body > p {
+      font-size: 19px;
+      line-height: 33px;
+    }
+
+    .section-title {
+      font-size: 30px;
+      line-height: 38px;
+      letter-spacing: -0.6px;
+      margin: 72px 0 24px 0;
+    }
+
+    .timeline-item {
+      grid-template-columns: 1fr;
+      gap: 4px;
+      padding: 18px 0;
+    }
+
+    .timeline-date {
+      font-size: 14px;
+      line-height: 22px;
+      padding-top: 0;
+    }
+
+    .timeline-stage {
+      font-size: 17px;
+      line-height: 26px;
+    }
+  }
+</style>

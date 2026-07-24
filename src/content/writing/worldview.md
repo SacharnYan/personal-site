@@ -1,8 +1,11 @@
 ---
 title: "简约世界观"
+title_en: "A Simple Worldview"
 sub: "善良是一种选择。"
+sub_en: "Kindness is a choice."
 date: 2023-04-27
 description: "价值观四次崩塌与重建，最后落到一句：善良是一种选择。"
+description_en: "Four collapses and rebuilds of my values, landing on one line: kindness is a choice."
 tags: ["随笔", "思考"]
 ---
 

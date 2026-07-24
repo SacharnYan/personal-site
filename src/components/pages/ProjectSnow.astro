@@ -1,0 +1,182 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, type Lang } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const isEn = lang === 'en';
+---
+
+<Base
+  title={isEn ? 'Snow at Huxin Pavilion' : '湖心亭看雪'}
+  description={isEn
+    ? 'Zhang Dai\'s "all in white", made into a lake you can row into.'
+    : '把张岱的「上下一白」做成可以划进去的湖。'}
+  lang={lang}
+>
+  <article class="story">
+    <header class="story-hero" data-fade>
+      <p class="story-eyebrow">Interactive · 2026</p>
+      <h1 class="story-title">{isEn ? 'Snow at Huxin Pavilion' : '湖心亭看雪'}</h1>
+      <p class="story-sub">{isEn
+        ? 'Zhang Dai\'s "all in white", made into a lake you can row into.'
+        : '把「上下一白」做成可以划进去的湖。'}</p>
+    </header>
+
+    <div class="story-body">
+      <figure class="story-figure">
+        <a href="/snow/" aria-label={isEn ? 'Enter the interactive scene of Snow at Huxin Pavilion' : '进入湖心亭看雪互动场景'}>
+          <img
+            src="/projects/snow/card.jpg"
+            alt={isEn ? 'West Lake on a snowy night: a small boat heading for Huxin Pavilion' : '雪夜西湖：小舟驶向湖心亭'}
+            loading="eager"
+          />
+        </a>
+      </figure>
+
+      {isEn ? (
+        <>
+          <p>
+            The best part of Zhang Dai's snow writing is in the measure words: the long embankment a trace, Huxin Pavilion a dot, my boat a speck, and the people in it two or three grains. I used AI to build a three-dimensional West Lake on a snowy night, and made each of those tiny "ones" a scene you can row into.
+          </p>
+          <p>
+            Click the water and the boat rows there by itself; or hold "Row" or the space bar to paddle slowly. After three days of heavy snow, all sounds of people and birds have left the lake — you head for the pavilion alone. Once there, why not step ashore and sit a while: the people in the pavilion are already warming wine by the stove.
+          </p>
+          <p>
+            <a class="story-link" href="/snow/">Row alone to Huxin Pavilion →</a>
+          </p>
+        </>
+      ) : (
+        <>
+          <p>
+            张岱写雪，最妙是那几个量词：长堤一痕、湖心亭一点、与余舟一芥、舟中人两三粒。我用 AI 生成了一座三维的雪夜西湖，把这几个「一」做成可以划进去的场景。
+          </p>
+          <p>
+            点击水面，船会自己划过去；也可以按住「划桨」或空格慢慢摇。大雪三日，湖中人鸟声俱绝，你一个人往湖心亭去。到了亭前，不妨登亭一坐——亭中人已在炉边温酒。
+          </p>
+          <p>
+            <a class="story-link" href="/snow/">独往湖心亭 →</a>
+          </p>
+        </>
+      )}
+    </div>
+  </article>
+</Base>
+
+<style>
+  .story {
+    padding: 0 96px 160px;
+  }
+
+  .story-hero {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 160px 0 72px;
+  }
+
+  .story-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .story-title {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    margin: 0;
+  }
+
+  .story-sub {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #707070;
+    margin: 0;
+  }
+
+  .story-body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  .story-body p {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: 0;
+    color: #000;
+    margin: 0;
+  }
+
+  .story-body p + p {
+    margin-top: 1.5em;
+  }
+
+  .story-figure {
+    margin: 48px 0;
+    width: 100%;
+  }
+
+  .story-figure:first-child {
+    margin-top: 0;
+  }
+
+  .story-figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 200ms;
+  }
+
+  .story-figure a:hover img {
+    opacity: 0.85;
+  }
+
+  .story-link {
+    color: #000;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    transition: color 200ms;
+  }
+
+  .story-link:hover {
+    color: #707070;
+  }
+
+  @media (max-width: 768px) {
+    .story {
+      padding: 0 24px 80px;
+    }
+
+    .story-hero {
+      padding: 120px 0 56px;
+    }
+
+    .story-title,
+    .story-sub {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .story-body p {
+      font-size: 19px;
+      line-height: 33px;
+    }
+
+    .story-figure {
+      margin: 40px 0;
+    }
+  }
+</style>

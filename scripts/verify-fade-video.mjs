@@ -25,7 +25,7 @@ const browser = await chromium.launch();
 let failed = 0;
 const check = (name, ok, detail) => { if (!ok) failed++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}  ${detail ?? ''}`); };
 
-/* 1. 正常浏览器：html.js 存在、fade 动画生效、notes 18 条 */
+/* 1. 正常浏览器：html.js 存在、fade 动画生效、notes 19 条 */
 {
   const p = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await p.goto(`http://localhost:${PORT}/notes/`, { waitUntil: 'networkidle' });
@@ -34,11 +34,11 @@ const check = (name, ok, detail) => { if (!ok) failed++; console.log(`${ok ? 'PA
     js: document.documentElement.classList.contains('js'),
     items: document.querySelectorAll('.note-item').length,
     visible: document.querySelectorAll('.note-item.is-visible').length,
-    articleOp: getComputedStyle(document.querySelector('article[data-fade]')).opacity,
+    heroOp: getComputedStyle(document.querySelector('.article-hero[data-fade]')).opacity,
   }));
   check('正常浏览器 html.js 存在', r.js === true);
-  check('notes 18 条渲染', r.items === 18, `实际 ${r.items}`);
-  check('fade 动画生效（article opacity=1）', r.articleOp === '1', r.articleOp);
+  check('notes 19 条渲染', r.items === 19, `实际 ${r.items}`);
+  check('fade 动画生效（hero opacity=1）', r.heroOp === '1', r.heroOp);
   await p.close();
 }
 
@@ -48,36 +48,35 @@ const check = (name, ok, detail) => { if (!ok) failed++; console.log(`${ok ? 'PA
   await p.goto(`http://localhost:${PORT}/notes/`, { waitUntil: 'networkidle' });
   const r = await p.evaluate(() => ({
     js: document.documentElement.classList.contains('js'),
-    articleOp: getComputedStyle(document.querySelector('article[data-fade]')).opacity,
+    heroOp: getComputedStyle(document.querySelector('.article-hero[data-fade]')).opacity,
     itemOp: getComputedStyle(document.querySelectorAll('.note-item')[3]).opacity,
     text: document.querySelector('main').innerText.length,
   }));
   check('禁 JS 时无 html.js', r.js === false);
-  check('禁 JS 时 article 直接可见', r.articleOp === '1', r.articleOp);
-  check('禁 JS 时第 4 条(带图)可见', r.itemOp === '1', r.itemOp);
+  check('禁 JS 时 hero 直接可见', r.heroOp === '1', r.heroOp);
+  check('禁 JS 时第 4 条可见', r.itemOp === '1', r.itemOp);
   check('禁 JS 时文本完整', r.text > 1800, `${r.text}字`);
   await p.close();
 }
 
-/* 3. 模拟老内核：拦截 HTML，强制标记脚本条件为 false、module script 不执行 */
+/* 3. 模拟老内核：拦截 HTML，让 classList 检测失败（不标记 js），内容应直接可见 */
 {
   const p = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await p.route('**/notes/', async route => {
     const resp = await route.fetch();
     let body = await resp.text();
-    body = body.replace(/'noModule' in HTMLScriptElement\.prototype/g, 'false');
-    body = body.replace(/<script type="module">/g, '<script type="text/plain">');
+    body = body.replace(/'classList' in document\.documentElement/g, 'false');
     route.fulfill({ response: resp, body });
   });
   await p.goto(`http://localhost:${PORT}/notes/`, { waitUntil: 'networkidle' });
   await p.waitForTimeout(800);
   const r = await p.evaluate(() => ({
     js: document.documentElement.classList.contains('js'),
-    articleOp: getComputedStyle(document.querySelector('article[data-fade]')).opacity,
+    heroOp: getComputedStyle(document.querySelector('.article-hero[data-fade]')).opacity,
     text: document.querySelector('main').innerText.length,
   }));
   check('老内核模拟：不添加 html.js', r.js === false);
-  check('老内核模拟：内容直接可见', r.articleOp === '1', r.articleOp);
+  check('老内核模拟：内容直接可见', r.heroOp === '1', r.heroOp);
   check('老内核模拟：文本完整', r.text > 1800, `${r.text}字`);
   await p.close();
 }

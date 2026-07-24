@@ -1,0 +1,338 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, href, type Lang } from '../../i18n/ui';
+
+interface Photo {
+  id: string;
+  src: string;
+  title: string;
+  title_en: string;
+  date: string;
+}
+
+interface Props {
+  lang: Lang;
+  photo: Photo;
+  index: number;
+  total: number;
+  prev: Photo | null;
+  next: Photo | null;
+}
+
+const { lang, photo, index, total, prev, next } = Astro.props;
+const isEn = lang === 'en';
+const pad = (n: number) => String(n).padStart(2, '0');
+const pTitle = isEn ? photo.title_en : photo.title;
+const prevTitle = prev ? (isEn ? prev.title_en : prev.title) : '';
+const nextTitle = next ? (isEn ? next.title_en : next.title) : '';
+---
+
+<Base title={`${pTitle} · ${t(lang, 'photos.title')}`} description={pTitle} image={photo.src} lang={lang}>
+  <div class="pd">
+    <nav class="pd-bar" aria-label={t(lang, 'photos.title')}>
+      <a href={href(lang, '/photos/')} class="pd-bar-link">{t(lang, 'photos.back')}</a>
+      <span class="pd-counter">{pad(index)} / {pad(total)}</span>
+    </nav>
+
+    <div class="pd-stage">
+      <figure
+        class="pd-card"
+        id="pdCard"
+        data-prev={prev ? href(lang, `/photos/${prev.id}/`) : ''}
+        data-next={next ? href(lang, `/photos/${next.id}/`) : ''}
+      >
+        <img src={photo.src} alt={pTitle} loading="eager" draggable="false" />
+      </figure>
+    </div>
+
+    <header class="pd-head">
+      <h1 class="pd-title">{pTitle}</h1>
+      {photo.date && <p class="pd-date">{photo.date}</p>}
+    </header>
+
+    <nav class="pd-nav" aria-label={t(lang, 'photos.prevnext')}>
+      {prev ? (
+        <a href={href(lang, `/photos/${prev.id}/`)} class="pd-step">‹ {prevTitle}</a>
+      ) : <span class="pd-step pd-step-dim">{t(lang, 'photos.first')}</span>}
+      {next ? (
+        <a href={href(lang, `/photos/${next.id}/`)} class="pd-step pd-step-r">{nextTitle} ›</a>
+      ) : <span class="pd-step pd-step-dim">{t(lang, 'photos.last')}</span>}
+    </nav>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var card = document.getElementById('pdCard');
+      if (!card) return;
+
+      // 翻页进场方向（由上一页记录）
+      try {
+        var dir = window.sessionStorage.getItem('pd-dir');
+        window.sessionStorage.removeItem('pd-dir');
+        if (dir === 'next') card.className += ' pd-enter-r';
+        else if (dir === 'prev') card.className += ' pd-enter-l';
+      } catch (e0) {}
+
+      var prevUrl = card.getAttribute('data-prev');
+      var nextUrl = card.getAttribute('data-next');
+      var startX = 0, startY = 0, dx = 0;
+      var dragging = false, tracking = false, animating = false;
+      var THRESHOLD = 64;
+
+      function go(url, dirName) {
+        if (animating || !url) return;
+        animating = true;
+        try { window.sessionStorage.setItem('pd-dir', dirName); } catch (e1) {}
+        card.style.transition = 'transform 320ms cubic-bezier(0.16, 1, 0.3, 1), opacity 320ms ease';
+        var s = dirName === 'next' ? -1 : 1;
+        card.style.transform = 'translateX(' + s * 120 + '%) rotate(' + s * -4 + 'deg)';
+        card.style.opacity = '0';
+        setTimeout(function () { window.location.href = url; }, 300);
+      }
+
+      function onStart(x, y) {
+        if (animating) return;
+        dragging = true; tracking = false; dx = 0;
+        startX = x; startY = y;
+        card.style.transition = 'none';
+      }
+
+      function onMove(x, y, ev) {
+        if (!dragging || animating) return;
+        var mx = x - startX, my = y - startY;
+        if (!tracking) {
+          if (Math.abs(mx) > 8 && Math.abs(mx) > Math.abs(my) * 1.2) tracking = true;
+          else if (Math.abs(my) > 12) { dragging = false; return; }
+          else return;
+        }
+        dx = mx;
+        if ((dx < 0 && !nextUrl) || (dx > 0 && !prevUrl)) dx = dx * 0.35;
+        if (ev && ev.cancelable) ev.preventDefault();
+        card.style.transform = 'translateX(' + dx + 'px) rotate(' + dx / 60 + 'deg)';
+      }
+
+      function onEnd() {
+        if (!dragging) return;
+        dragging = false;
+        if (animating) return;
+        if (!tracking) return;
+        tracking = false;
+        if (dx <= -THRESHOLD && nextUrl) { go(nextUrl, 'next'); return; }
+        if (dx >= THRESHOLD && prevUrl) { go(prevUrl, 'prev'); return; }
+        card.style.transition = 'transform 300ms cubic-bezier(0.16, 1, 0.3, 1)';
+        card.style.transform = '';
+      }
+
+      // 触屏滑动
+      card.addEventListener('touchstart', function (e) {
+        var t = e.changedTouches[0];
+        onStart(t.clientX, t.clientY);
+      }, { passive: true });
+      card.addEventListener('touchmove', function (e) {
+        var t = e.changedTouches[0];
+        onMove(t.clientX, t.clientY, e);
+      }, { passive: false });
+      card.addEventListener('touchend', onEnd);
+      card.addEventListener('touchcancel', onEnd);
+
+      // 鼠标拖拽
+      card.addEventListener('mousedown', function (e) {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        onStart(e.clientX, e.clientY);
+        var mm = function (ev) { onMove(ev.clientX, ev.clientY, ev); };
+        var mu = function () {
+          document.removeEventListener('mousemove', mm);
+          document.removeEventListener('mouseup', mu);
+          onEnd();
+        };
+        document.addEventListener('mousemove', mm);
+        document.addEventListener('mouseup', mu);
+      });
+      card.addEventListener('dragstart', function (e) { e.preventDefault(); });
+
+      // 键盘方向键
+      document.addEventListener('keydown', function (e) {
+        var k = e.key || e.keyCode;
+        if (k === 'ArrowLeft' || k === 37) { if (prevUrl) go(prevUrl, 'prev'); }
+        else if (k === 'ArrowRight' || k === 39) { if (nextUrl) go(nextUrl, 'next'); }
+      });
+    })();
+  </script>
+</Base>
+
+<style>
+  .pd {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px 120px;
+  }
+
+  .pd-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 140px 0 56px;
+  }
+
+  .pd-bar-link {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+    transition: opacity 200ms ease;
+  }
+
+  .pd-bar-link:hover {
+    opacity: 0.5;
+  }
+
+  .pd-counter {
+    font-family: var(--font-body);
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    color: var(--color-fg-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pd-stage {
+    display: flex;
+    justify-content: center;
+  }
+
+  .pd-card {
+    margin: 0;
+    max-width: 100%;
+    background: #fff;
+    padding: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 6px;
+    box-shadow:
+      0 30px 80px -32px rgba(0, 0, 0, 0.35),
+      0 4px 16px rgba(0, 0, 0, 0.06);
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y;
+    animation: pdIn 520ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+
+  .pd-card:active {
+    cursor: grabbing;
+  }
+
+  .pd-card img {
+    display: block;
+    max-width: 100%;
+    max-height: 62vh;
+    width: auto;
+    height: auto;
+    border-radius: 2px;
+    pointer-events: none;
+  }
+
+  .pd-enter-r {
+    animation: pdInR 460ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+
+  .pd-enter-l {
+    animation: pdInL 460ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+
+  @keyframes pdIn {
+    from { opacity: 0; transform: translateY(18px); }
+  }
+
+  @keyframes pdInR {
+    from { opacity: 0; transform: translateX(56px) rotate(2deg); }
+  }
+
+  @keyframes pdInL {
+    from { opacity: 0; transform: translateX(-56px) rotate(-2deg); }
+  }
+
+  .pd-head,
+  .pd-nav {
+    animation: pdFade 600ms ease 140ms backwards;
+  }
+
+  @keyframes pdFade {
+    from { opacity: 0; }
+  }
+
+  .pd-head {
+    text-align: center;
+    padding: 40px 0 0;
+  }
+
+  .pd-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #000;
+    margin: 0;
+  }
+
+  .pd-date {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-fg-muted);
+    margin: 12px 0 0;
+  }
+
+  .pd-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-top: 72px;
+  }
+
+  .pd-step {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+    transition: opacity 200ms ease;
+  }
+
+  .pd-step:hover {
+    opacity: 0.5;
+  }
+
+  .pd-step-dim {
+    color: var(--color-fg-faint);
+  }
+
+  @media (max-width: 768px) {
+    .pd {
+      padding: 0 20px 80px;
+    }
+
+    .pd-bar {
+      padding: 104px 0 36px;
+    }
+
+    .pd-card {
+      padding: 8px;
+      border-radius: 5px;
+    }
+
+    .pd-card img {
+      max-height: 58vh;
+    }
+
+    .pd-head {
+      padding-top: 28px;
+    }
+
+    .pd-title {
+      font-size: 22px;
+    }
+
+    .pd-nav {
+      margin-top: 48px;
+    }
+  }
+</style>

@@ -1,8 +1,11 @@
 ---
 title: "2023 年度回顾"
+title_en: "2023 in Review"
 sub: "学生时代的平稳节奏，一去不复返。"
+sub_en: "The steady rhythm of student days, never to return."
 date: 2024-01-20
 description: "2023 年的九条感悟，和一年里读的、看的、听的、走过的。"
+description_en: "Nine lessons from 2023, and what I read, watched, heard, and walked through that year."
 tags: ["总结"]
 ---
 

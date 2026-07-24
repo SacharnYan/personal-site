@@ -1,8 +1,11 @@
 ---
 title: "最美的非龙"
+title_en: "The Most Beautiful Non-Dragon"
 sub: "你爱的究竟是龙，还是想象中的龙。"
+sub_en: "Do you love the dragon, or the dragon of your imagination?"
 date: 2019-11-15
 description: "重读叶公好龙：似龙非龙者，既不叫水中月，也不叫镜中花，她叫理想。"
+description_en: "Rereading 'Lord Ye Loves Dragons': the almost-dragon is neither the moon in the water nor the flower in the mirror — she is the ideal."
 tags: ["随笔", "思考"]
 ---
 

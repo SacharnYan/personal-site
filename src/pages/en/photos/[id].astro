@@ -1,0 +1,19 @@
+---
+import PhotoDetail from '../../../components/pages/PhotoDetail.astro';
+import photos from '../../../data/photos.json';
+
+export function getStaticPaths() {
+  return photos.map((p, i) => ({
+    params: { id: p.id },
+    props: {
+      photo: p,
+      index: i + 1,
+      total: photos.length,
+      prev: i > 0 ? photos[i - 1] : null,
+      next: i < photos.length - 1 ? photos[i + 1] : null,
+    },
+  }));
+}
+---
+
+<PhotoDetail lang="en" {...Astro.props} />

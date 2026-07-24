@@ -1,0 +1,170 @@
+---
+import Base from '../../layouts/Base.astro';
+import type { Lang } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const isEn = lang === 'en';
+---
+
+<Base
+  title={isEn ? 'Floral Course Schedule Posters' : '花艺课程表海报'}
+  description={isEn ? 'Turn poster-making into data-editing.' : '把做海报，变成改数据。'}
+  lang={lang}
+>
+  <article class="story">
+    <header class="story-hero" data-fade>
+      <p class="story-eyebrow">Tool · 2026</p>
+      <h1 class="story-title">{isEn ? 'Floral Course Schedule Posters' : '花艺课程表海报'}</h1>
+      <p class="story-sub">{isEn ? 'Turn poster-making into data-editing.' : '把做海报，变成改数据。'}</p>
+    </header>
+
+    <div class="story-body">
+      <figure class="story-figure">
+        <img
+          src="/cards/projects-card.jpg"
+          alt={isEn ? 'Course schedule posters for the zero-basis class and the all-around class' : '零基础创业班与创业全能班课程表海报'}
+          loading="eager"
+        />
+      </figure>
+
+      {isEn ? (
+        <>
+          <p>
+            A floral studio runs two courses: a zero-basis startup class and an all-around startup class. Every new session needs two schedule posters, sent to the student group, WeChat Moments, and Xiaohongshu. So I built a small tool: edit one data file, and both posters lay themselves out.
+          </p>
+          <p>
+            The hard part is not the layout — it is the edits. Each poster holds more than thirty dates, five or six chapters, and over a hundred skill points. Made in PowerPoint or Canva, one change means hunting down dozens of spots; miss one and it is wrong. Two posters take the better part of a day.
+          </p>
+          <p>
+            The fix is separating data from layout. The layout is set once in HTML and CSS; all content lives in one data file — dates, chapter names, skill points. Change one date and all thirty-plus spots update together; rename a chapter and the Roman numerals renumber themselves. The two courses share seventy percent of their content, so they share one file — no copying twice.
+          </p>
+          <p>
+            Now a new session means: edit the data, save, and both posters are final. What took most of a day now takes a minute. It is still an internal tool, used only by the studio. I keep wondering whether small tools like this — turning repetitive work into data — could become something more small businesses can use.
+          </p>
+        </>
+      ) : (
+        <>
+          <p>
+            一家花艺工作室有两套课程：零基础创业班和创业全能班。每开一期新课，都要做两张课程表海报，发到学员群、朋友圈和小红书。于是我做了一个小工具：改一份数据，两张海报自己排好。
+          </p>
+          <p>
+            难的不是排版，是改。每张海报里有三十多处日期、五六个章节、一百多个技能点。用 PPT 或 Canva 做，一处改动要对着全文改几十处，漏一处就是错一处。两张做下来，大半天就没了。
+          </p>
+          <p>
+            解法是把数据和版式分开。版式用 HTML 和 CSS 定一次；内容全部收进一份数据文件：日期、章节名、技能点都在里面。改一个日期，全表三十多处一起更新；改一个章节名，罗马序号自己重排。两套课程七成内容相同，共用一份数据，不用抄两遍。
+          </p>
+          <p>
+            现在开新一期，改完数据、保存，两张海报就是成片。原来大半天的活，现在一分钟。它还只是个内部工具，只有工作室在用。我还在想：这种把重复劳动做成数据的小工具，能不能变成更多小商家都能用的东西。
+          </p>
+        </>
+      )}
+    </div>
+  </article>
+</Base>
+
+<style>
+  .story {
+    padding: 0 96px 160px;
+  }
+
+  .story-hero {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 160px 0 72px;
+  }
+
+  .story-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .story-title {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    margin: 0;
+  }
+
+  .story-sub {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #707070;
+    margin: 0;
+  }
+
+  .story-body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  .story-body p {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: 0;
+    color: #000;
+    margin: 0;
+  }
+
+  .story-body p + p {
+    margin-top: 1.5em;
+  }
+
+  .story-figure {
+    margin: 48px 0;
+    width: 100%;
+  }
+
+  .story-figure:first-child {
+    margin-top: 0;
+  }
+
+  .story-figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .story {
+      padding: 0 24px 80px;
+    }
+
+    .story-hero {
+      padding: 120px 0 56px;
+    }
+
+    .story-title,
+    .story-sub {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .story-body p {
+      font-size: 19px;
+      line-height: 33px;
+    }
+
+    .story-figure {
+      margin: 40px 0;
+    }
+
+    .story-figure:first-child {
+      margin-top: 0;
+    }
+  }
+</style>

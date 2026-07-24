@@ -1,8 +1,11 @@
 ---
 title: "三丫坡之行"
+title_en: "A Trip to Sanyapo"
 sub: "没有退路就是胜利之路。"
+sub_en: "No way back is the way to victory."
 date: 2023-07-15
 description: "去东莞三丫坡参加战略预备队培训的两周：军训、考试，和一座努力摆脱工科呆板气质的园区。"
+description_en: "Two weeks at a strategic reserve training in Sanyapo, Dongguan: drills, exams, and a campus trying to shake off its engineering stiffness."
 tags: ["随笔", "工作"]
 ---
 

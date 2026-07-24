@@ -1,8 +1,11 @@
 ---
 title: "警惕主题的碎片"
+title_en: "Beware the Fragmentation of Theme"
 sub: "该警惕的不是时间的碎片，而是主题的碎片。"
+sub_en: "What deserves vigilance is not fragmented time, but fragmented themes."
 date: 2023-05-02
 description: "把获取信息的方式按时间和主题两个维度分成四个象限，重新审视碎片化信息。"
+description_en: "Sorting information intake along two axes — time and theme — into four quadrants, to reexamine fragmented information."
 tags: ["思考", "方法"]
 ---
 

@@ -1,0 +1,277 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, fmtDate, type Lang } from '../../i18n/ui';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { lang: Lang; article: CollectionEntry<'writing'> }
+const { lang, article } = Astro.props;
+const isEn = lang === 'en';
+const { Content } = await article.render();
+
+const title = isEn ? (article.data.title_en || article.data.title) : article.data.title;
+const sub = isEn ? (article.data.sub_en || article.data.sub) : article.data.sub;
+const description = isEn
+  ? (article.data.description_en || article.data.description || title)
+  : (article.data.description || title);
+---
+
+<Base
+  title={`${title} — ${t(lang, 'writing.title')}`}
+  description={description}
+  image={article.data.cover}
+  lang={lang}
+>
+  <article class="article">
+    <header class="article-hero" data-fade>
+      <p class="article-eyebrow">{fmtDate(lang, article.data.date)}</p>
+      <h1 class="article-title">{title}</h1>
+      {sub && <p class="article-sub">{sub}</p>}
+    </header>
+
+    {isEn && (
+      <p class="article-notice" data-fade>{t(lang, 'writing.notice')}</p>
+    )}
+
+    {article.data.cover && (
+      <figure class="article-cover">
+        <img src={article.data.cover} alt="" loading="eager" />
+      </figure>
+    )}
+
+    <div class="article-body">
+      <Content />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .article {
+    max-width: none;
+    margin: 0;
+    padding: 0 96px 160px;
+  }
+
+  .article-hero {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 160px 0 72px;
+  }
+
+  .article-notice {
+    max-width: 768px;
+    margin: 0 auto 48px;
+    padding: 16px 20px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #707070;
+  }
+
+  .article-cover {
+    max-width: 768px;
+    margin: 0 auto 48px;
+  }
+
+  .article-cover img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .article-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .article-title {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    max-width: 55ch;
+    margin: 0;
+  }
+
+  .article-sub {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #707070;
+    margin: 0;
+  }
+
+  .article-body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  /* Markdown 渲染内容没有本组件的作用域属性，必须用 :global 穿透 */
+  .article-body :global(h2) {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 50px;
+    letter-spacing: -0.84px;
+    color: #000;
+    margin: 96px 0 24px 0;
+  }
+
+  .article-body :global(h3) {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 36px;
+    color: #000;
+    margin: 64px 0 16px 0;
+  }
+
+  .article-body :global(p),
+  .article-body :global(li) {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: 0;
+    color: #000;
+  }
+
+  .article-body :global(p) {
+    margin: 0 0 0 0;
+  }
+
+  .article-body :global(p + p) {
+    text-indent: 0;
+    margin-top: 1.5em;
+  }
+
+  .article-body :global(ul),
+  .article-body :global(ol) {
+    margin: 0 0 0 0;
+    padding-left: 22px;
+  }
+
+  .article-body :global(li) {
+    margin-bottom: 8px;
+  }
+
+  .article-body :global(li > ul),
+  .article-body :global(li > ol) {
+    margin-top: 8px;
+  }
+
+  .article-body :global(strong) {
+    font-weight: 600;
+  }
+
+  .article-body :global(blockquote) {
+    border-left: 1px solid #d0d0d0;
+    padding-left: 24px;
+    margin: 48px 0;
+    color: #707070;
+  }
+
+  .article-body :global(blockquote p) {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 36px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .article-body :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .article-body :global(hr) {
+    border: 0;
+    border-top: 1px solid #d0d0d0;
+    margin: 64px 0;
+  }
+
+  .article-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 48px auto;
+  }
+
+  .article-body :global(a) {
+    color: #000;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    transition: color 200ms;
+  }
+
+  .article-body :global(a:hover) {
+    color: #707070;
+  }
+
+  .article-body :global(code) {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.82em;
+    background: #f5f5f5;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+
+  .article-body :global(pre) {
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 48px 0;
+    overflow-x: auto;
+  }
+
+  .article-body :global(pre code) {
+    background: none;
+    padding: 0;
+    font-size: 16px;
+    line-height: 28px;
+  }
+
+  @media (max-width: 768px) {
+    .article {
+      padding: 0 24px 80px;
+    }
+
+    .article-hero {
+      padding: 120px 0 64px;
+    }
+
+    .article-title,
+    .article-sub {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .article-body {
+      margin-left: 0;
+    }
+
+    .article-body :global(h2) {
+      font-size: 30px;
+      line-height: 38px;
+      letter-spacing: -0.6px;
+    }
+
+    .article-body :global(p),
+    .article-body :global(li) {
+      font-size: 19px;
+      line-height: 33px;
+    }
+  }
+</style>

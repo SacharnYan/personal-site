@@ -1,0 +1,114 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, href, type Lang } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const isEn = lang === 'en';
+---
+
+<Base title={t(lang, 'life.title')} lang={lang}>
+  <article class="article">
+    <header class="article-hero" data-fade>
+      <p class="article-eyebrow">Life</p>
+      <h1 class="article-title">{t(lang, 'life.title')}</h1>
+    </header>
+
+    <div class="article-body">
+      {isEn ? (
+        <p>Life content has been moved to the <a href={href(lang, '/photos/')} class="inline-link">Photos</a> page.</p>
+      ) : (
+        <p>生活的内容已整理到 <a href={href(lang, '/photos/')} class="inline-link">照片</a> 页面。</p>
+      )}
+    </div>
+  </article>
+</Base>
+
+<style>
+  .article {
+    max-width: none;
+    margin: 0;
+    padding: 0 96px 160px;
+  }
+
+  .article-hero {
+    padding: 160px 0 96px;
+  }
+
+  .article-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .article-title {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    max-width: 55ch;
+    margin: 0;
+  }
+
+  .article-body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  .article-body p {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: 0;
+    color: #000;
+    margin: 0 0 0 0;
+  }
+
+  .article-body p + p {
+    text-indent: 0;
+    margin-top: 1.5em;
+  }
+
+  .inline-link {
+    color: #000;
+    border-bottom: 1px solid #000;
+    transition: color 200ms, border-color 200ms;
+  }
+
+  .inline-link:hover {
+    color: #707070;
+    border-bottom-color: #707070;
+  }
+
+  @media (max-width: 768px) {
+    .article {
+      padding: 0 24px 80px;
+    }
+
+    .article-hero {
+      padding: 120px 0 64px;
+    }
+
+    .article-title {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .article-body {
+      margin-left: 0;
+    }
+
+    .article-body p {
+      font-size: 19px;
+      line-height: 33px;
+    }
+  }
+</style>

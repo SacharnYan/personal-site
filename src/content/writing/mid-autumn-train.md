@@ -1,8 +1,11 @@
 ---
 title: "2019 中秋归泰途中"
+title_en: "Homeward on the Mid-Autumn Night, 2019"
 sub: "T152 次列车正行驶在月亮最圆的方向。"
+sub_en: "Train T152 is running toward the roundest moon."
 date: 2019-11-15
 description: "中秋夜坐火车回泰州，车厢里的陌生人，和一场来去都快的惊慌。"
+description_en: "A Mid-Autumn night train back to Taizhou: strangers in the carriage, and a fright that came and went quickly."
 tags: ["随笔", "旅途"]
 ---
 

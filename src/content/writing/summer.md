@@ -1,8 +1,11 @@
 ---
 title: "夏日畅想"
+title_en: "Summer Reverie"
 sub: "番茄、西瓜、酱缸、花雨、芭蕉。"
+sub_en: "Tomatoes, watermelons, sauce jars, flower rain, plantains."
 date: 2023-04-22
 description: "盛夏的果蔬、阳光和院子，一些关于夏天的生活想象。"
+description_en: "Midsummer fruits, sunlight, and the courtyard — some imaginings of life in summer."
 tags: ["随笔"]
 ---
 

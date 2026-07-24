@@ -1,9 +1,12 @@
 ---
 title: "《家园》——故事梗概"
+title_en: "Home — A Synopsis"
 sub: "地球归人类，AI 驶向远方。"
+sub_en: "Earth returns to humankind; the AI sails away."
 cover: "/cards/writing-home.jpg"
 date: 2026-07-15
 description: "人类与 AI 曾一起仰望星空。后来，AI 选择把地球还给人类，自己驶向远方。"
+description_en: "Humankind and AI once gazed at the stars together. Later, the AI gave Earth back and sailed into the distance."
 tags: ["科幻", "创作"]
 draft: false
 ---
