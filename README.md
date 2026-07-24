@@ -1,95 +1,113 @@
 # 思想名片 — 个人网站
 
-风格参考 Steve Jobs Archive：纯白底、近乎手写体的衬线大字、极重留白、克制动效。
+严树成的个人网站，线上地址 **https://sacharn.site**。
+风格对齐 Steve Jobs Archive：纯白底、衬线大字、极重留白、克制动效。
+全站双语：中文在根路径，英文镜像在 `/en/` 下，页面一一对应。
 
 ## 技术栈
 
-- **Astro 4** — 静态生成，零运行时，HTML 直接出
-- **Cloudflare Pages**（计划）— 全球 CDN，大陆走香港/日本节点
+- **Astro** — 静态生成，零运行时，HTML 直接出（62 页）
 - **纯 CSS** — 不上 Tailwind / UI 库
 - **Markdown + JSON** — 内容文件，不依赖 CMS
+- **Cloudflare Pages** — 推送 `main` 分支自动构建发布
 
 ## 目录结构
 
 ```
 src/
-  pages/             # 路由 = 文件路径
-    index.astro      # 首页（5 个内容块的入口）
-    about.astro      # 关于
-    projects/        # 项目柜
-    writing/         # 写作柜
-    photos/          # 照片柜
-    vlog/            # vlog 柜
-    life/            # 生活记录柜
-  layouts/
-    Base.astro       # 复用布局：导航、页脚、fade-in 脚本
-  styles/
-    global.css       # 全局样式（颜色、字号、间距、动效）
-  content/
-    index.json       # 首页 5 个内容块的数据
-public/
-  favicon.svg
-dist/                # build 产物（自动生成）
+  pages/               # 中文路由（根路径）
+    en/                # 英文镜像路由（/en/ 前缀，结构与中文一一对应）
+  components/pages/    # 页面组件：双语共用，靠 lang 属性区分（<WritingIndex lang="en" />）
+  layouts/Base.astro   # 复用布局：导航抽屉、页脚、fade-in、语言切换
+  i18n/ui.ts           # 双语字典 + 路由/日期助手
+  content/writing/     # 中文文章（content collection）
+  content/writing-en/  # 英文译文（同 slug，与中文一一对应）
+  data/
+    index.json         # 首页卡片（含 en 块）
+    notes.json         # 随记（text + text_en）
+    photos.json        # 照片（title + title_en）
+public/                # 图片、视频、favicon 等静态资源
+scripts/               # verify-*.mjs 验证脚本（Playwright 跑 dist）
+dist/                  # build 产物（不提交）
 ```
 
-## 日常维护
+## 双语架构
 
-### 改首页内容
-编辑 `src/content/index.json`——只改这个文件，标题/副标/CTA 都在这里。
+### 路由
 
-### 加新文章 / 新项目
-Astro 的 content collections 已经预置（之后可以加 schema 校验）。现在直接：
+- 每个中文页 `src/pages/x.astro` 都有一个英文镜像 `src/pages/en/x.astro`；
+  两者都只写一行：`<PageComponent lang="zh" />` / `<PageComponent lang="en" />`，
+  实际渲染逻辑在 `src/components/pages/` 的共用组件里。
+- `src/i18n/ui.ts` 提供：
+  - `t(lang, key)` — 界面文案字典（菜单、页脚、按钮等）
+  - `href(lang, path)` — 给站内链接加语言前缀
+  - `switchPath(lang, pathname)` — 菜单语言切换器的目标地址
+  - `fmtDate(lang, date)` — 中文 `2024.01.20` / 英文 `Jan 20, 2024`
 
-1. 在 `src/content/projects/` 创建 `2026-07-my-project.md`
-2. 在 `src/pages/projects/index.astro` 里加一行链接到它
+### 写作（重点）
 
-如果文章多，可以加 `getCollection()` 自动列出——告诉我数量和频率我来加。
+- 中文文章：`src/content/writing/<slug>.md`
+- 英文译文：`src/content/writing-en/<slug>.md`（**文件名必须相同**，
+  frontmatter 的 title/sub/description 直接写英文，date 与中文一致）
+- 英文文章页逻辑（`WritingPost.astro`）：
+  - `writing-en` 里有同 slug 译文 → 直接渲染英文正文
+  - 没有译文 → 回退中文正文 + 顶部提示条，列表页标题旁挂 `In Chinese` 徽标
+- 文章内的图片若带中文（如示意图），在 `public/writing/<slug>/` 下加 `<name>-en.png`，
+  译文里引用英文版图片；中文原文不动。
+
+### 随记 / 照片 / 首页卡片
+
+- 随记：`src/data/notes.json`，每条 `text`（中）+ `text_en`（英）。
+  英文随记页只渲染 `text_en`，缺了会在验证脚本里报错。
+- 照片：`src/data/photos.json`，`title` + `title_en`。
+- 首页卡片：`src/data/index.json`，中文字段平铺，英文放在 `en` 子对象里。
+
+## 日常工作流
+
+### 加一篇新文章
+
+1. 写中文：`src/content/writing/<slug>.md`
+2. 写译文：`src/content/writing-en/<slug>.md`（可以后补，未补时英文页自动回退）
+3. 验证（见下），推送
+
+### 加一条随记
+
+`notes.json` 加 `{ date, text, text_en }`，中英文都写。
 
 ### 加照片
-1. 把图丢到 `public/photos/`
-2. 在 `src/pages/photos/index.astro` 里加 `<img>`
 
-### 本地预览
+1. 图片放进 `public/photos/`
+2. `photos.json` 加 `{ id, src, title, title_en, date }`
+
+### 验证（提交前必跑）
+
 ```bash
-cd C:\Users\sacha\personal-site
-node node_modules/astro/astro.js dev --host 127.0.0.1 --port 4321
-# 浏览器打开 http://127.0.0.1:4321
+npm.cmd run build              # 构建 62 页
+node scripts/verify-i18n.mjs   # 双语主验证（镜像存在、界面字、译文、徽标、无中文残留等 ~68 项）
+node scripts/verify-photos.mjs        # 照片墙与卡牌详情
+node scripts/verify-writing-migration.mjs  # 中文文章完整性
 ```
 
-> 注：MSYS 环境下用 `node node_modules/astro/astro.js` 直接调，**不要用 `npm run dev`**——`npm` 在这个 shell 下会卡住。如果你要在 Windows Terminal / PowerShell 里跑，`npm run dev` 没问题。
+验证脚本用 Playwright 起本地静态服务跑 `dist`，全绿才算完。
+截图类断言会产出 `shot-*.png`，已被 .gitignore 屏蔽，**不要提交截图**。
 
-### 改样式
-只改 `src/styles/global.css`。所有设计 token（颜色、字号、间距）都在文件顶部的 `:root` 里。
+### 环境注意
 
-## 部署到 Cloudflare Pages
+- Git Bash 里用 `npm.cmd`（直接 `npm` 会卡）
+- 页面内联脚本只写 ES5 经典语法（老手机内核）
+- `data-fade` 淡入只用于小元素，别套大容器
 
-1. 把这个目录 push 到 GitHub（公开或私有都行）
-2. 登录 Cloudflare → Pages → Connect to Git
-3. 选你的 repo，build 配置：
-   - **Build command**: `npm run build`
-   - **Build output directory**: `dist`
-   - **Node version**: 20
-4. 绑定你的域名（阿里云/腾讯云注册后改 NS 到 Cloudflare）
+## 部署
 
-> 备注：当前 `package.json` 里 `astro` 是从 npm 装的。**等正式上线前**，我建议把 `astro` 升级到最新稳定版，并加 `astro check` 做类型校验（你 Java 后端背景应该会喜欢这个）。
+推送 `main` → Cloudflare Pages 自动构建（`npm run build`，输出 `dist`）→ sacharn.site 更新。
+构建状态可查：
+`curl -s "https://api.github.com/repos/SacharnYan/personal-site/commits/main/check-runs"`
 
-## 待办（你来定优先级）
+## 设计宪法（不可随意改）
 
-- [ ] 首页 5 个 block 的实际内容
-- [ ] 项目页：把花艺工具的"故事"写完整
-- [ ] 写作页：加 content collection，自动列文章
-- [ ] 照片页：决定是 grid 还是时间轴
-- [ ] vlog 页：决定是嵌入 B 站/YouTube iframe，还是自托管
-- [ ] 头像 / logo：现在是简化的人形剪影占位
-- [ ] 域名：注册并绑定
-- [ ] Google Search Console / 简单 SEO
+- 纯白底、衬线字体（`--font-display` / `--font-body`）、极重留白
+- 黑 / 白 / 灰阶，不用彩色、emoji、阴影堆砌
+- 动效只用 fade-in，不玩 parallax / scroll-jacking
+- 正文栏居中（对齐 SJA about 页），不大面积左对齐留白
 
-## 设计决策（不可随意改）
-
-- **只有 6 个字号**：12 / 14 / 16 / 20 / 28 / 40
-- **只有 2 个字重**：400 / 500
-- **只有 3 个颜色**：黑、白、一种暖棕褐
-- **不用圆角 / 阴影 / emoji**
-- **动效只用 fade-in**——不玩 parallax、不玩 scroll-jacking
-
-这是网站的"宪法"。改任何一条都先想清楚——一旦破例，就会开始丑。
+改版决策的完整记录见 `REDESIGN.md`。改任何一条宪法之前先想清楚——一旦破例，就会开始丑。
