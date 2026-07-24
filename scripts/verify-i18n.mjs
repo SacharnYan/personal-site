@@ -88,29 +88,42 @@ check('hreflang 三条', hreflang.length === 3, hreflang.join(' | '));
 check('hreflang zh 指向中文版', hreflang.some(h => h.startsWith('zh-CN:') && h.endsWith('/photos/01/')), hreflang.find(h => h.startsWith('zh')) || '');
 check('hreflang en 指向英文版', hreflang.some(h => h.startsWith('en:') && h.includes('/en/photos/01/')), hreflang.find(h => h.startsWith('en:')) || '');
 
-// 6) 英文写作列表：英译标题 + In Chinese 徽标
+// 6) 英文写作列表：英译标题；已译文章不挂徽标，未译的挂 In Chinese
 await pg.goto('http://localhost:4597/en/writing/', { waitUntil: 'networkidle' });
-const enW = await pg.evaluate(() => ({
-  first: document.querySelector('.article-item-title a')?.textContent?.trim(),
-  badge: document.querySelector('.article-badge')?.textContent,
-  count: document.querySelectorAll('.article-item').length,
-  date: document.querySelector('.article-date')?.textContent,
-}));
+const enW = await pg.evaluate(() => {
+  const items = [...document.querySelectorAll('.article-item')];
+  return {
+    first: items[0]?.querySelector('.article-item-title a')?.textContent?.trim(),
+    firstBadge: items[0]?.querySelector('.article-badge')?.textContent ?? null,
+    secondBadge: items[1]?.querySelector('.article-badge')?.textContent ?? null,
+    count: items.length,
+    date: document.querySelector('.article-date')?.textContent,
+  };
+});
 check('EN 写作列表 11 篇', enW.count === 11, 'count=' + enW.count);
 check('EN 写作首篇英译标题', enW.first === 'Home — A Synopsis', enW.first);
-check('EN 写作徽标', enW.badge === 'In Chinese', enW.badge);
+check('EN 已译首篇无徽标', enW.firstBadge === null, String(enW.firstBadge));
+check('EN 未译次篇挂徽标', enW.secondBadge === 'In Chinese', String(enW.secondBadge));
 check('EN 日期格式', /^[A-Z][a-z]{2} \d{1,2}, \d{4}$/.test(enW.date || ''), enW.date);
 
-// 7) 英文写作详情：英译标题 + 提示条 + 中文正文保留
+// 7) 英文写作详情：已译《家园》直接渲染英文正文；未译《summer》回退中文 + 提示条
 await pg.goto('http://localhost:4597/en/writing/home/', { waitUntil: 'networkidle' });
 const enPost = await pg.evaluate(() => ({
   title: document.querySelector('.article-title')?.textContent,
-  notice: document.querySelector('.article-notice')?.textContent,
+  notice: document.querySelector('.article-notice')?.textContent ?? null,
   bodyCJK: /[\u4e00-\u9fff]/.test(document.querySelector('.article-body')?.textContent || ''),
 }));
 check('EN 文章页英译标题', enPost.title === 'Home — A Synopsis', enPost.title);
-check('EN 文章页提示条', (enPost.notice || '').includes('written in Chinese'), enPost.notice?.slice(0, 40));
-check('EN 文章页保留中文正文', enPost.bodyCJK);
+check('EN 已译文章无提示条', enPost.notice === null, String(enPost.notice));
+check('EN 已译文章正文全英文', !enPost.bodyCJK);
+
+await pg.goto('http://localhost:4597/en/writing/summer/', { waitUntil: 'networkidle' });
+const enPostFallback = await pg.evaluate(() => ({
+  notice: document.querySelector('.article-notice')?.textContent ?? null,
+  bodyCJK: /[\u4e00-\u9fff]/.test(document.querySelector('.article-body')?.textContent || ''),
+}));
+check('EN 未译文章有提示条', (enPostFallback.notice || '').includes('written in Chinese'), String(enPostFallback.notice).slice(0, 40));
+check('EN 未译文章回退中文正文', enPostFallback.bodyCJK);
 
 // 8) 中文页不受污染：首页 Hero 仍中文，无 English 界面字
 await pg.goto('http://localhost:4597/', { waitUntil: 'networkidle' });

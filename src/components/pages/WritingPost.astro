@@ -1,24 +1,35 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { t, fmtDate, type Lang } from '../../i18n/ui';
-import type { CollectionEntry } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 interface Props { lang: Lang; article: CollectionEntry<'writing'> }
 const { lang, article } = Astro.props;
 const isEn = lang === 'en';
-const { Content } = await article.render();
 
-const title = isEn ? (article.data.title_en || article.data.title) : article.data.title;
-const sub = isEn ? (article.data.sub_en || article.data.sub) : article.data.sub;
+/* 英文页优先渲染 writing-en 里的译文；没有译文则回退中文原文 + 提示条 */
+const enEntry = isEn
+  ? (await getCollection('writing-en')).find((e) => e.slug === article.slug)
+  : undefined;
+const zhRendered = await article.render();
+const enRendered = enEntry ? await enEntry.render() : null;
+const Body = enRendered ? enRendered.Content : zhRendered.Content;
+
+const source = enEntry || article;
+const title = isEn
+  ? (source.data.title_en || source.data.title)
+  : source.data.title;
+const sub = isEn ? (source.data.sub_en || source.data.sub) : source.data.sub;
 const description = isEn
-  ? (article.data.description_en || article.data.description || title)
-  : (article.data.description || title);
+  ? (source.data.description_en || source.data.description || title)
+  : (source.data.description || title);
+const cover = source.data.cover || article.data.cover;
 ---
 
 <Base
   title={`${title} — ${t(lang, 'writing.title')}`}
   description={description}
-  image={article.data.cover}
+  image={cover}
   lang={lang}
 >
   <article class="article">
@@ -28,18 +39,18 @@ const description = isEn
       {sub && <p class="article-sub">{sub}</p>}
     </header>
 
-    {isEn && (
+    {isEn && !enEntry && (
       <p class="article-notice" data-fade>{t(lang, 'writing.notice')}</p>
     )}
 
-    {article.data.cover && (
+    {cover && (
       <figure class="article-cover">
-        <img src={article.data.cover} alt="" loading="eager" />
+        <img src={cover} alt="" loading="eager" />
       </figure>
     )}
 
     <div class="article-body">
-      <Content />
+      <Body />
     </div>
   </article>
 </Base>

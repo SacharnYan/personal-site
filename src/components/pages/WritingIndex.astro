@@ -9,6 +9,9 @@ const isEn = lang === 'en';
 
 const articles = await getCollection('writing', ({ data }) => !data.draft);
 articles.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+/* 已有全文译文的 slug，英文列表不再挂 "In Chinese" 徽标 */
+const enSlugs = new Set((await getCollection('writing-en')).map((e) => e.slug));
 ---
 
 <Base title={t(lang, 'writing.title')} lang={lang}>
@@ -27,7 +30,7 @@ articles.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
               <a href={href(lang, `/writing/${article.slug}/`)}>
                 {isEn ? (article.data.title_en || article.data.title) : article.data.title}
               </a>
-              {isEn && <span class="article-badge">{t(lang, 'writing.badge')}</span>}
+              {isEn && !enSlugs.has(article.slug) && <span class="article-badge">{t(lang, 'writing.badge')}</span>}
             </h2>
             {(isEn ? article.data.description_en : article.data.description) && (
               <p class="article-item-desc">{isEn ? article.data.description_en : article.data.description}</p>
