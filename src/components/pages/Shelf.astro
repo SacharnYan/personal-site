@@ -1,0 +1,531 @@
+---
+import Base from '../../layouts/Base.astro';
+import { href, type Lang } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const isEn = lang === 'en';
+
+const labels = {
+  zh: {
+    page: '书架',
+    all: '全部',
+    books: '书籍',
+    essays: '文章',
+    films: '影像',
+    talks: '演讲',
+    filter: '筛选书架',
+    description: '反复读、反复看，也持续塑造我的东西。',
+    source: '完整清单',
+  },
+  en: {
+    page: 'Bookshelf',
+    all: 'All',
+    books: 'Books',
+    essays: 'Essays',
+    films: 'Films',
+    talks: 'Talks',
+    filter: 'Filter bookshelf',
+    description: 'Things I return to, and that continue to shape me.',
+    source: 'Full list',
+  },
+}[lang];
+
+const categories = [
+  { key: 'all', label: labels.all },
+  { key: 'books', label: labels.books },
+  { key: 'essays', label: labels.essays },
+  { key: 'films', label: labels.films },
+  { key: 'talks', label: labels.talks },
+];
+
+const intakePath = href(lang, '/writing/intake/');
+const items = [
+  { category: 'books', kind: 'book', variant: 'mint', title: '置身事内', title_en: 'Within the System', by: '兰小欢', by_en: 'Lan Xiaohuan', href: intakePath },
+  { category: 'books', kind: 'book', variant: 'sepia', title: '活着', title_en: 'To Live', by: '余华', by_en: 'Yu Hua', href: intakePath },
+  { category: 'essays', kind: 'paper', variant: 'paper', title: '经济机器是怎样运行的', title_en: 'How the Economic Machine Works', by: 'Ray Dalio', by_en: 'Ray Dalio', href: intakePath },
+  { category: 'all', kind: 'calendar', variant: 'calendar', title: '', title_en: '', by: '', by_en: '', href: '' },
+  { category: 'books', kind: 'book', variant: 'sand', title: '明朝那些事儿', title_en: 'Those Things About the Ming Dynasty', by: '当年明月', by_en: 'Dangnian Mingyue', href: intakePath },
+  { category: 'books', kind: 'book', variant: 'red', title: '纳瓦尔宝典', title_en: 'The Almanack of Naval Ravikant', by: 'Eric Jorgenson', by_en: 'Eric Jorgenson', href: intakePath },
+  { category: 'books', kind: 'book', variant: 'white', title: 'Make Something Wonderful', title_en: 'Make Something Wonderful', by: 'Steve Jobs', by_en: 'Steve Jobs', href: 'https://stevejobsarchive.com/book', external: true },
+  { category: 'essays', kind: 'paper', variant: 'paper', title: '中县干部', title_en: 'Cadres of a Central County', by: '冯军旗', by_en: 'Feng Junqi', href: intakePath },
+  { category: 'films', kind: 'poster', variant: 'black', title: '轮回', title_en: 'Samsara', by: 'Ron Fricke', by_en: 'Ron Fricke', href: 'https://www.bilibili.com/video/BV1Kx411b7BP', external: true },
+  { category: 'books', kind: 'book', variant: 'navy', title: '少年派的奇幻漂流', title_en: 'Life of Pi', by: 'Yann Martel', by_en: 'Yann Martel', href: intakePath },
+  { category: 'essays', kind: 'paper', variant: 'paper', title: '酷壳', title_en: 'CoolShell', by: '陈皓', by_en: 'Chen Hao', href: 'https://coolshell.cn/haoel', external: true },
+  { category: 'books', kind: 'book', variant: 'orange', title: '数据密集型应用系统设计', title_en: 'Designing Data-Intensive Applications', by: 'Martin Kleppmann', by_en: 'Martin Kleppmann', href: intakePath },
+  { category: 'talks', kind: 'poster', variant: 'charcoal', title: '斯坦福毕业演讲', title_en: 'Stanford Commencement Address', by: 'Steve Jobs', by_en: 'Steve Jobs', href: 'https://www.bilibili.com/video/BV1oW411h7Ea', external: true },
+  { category: 'talks', kind: 'poster', variant: 'blue', title: '生活、工作与智慧', title_en: 'Life, Work, and Wisdom', by: 'Naval Ravikant', by_en: 'Naval Ravikant', href: 'https://www.bilibili.com/video/BV1HW4y1i71t', external: true },
+  { category: 'books', kind: 'book', variant: 'olive', title: '探寻智慧', title_en: 'Seeking Wisdom', by: 'Peter Bevelin', by_en: 'Peter Bevelin', href: intakePath },
+  { category: 'films', kind: 'image', variant: 'snow', title: '湖心亭看雪', title_en: 'Snow at Huxin Pavilion', by: '互动场景', by_en: 'Interactive scene', href: href(lang, '/projects/snow/'), image: '/projects/snow/card.jpg' },
+  { category: 'essays', kind: 'paper', variant: 'paper', title: '高效管理碎片化知识', title_en: 'Managing Fragmented Knowledge', by: 'RSS', by_en: 'RSS', href: 'https://www.bilibili.com/video/BV17E411L78o', external: true },
+  { category: 'films', kind: 'poster', variant: 'rose', title: '何藩', title_en: 'Fan Ho', by: '决定性瞬间', by_en: 'The Decisive Moment', href: 'https://www.bilibili.com/video/BV12741177X5', external: true },
+  { category: 'films', kind: 'poster', variant: 'burgundy', title: '红楼梦', title_en: 'Dream of the Red Chamber', by: '舞剧', by_en: 'Dance drama', href: 'https://www.bilibili.com/video/BV1Ce411V7Bn', external: true },
+  { category: 'books', kind: 'book', variant: 'cream', title: '陶庵梦忆', title_en: "Dream Reminiscences of Tao'an", by: '张岱', by_en: 'Zhang Dai', href: intakePath },
+  { category: 'books', kind: 'book', variant: 'yellow', title: '进化心理学', title_en: 'Evolutionary Psychology', by: 'David Buss', by_en: 'David Buss', href: intakePath },
+  { category: 'films', kind: 'poster', variant: 'graphite', title: '中国从哪里来', title_en: 'Where Does China Come From?', by: '地理视角', by_en: 'A geographic view', href: 'https://www.bilibili.com/video/BV1SU4y1A7wX', external: true },
+  { category: 'films', kind: 'poster', variant: 'steel', title: '钢铁侠机械臂', title_en: "Iron Man's Robotic Arm", by: '自制', by_en: 'Built from scratch', href: 'https://www.bilibili.com/video/BV12341117rG', external: true },
+];
+---
+
+<Base
+  title={`${labels.page} — ${isEn ? 'Sacharn' : '思想名片'}`}
+  description={labels.description}
+  lang={lang}
+>
+  <div class="shelf-page">
+    <aside class="shelf-aside">
+      <div class="shelf-aside-inner">
+        <h1 class="shelf-title">{labels.page}</h1>
+        <p class="shelf-description">{labels.description}</p>
+        <nav class="shelf-filters" aria-label={labels.filter}>
+          {categories.map((category, index) => (
+            <button
+              type="button"
+              class="shelf-filter"
+              data-filter={category.key}
+              aria-pressed={index === 0 ? 'true' : 'false'}
+            >
+              {category.label}
+            </button>
+          ))}
+        </nav>
+        <a class="shelf-source" href={intakePath}>{labels.source} →</a>
+      </div>
+    </aside>
+
+    <main class="shelf-main" id="shelf-grid">
+      <div class="shelf-grid">
+        {items.map((item) => item.kind === 'calendar' ? (
+          <article class="shelf-item calendar-item" data-category="all">
+            <div class="calendar-object" aria-label={isEn ? 'Today calendar' : '今日日历'}>
+              <div class="calendar-page">
+                <div class="calendar-head">
+                  <span class="calendar-weekday" data-calendar-weekday>WED</span>
+                  <span class="calendar-year" data-calendar-year>2026</span>
+                </div>
+                <p class="calendar-month" data-calendar-month>JULY</p>
+                <p class="calendar-day" data-calendar-day>29</p>
+                <p class="calendar-foot" data-calendar-full>2026.07.29</p>
+              </div>
+              <div class="calendar-flip" aria-hidden="true">
+                <span data-calendar-prev>28</span>
+              </div>
+            </div>
+          </article>
+        ) : (
+          <article class:list={['shelf-item', `kind-${item.kind}`]} data-category={item.category}>
+            <a
+              class="shelf-link"
+              href={item.href}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener' : undefined}
+              aria-label={`${isEn ? item.title_en : item.title} · ${isEn ? item.by_en : item.by}`}
+            >
+              <div class:list={['shelf-object', `variant-${item.variant}`]}>
+                {item.kind === 'image' && item.image ? (
+                  <img src={item.image} alt="" loading="lazy" />
+                ) : (
+                  <div class="shelf-cover-copy">
+                    {(item.kind === 'paper' || item.variant === 'white') && <span class="cover-rule"></span>}
+                    <h2>{isEn ? item.title_en : item.title}</h2>
+                    <p>{isEn ? item.by_en : item.by}</p>
+                  </div>
+                )}
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+    </main>
+  </div>
+
+  <script is:inline>
+    (function () {
+      try {
+        var root = document.getElementById('shelf-grid');
+        if (!root) return;
+        var filters = document.querySelectorAll('[data-filter]');
+        var items = root.querySelectorAll('[data-category]');
+        for (var i = 0; i < filters.length; i++) {
+          filters[i].addEventListener('click', function () {
+            var key = this.getAttribute('data-filter');
+            for (var j = 0; j < filters.length; j++) {
+              filters[j].setAttribute('aria-pressed', String(filters[j] === this));
+            }
+            for (var k = 0; k < items.length; k++) {
+              var category = items[k].getAttribute('data-category');
+              items[k].hidden = key !== 'all' && category !== key;
+            }
+          });
+        }
+
+        var now = new Date();
+        var prev = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+        var monthsZh = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+        var monthsEn = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+        var weekdaysZh = ['日','一','二','三','四','五','六'];
+        var weekdaysEn = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+        var isEnglish = document.documentElement.lang === 'en';
+        var setText = function (selector, text) {
+          var el = document.querySelector(selector);
+          if (el) el.textContent = text;
+        };
+        var pad = function (n) { return n < 10 ? '0' + n : String(n); };
+        setText('[data-calendar-weekday]', isEnglish ? weekdaysEn[now.getDay()] : '星期' + weekdaysZh[now.getDay()]);
+        setText('[data-calendar-year]', String(now.getFullYear()));
+        setText('[data-calendar-month]', isEnglish ? monthsEn[now.getMonth()] : monthsZh[now.getMonth()]);
+        setText('[data-calendar-day]', String(now.getDate()));
+        setText('[data-calendar-prev]', String(prev.getDate()));
+        setText('[data-calendar-full]', now.getFullYear() + '.' + pad(now.getMonth() + 1) + '.' + pad(now.getDate()));
+        var calendar = document.querySelector('.calendar-object');
+        if (calendar) calendar.classList.add('flip-once');
+      } catch (e) {}
+    })();
+  </script>
+</Base>
+
+<style>
+  .shelf-page {
+    display: grid;
+    grid-template-columns: 210px minmax(0, 1fr);
+    gap: 40px;
+    padding: 144px 32px 144px;
+    background: #fafafa;
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .shelf-aside-inner {
+    position: sticky;
+    top: 32px;
+  }
+
+  .shelf-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  .shelf-description {
+    font-size: 13px;
+    line-height: 22px;
+    color: var(--color-fg-muted);
+    margin: 20px 0 32px;
+    max-width: 180px;
+  }
+
+  .shelf-filters {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 17px;
+  }
+
+  .shelf-filter {
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1.2;
+    color: #aaa;
+    transition: color 180ms ease;
+  }
+
+  .shelf-filter:hover,
+  .shelf-filter[aria-pressed='true'] {
+    color: #000;
+  }
+
+  .shelf-source {
+    display: inline-block;
+    margin-top: 36px;
+    font-size: 13px;
+    color: var(--color-fg-muted);
+    border-bottom: 1px solid var(--color-rule);
+    padding-bottom: 2px;
+  }
+
+  .shelf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+    gap: 24px 18px;
+    align-items: start;
+  }
+
+  .shelf-item {
+    min-width: 0;
+    perspective: 1000px;
+  }
+
+  .shelf-link {
+    display: block;
+  }
+
+  .shelf-object,
+  .calendar-object {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+  }
+
+  .shelf-object {
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 2px 2px 8px rgba(0,0,0,.13);
+  }
+
+  .kind-book .shelf-object {
+    transform: rotateY(-5deg);
+    transform-style: preserve-3d;
+    transform-origin: left center;
+    transition: transform 450ms cubic-bezier(.16,1,.3,1), box-shadow 450ms ease;
+    border-radius: 0 2px 2px 0;
+  }
+
+  .kind-book:hover .shelf-object {
+    transform: rotateY(-18deg);
+    box-shadow: 7px 4px 14px rgba(0,0,0,.16);
+  }
+
+  .kind-book .shelf-object::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: linear-gradient(90deg, rgba(0,0,0,.18), rgba(255,255,255,.12));
+    z-index: 2;
+  }
+
+  .shelf-cover-copy {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 14px 12px 12px;
+  }
+
+  .shelf-cover-copy h2 {
+    font-family: var(--font-body);
+    font-size: clamp(10px, .82vw, 13px);
+    font-weight: 600;
+    line-height: 1.28;
+    letter-spacing: -.02em;
+    margin: 0;
+  }
+
+  .shelf-cover-copy p {
+    margin: auto 0 0;
+    font-size: 9px;
+    line-height: 1.35;
+    color: currentColor;
+    opacity: .62;
+  }
+
+  .cover-rule {
+    width: 26px;
+    height: 2px;
+    background: #e55830;
+    margin-bottom: 10px;
+  }
+
+  .kind-paper .shelf-object {
+    background: #fff;
+  }
+
+  .kind-poster .shelf-cover-copy {
+    justify-content: flex-end;
+    padding: 14px;
+  }
+
+  .kind-poster .shelf-cover-copy h2 {
+    font-family: var(--font-display);
+    font-size: clamp(15px, 1.2vw, 22px);
+    font-weight: 400;
+    line-height: 1.05;
+  }
+
+  .kind-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .kind-image .shelf-object::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.12), transparent 45%);
+  }
+
+  .variant-mint { background: #b8c9b6; color: #152019; }
+  .variant-sepia { background: #d8c2a5; color: #2b1c12; }
+  .variant-sand { background: #d7c89e; color: #2a251a; }
+  .variant-red { background: #c72e26; color: #fff; }
+  .variant-white { background: #fff; color: #111; }
+  .variant-black { background: #0e0e0e; color: #f5f1e7; }
+  .variant-navy { background: #1f3445; color: #f3e8d4; }
+  .variant-orange { background: #bd5a2f; color: #fff5e9; }
+  .variant-charcoal { background: #242424; color: #f2f2f2; }
+  .variant-blue { background: #43647a; color: #f2efe8; }
+  .variant-olive { background: #74785a; color: #fff; }
+  .variant-rose { background: #b77d75; color: #fff8f1; }
+  .variant-burgundy { background: #6e2630; color: #f6e8dd; }
+  .variant-cream { background: #eee7d7; color: #2b261d; }
+  .variant-yellow { background: #d6aa3a; color: #231d10; }
+  .variant-graphite { background: #4d4f50; color: #f2f2f2; }
+  .variant-steel { background: #7a8c98; color: #fff; }
+
+  .calendar-object {
+    --paper: #fffdf8;
+    position: relative;
+    perspective: 900px;
+    transform: rotate(-.4deg);
+  }
+
+  .calendar-page,
+  .calendar-flip {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255,255,253,.99),rgba(250,249,244,.98)),
+      repeating-linear-gradient(88deg,rgba(28,26,22,.025) 0,rgba(28,26,22,.025) 1px,transparent 1px,transparent 8px);
+    border: 1px solid #e5e0d7;
+    box-shadow: 2px 2px 8px rgba(0,0,0,.12);
+  }
+
+  .calendar-page {
+    padding: 9px 8px 8px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .calendar-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 7px;
+    font-weight: 600;
+    color: #d94b2b;
+    letter-spacing: .06em;
+  }
+
+  .calendar-month {
+    margin: 16% 0 0;
+    text-align: center;
+    font-size: 8px;
+    font-weight: 600;
+    color: #d94b2b;
+    letter-spacing: .08em;
+  }
+
+  .calendar-day {
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: clamp(42px, 5vw, 72px);
+    font-weight: 900;
+    line-height: .9;
+    letter-spacing: -.05em;
+    text-align: center;
+    color: #d94b2b;
+    margin: 4px 0 0;
+    transform: scaleX(.88);
+  }
+
+  .calendar-foot {
+    margin: auto 0 0;
+    border-top: 1px solid #e9d7cf;
+    padding-top: 6px;
+    text-align: center;
+    font-size: 7px;
+    color: #8d8880;
+    letter-spacing: .06em;
+  }
+
+  .calendar-flip {
+    z-index: 5;
+    opacity: 0;
+    transform-origin: center top;
+    transform-style: preserve-3d;
+  }
+
+  .calendar-flip span {
+    display: block;
+    margin-top: 41%;
+    text-align: center;
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: clamp(42px, 5vw, 72px);
+    font-weight: 900;
+    line-height: .9;
+    color: #d94b2b;
+    transform: scaleX(.88);
+  }
+
+  .calendar-object.flip-once .calendar-flip {
+    opacity: 1;
+    animation: calendarPageFlip 1.2s cubic-bezier(.45,0,.18,1) .25s forwards;
+  }
+
+  @keyframes calendarPageFlip {
+    0% { opacity: 1; transform: rotateX(0deg) translateY(0); }
+    55% { opacity: 1; transform: rotateX(-80deg) translateY(-3%); }
+    100% { opacity: 0; transform: rotateX(-116deg) translateY(-9%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .calendar-object.flip-once .calendar-flip {
+      display: none;
+      animation: none;
+    }
+
+    .kind-book .shelf-object {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .shelf-page {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 120px 24px 96px;
+    }
+
+    .shelf-aside-inner {
+      position: static;
+    }
+
+    .shelf-description {
+      max-width: 40ch;
+      margin-bottom: 24px;
+    }
+
+    .shelf-filters {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 12px 22px;
+    }
+
+    .shelf-filter {
+      font-size: 18px;
+    }
+
+    .shelf-source {
+      margin-top: 24px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .shelf-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px 12px;
+    }
+
+    .shelf-cover-copy {
+      padding: 10px 9px 9px;
+    }
+
+    .shelf-cover-copy h2 {
+      font-size: 9px;
+    }
+
+    .kind-poster .shelf-cover-copy h2 {
+      font-size: 13px;
+    }
+  }
+</style>

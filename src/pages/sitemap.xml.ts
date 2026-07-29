@@ -10,6 +10,7 @@ const staticPaths = [
   '/projects/floral/',
   '/projects/snow/',
   '/writing/',
+  '/shelf/',
   '/notes/',
   '/photos/',
   '/vlog/',

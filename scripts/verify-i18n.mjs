@@ -24,7 +24,7 @@ const check = (name, ok, extra = '') => {
 const hasCJK = (s) => /[\u4e00-\u9fff]/.test(s || '');
 
 // 所有应有双语镜像的静态路径（动态页抽查代表）
-const ZH_PATHS = ['/', '/about/', '/projects/', '/projects/snow/', '/projects/floral/', '/writing/', '/notes/', '/photos/', '/vlog/', '/life/'];
+const ZH_PATHS = ['/', '/about/', '/projects/', '/projects/snow/', '/projects/floral/', '/writing/', '/shelf/', '/notes/', '/photos/', '/vlog/', '/life/'];
 const enPath = (p) => (p === '/' ? '/en/' : '/en' + p);
 
 const pg = await browser.newPage({ viewport: { width: 1440, height: 900 } });
@@ -52,7 +52,7 @@ const enHome = await pg.evaluate(() => ({
 }));
 check('EN 首页 Hero', enHome.hero === 'Learn always. Create with care. Express freely.', enHome.hero);
 check('EN 首页副题', enHome.heroSub === 'The leopard transforms; his coat grows splendid.', enHome.heroSub);
-check('EN 菜单五项英文', enHome.nav.join(',') === 'Projects,Writing,Notes,Photos,Vlog', enHome.nav.join(','));
+check('EN 菜单六项英文', enHome.nav.join(',') === 'Projects,Writing,Bookshelf,Notes,Photos,Vlog', enHome.nav.join(','));
 check('EN 页脚订阅文案', !hasCJK(enHome.foot), enHome.foot?.slice(0, 30));
 check('EN 署名', enHome.copy?.includes('Shucheng Yan'), enHome.copy);
 check('EN 首页第一张卡', enHome.firstCard === 'Snow at Huxin Pavilion', enHome.firstCard);
