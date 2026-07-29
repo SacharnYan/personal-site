@@ -5,6 +5,8 @@ import { t, href, type Lang } from '../../i18n/ui';
 interface Photo {
   id: string;
   src: string;
+  width: number;
+  height: number;
   title: string;
   title_en: string;
   date: string;
@@ -41,7 +43,15 @@ const nextTitle = next ? (isEn ? next.title_en : next.title) : '';
         data-prev={prev ? href(lang, `/photos/${prev.id}/`) : ''}
         data-next={next ? href(lang, `/photos/${next.id}/`) : ''}
       >
-        <img src={photo.src} alt={pTitle} loading="eager" draggable="false" />
+        <img
+          src={photo.src}
+          width={photo.width}
+          height={photo.height}
+          alt={pTitle}
+          loading="eager"
+          fetchpriority="high"
+          draggable="false"
+        />
       </figure>
     </div>
 

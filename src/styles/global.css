@@ -54,6 +54,12 @@ a {
   text-decoration: none;
 }
 
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
 ul,
 ol {
   list-style: none;
@@ -199,6 +205,10 @@ button {
 }
 
 .menu-link:hover {
+  color: #000;
+}
+
+.menu-link[aria-current='page'] {
   color: #000;
 }
 

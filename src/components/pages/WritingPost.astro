@@ -24,6 +24,23 @@ const description = isEn
   ? (source.data.description_en || source.data.description || title)
   : (source.data.description || title);
 const cover = source.data.cover || article.data.cover;
+const canonicalUrl = `https://sacharn.site${isEn ? '/en' : ''}/writing/${article.slug}/`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: article.data.date.toISOString(),
+  inLanguage: isEn ? 'en' : 'zh-CN',
+  mainEntityOfPage: canonicalUrl,
+  url: canonicalUrl,
+  ...(cover ? { image: `https://sacharn.site${cover}` } : {}),
+  author: {
+    '@type': 'Person',
+    name: isEn ? 'Shucheng Yan' : '严树成',
+    url: `https://sacharn.site${isEn ? '/en' : ''}/about/`,
+  },
+};
 ---
 
 <Base
@@ -31,6 +48,7 @@ const cover = source.data.cover || article.data.cover;
   description={description}
   image={cover}
   lang={lang}
+  jsonLd={jsonLd}
 >
   <article class="article">
     <header class="article-hero" data-fade>

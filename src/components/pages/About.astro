@@ -17,12 +17,25 @@ const timeline = [
   { date: '2000–2002', date_en: '2000–2002', stage: '幼儿园', stage_en: 'Kindergarten', place: '蔡堡中心幼儿园', place_en: 'Caibao Central Kindergarten' },
   { date: '1996', date_en: '1996', stage: '出生', stage_en: 'Born', place: '江苏省兴化市', place_en: 'Xinghua, Jiangsu' },
 ];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: isEn ? 'Shucheng Yan' : '严树成',
+  alternateName: isEn ? '严树成' : 'Sacharn',
+  url: `https://sacharn.site${isEn ? '/en' : ''}/about/`,
+  jobTitle: isEn ? 'Retail Product Manager' : '零售产品经理',
+  worksFor: { '@type': 'Organization', name: 'Huawei' },
+  homeLocation: { '@type': 'Place', name: isEn ? 'Nanjing, China' : '中国南京' },
+  sameAs: ['https://github.com/SacharnYan'],
+};
 ---
 
 <Base
   title={isEn ? 'About — Sacharn' : '关于 — 思想名片'}
   description={isEn ? 'Shucheng Yan · Retail Product Management at Huawei · Nanjing' : '严树成 · 华为零售产品管理 · 南京'}
   lang={lang}
+  jsonLd={jsonLd}
 >
   <article class="article">
     <header class="article-hero" data-fade>

@@ -181,7 +181,7 @@ const ctxEn2 = await browser.newContext({ locale: 'en-US', viewport: { width: 14
 const pEn2 = await ctxEn2.newPage();
 await pEn2.goto('http://localhost:4597/writing/home/', { waitUntil: 'domcontentloaded' });
 await pEn2.waitForTimeout(400);
-check('英文环境深链跳 /en/writing/home/', pEn2.url().endsWith('/en/writing/home/'), pEn2.url());
+check('英文环境打开中文深链时尊重原链接', pEn2.url().endsWith('/writing/home/'), pEn2.url());
 await ctxEn2.close();
 
 const ctxZh = await browser.newContext({ locale: 'zh-CN', viewport: { width: 1440, height: 900 } });

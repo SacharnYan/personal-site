@@ -20,8 +20,11 @@ const isEn = lang === 'en';
         <a class="gallery-item" data-fade href={href(lang, `/photos/${photo.id}/`)} aria-label={isEn ? photo.title_en : photo.title}>
           <img
             src={photo.src}
+            width={photo.width}
+            height={photo.height}
             alt={isEn ? photo.title_en : photo.title}
             loading={i < 4 ? 'eager' : 'lazy'}
+            fetchpriority={i === 0 ? 'high' : undefined}
           />
         </a>
       ))}

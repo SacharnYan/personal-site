@@ -1,6 +1,6 @@
 ---
 // 基础布局：精确复刻 Steve Jobs Archive；双语化：中文在根路径，英文在 /en/ 镜像
-import '@fontsource/playfair-display/400.css';
+import '@fontsource/playfair-display/latin-400.css';
 import '@fontsource/noto-serif-sc/400.css';
 import { t, href, switchPath, type Lang } from '../i18n/ui';
 
@@ -9,6 +9,7 @@ interface Props {
   description?: string;
   image?: string;
   lang?: Lang;
+  jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
 const { title, lang = 'zh' } = Astro.props;
@@ -29,6 +30,20 @@ const otherPath = switchPath(lang, url.pathname);
 const zhUrl = url.origin + (lang === 'zh' ? url.pathname : otherPath);
 const enUrl = url.origin + (lang === 'en' ? url.pathname : otherPath);
 const year = new Date().getFullYear();
+const jsonLd = Astro.props.jsonLd ?? {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteName,
+  url: url.origin + homeHref,
+  inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
+  author: {
+    '@type': 'Person',
+    name: lang === 'zh' ? '严树成' : 'Shucheng Yan',
+    url: url.origin + aboutHref,
+  },
+};
+const safeJsonLd = JSON.stringify(jsonLd).replaceAll('<', '\\u003c');
+const currentPath = url.pathname.replace(/\/+$/, '') || '/';
 ---
 <!DOCTYPE html>
 <html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
@@ -57,16 +72,16 @@ const year = new Date().getFullYear();
               t = t.parentNode;
             }
           }, true);
-          if (store.get()) return; /* 已完成首次检测或用户已手动选择 */
+          if (store.get()) return; /* 用户已手动选择，或首页已完成首次检测 */
           var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
           if (nav.indexOf('zh') === 0) { store.set('zh'); return; }
-          store.set('en');
           var path = window.location.pathname;
           var onEn = path === '/en' || path.indexOf('/en/') === 0;
-          if (!onEn) {
-            var target = path === '/' ? '/en/' : '/en' + path;
-            window.location.replace(target + window.location.search + window.location.hash);
-          }
+          if (onEn) { store.set('en'); return; }
+          /* 分享出来的中文深链保持原样；仅首页按浏览器语言自动选择。 */
+          if (path !== '/') return;
+          store.set('en');
+          window.location.replace('/en/' + window.location.search + window.location.hash);
         } catch (e) {}
       })();
     </script>
@@ -99,6 +114,8 @@ const year = new Date().getFullYear();
     <link rel="alternate" hreflang="zh-CN" href={zhUrl} />
     <link rel="alternate" hreflang="en" href={enUrl} />
     <link rel="alternate" hreflang="x-default" href={zhUrl} />
+    <link rel="alternate" type="application/rss+xml" title={lang === 'zh' ? '思想名片 — 写作' : 'Sacharn — Writing'} href={href(lang, '/rss.xml')} />
+    <script type="application/ld+json" set:html={safeJsonLd}></script>
   </head>
   <body data-toast-mail={t(lang, 'toast.mail')}>
     <a href="#main" class="skip-link">{t(lang, 'a11y.skip')}</a>
@@ -107,7 +124,7 @@ const year = new Date().getFullYear();
       <a href={homeHref} class="logo" aria-label={t(lang, 'a11y.home')}>
         <img src="/logo-variants/logo-spiral.svg" alt="" class="logo-mark" />
       </a>
-      <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-menu">
+      <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-menu" aria-label={t(lang, 'a11y.menuOpen')}>
         Menu
         <svg class="menu-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
           <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.2" />
@@ -115,20 +132,24 @@ const year = new Date().getFullYear();
       </button>
     </header>
 
-    <div class="menu-overlay" id="site-menu" hidden>
+    <div class="menu-overlay" id="site-menu" role="dialog" aria-modal="true" aria-label={t(lang, 'a11y.menu')} tabindex="-1" hidden>
       <div class="menu-scrim"></div>
       <div class="menu-panel">
         <div class="menu-panel-head">
           <a href={homeHref} class="logo" aria-label={t(lang, 'a11y.home')}>
             <img src="/logo-variants/logo-spiral.svg" alt="" class="logo-mark" />
           </a>
-          <button type="button" class="menu-close">Close</button>
+          <button type="button" class="menu-close" aria-label={t(lang, 'a11y.menuClose')}>Close</button>
         </div>
         <nav class="menu-nav" aria-label={t(lang, 'a11y.menu')}>
           <ul class="menu-list">
             {navItems.map((item) => (
               <li>
-                <a href={item.href} class="menu-link">{item.label}</a>
+                <a
+                  href={item.href}
+                  class="menu-link"
+                  aria-current={(item.href.replace(/\/+$/, '') || '/') === currentPath ? 'page' : undefined}
+                >{item.label}</a>
               </li>
             ))}
           </ul>
@@ -159,6 +180,7 @@ const year = new Date().getFullYear();
         <ul class="footer-links">
           <li><a href={aboutHref} class="footer-link">{t(lang, 'foot.about')}</a></li>
           <li><a href="mailto:sacharn@163.com" class="footer-link" data-mail="sacharn@163.com">{t(lang, 'foot.contact')}</a></li>
+          <li><a href={href(lang, '/rss.xml')} class="footer-link">RSS</a></li>
           <li><a href="https://github.com/SacharnYan" class="footer-link" target="_blank" rel="noopener">GitHub</a></li>
         </ul>
         <a href="#" class="footer-link footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">{t(lang, 'foot.top')}</a>
@@ -215,18 +237,27 @@ const year = new Date().getFullYear();
         var menuToggle = document.querySelector('.menu-toggle');
         var menuOverlay = document.querySelector('.menu-overlay');
         var menuClose = document.querySelector('.menu-close');
+        var lastFocus = null;
+        var closeTimer = null;
+        var focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
         var setMenu = function (open) {
           menuToggle.setAttribute('aria-expanded', String(open));
+          if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
           if (open) {
+            lastFocus = document.activeElement;
             menuOverlay.hidden = false;
             requestAnimationFrame(function () {
               requestAnimationFrame(function () { menuOverlay.classList.add('is-open'); });
             });
             document.body.style.overflow = 'hidden';
+            menuClose.focus();
           } else {
             menuOverlay.classList.remove('is-open');
             document.body.style.overflow = '';
-            setTimeout(function () { menuOverlay.hidden = true; }, 450);
+            closeTimer = setTimeout(function () {
+              menuOverlay.hidden = true;
+              if (lastFocus && lastFocus.focus) lastFocus.focus();
+            }, 450);
           }
         };
         menuToggle.addEventListener('click', function () { setMenu(true); });
@@ -238,6 +269,18 @@ const year = new Date().getFullYear();
         }
         document.addEventListener('keydown', function (e) {
           if (e.key === 'Escape' && !menuOverlay.hidden) setMenu(false);
+          if (e.key !== 'Tab' || menuOverlay.hidden) return;
+          var focusable = menuOverlay.querySelectorAll(focusableSelector);
+          if (!focusable.length) { e.preventDefault(); menuOverlay.focus(); return; }
+          var first = focusable[0];
+          var last = focusable[focusable.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
         });
       } catch (e) { /* 菜单失效不影响内容 */ }
 
