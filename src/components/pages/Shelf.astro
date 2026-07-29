@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { href, type Lang } from '../../i18n/ui';
+import { shelfItems } from '../../data/shelf';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -65,6 +66,7 @@ const items = [
   { category: 'films', kind: 'poster', variant: 'graphite', title: '中国从哪里来', title_en: 'Where Does China Come From?', by: '地理视角', by_en: 'A geographic view', href: 'https://www.bilibili.com/video/BV1SU4y1A7wX', external: true },
   { category: 'films', kind: 'poster', variant: 'steel', title: '钢铁侠机械臂', title_en: "Iron Man's Robotic Arm", by: '自制', by_en: 'Built from scratch', href: 'https://www.bilibili.com/video/BV12341117rG', external: true },
 ];
+const detailSlugs = items.map((_, index) => index === 3 ? '' : shelfItems[index > 3 ? index - 1 : index].slug);
 ---
 
 <Base
@@ -95,7 +97,7 @@ const items = [
 
     <main class="shelf-main" id="shelf-grid">
       <div class="shelf-grid">
-        {items.map((item) => item.kind === 'calendar' ? (
+        {items.map((item, index) => item.kind === 'calendar' ? (
           <article class="shelf-item calendar-item" data-category="all">
             <div class="calendar-object" aria-label={isEn ? 'Today calendar' : '今日日历'}>
               <div class="calendar-page">
@@ -113,12 +115,10 @@ const items = [
             </div>
           </article>
         ) : (
-          <article class:list={['shelf-item', `kind-${item.kind}`]} data-category={item.category}>
+          <article class:list={['shelf-item', `kind-${item.kind}`]} data-category={item.category} data-slug={detailSlugs[index]}>
             <a
               class="shelf-link"
-              href={item.href}
-              target={item.external ? '_blank' : undefined}
-              rel={item.external ? 'noopener' : undefined}
+              href={href(lang, `/shelf/${detailSlugs[index]}/`)}
               aria-label={`${isEn ? item.title_en : item.title} · ${isEn ? item.by_en : item.by}`}
             >
               <div class:list={['shelf-object', `variant-${item.variant}`]}>

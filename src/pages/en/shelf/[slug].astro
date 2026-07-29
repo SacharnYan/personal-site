@@ -1,0 +1,19 @@
+---
+import ShelfDetail from '../../../components/pages/ShelfDetail.astro';
+import { shelfItems } from '../../../data/shelf';
+
+export function getStaticPaths() {
+  return shelfItems.map((item, index) => ({
+    params: { slug: item.slug },
+    props: {
+      item,
+      previous: shelfItems[index - 1],
+      next: shelfItems[index + 1],
+    },
+  }));
+}
+
+const { item, previous, next } = Astro.props;
+---
+
+<ShelfDetail lang="en" item={item} previous={previous} next={next} />

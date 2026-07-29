@@ -1,0 +1,313 @@
+---
+import Base from '../../layouts/Base.astro';
+import { href, type Lang } from '../../i18n/ui';
+import type { ShelfItem } from '../../data/shelf';
+
+interface Props {
+  lang: Lang;
+  item: ShelfItem;
+  previous?: ShelfItem;
+  next?: ShelfItem;
+}
+
+const { lang, item, previous, next } = Astro.props;
+const isEn = lang === 'en';
+const title = isEn ? item.title_en : item.title;
+const by = isEn ? item.by_en : item.by;
+const category = {
+  zh: { books: '书籍', essays: '文章', films: '影像', talks: '演讲' },
+  en: { books: 'Book', essays: 'Essay', films: 'Film', talks: 'Talk' },
+}[lang][item.category];
+const source = item.source?.startsWith('/') ? href(lang, item.source) : item.source;
+const sourceLabel = isEn ? item.sourceLabel_en : item.sourceLabel;
+const intakePath = href(lang, '/writing/intake/');
+const shelfPath = href(lang, '/shelf/');
+const description = `${title} · ${by}`;
+---
+
+<Base title={`${title} — ${isEn ? 'Bookshelf' : '书架'}`} description={description} lang={lang}>
+  <main class="detail">
+    <a class="detail-back" href={shelfPath}>← {isEn ? 'Bookshelf' : '返回书架'}</a>
+
+    <div class="detail-grid">
+      <div class:list={['detail-visual', `kind-${item.kind}`]}>
+        <div class:list={['detail-object', `variant-${item.variant}`]}>
+          {item.kind === 'image' && item.image ? (
+            <img src={item.image} alt={title} />
+          ) : (
+            <div class="detail-cover-copy">
+              {(item.kind === 'paper' || item.variant === 'white') && <span class="cover-rule"></span>}
+              <h2>{title}</h2>
+              <p>{by}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div class="detail-copy">
+        <p class="detail-category">{category}</p>
+        <h1>{title}</h1>
+        <p class="detail-by">{by}</p>
+
+        <dl class="detail-meta">
+          <div>
+            <dt>{isEn ? 'Filed in' : '收录于'}</dt>
+            <dd><a href={intakePath}>{isEn ? 'My List of Nourishment' : '我的食粮清单'} ↗</a></dd>
+          </div>
+          <div>
+            <dt>{isEn ? 'Original' : '原始资源'}</dt>
+            <dd>
+              {source ? (
+                <a
+                  href={source}
+                  target={item.source?.startsWith('/') ? undefined : '_blank'}
+                  rel={item.source?.startsWith('/') ? undefined : 'noopener'}
+                >
+                  {sourceLabel || (isEn ? 'Open resource' : '打开资源')} ↗
+                </a>
+              ) : (
+                <span>{isEn ? 'No verified link yet' : '暂未收录可靠链接'}</span>
+              )}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <nav class="detail-pager" aria-label={isEn ? 'Bookshelf pagination' : '书架翻页'}>
+      {previous ? (
+        <a href={href(lang, `/shelf/${previous.slug}/`)}>
+          <span>{isEn ? 'Previous' : '上一个'}</span>
+          {isEn ? previous.title_en : previous.title}
+        </a>
+      ) : <span></span>}
+      {next ? (
+        <a class="next" href={href(lang, `/shelf/${next.slug}/`)}>
+          <span>{isEn ? 'Next' : '下一个'}</span>
+          {isEn ? next.title_en : next.title}
+        </a>
+      ) : <span></span>}
+    </nav>
+  </main>
+</Base>
+
+<style>
+  .detail {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 156px 48px 96px;
+  }
+
+  .detail-back {
+    display: inline-block;
+    margin-bottom: 58px;
+    color: #8f9298;
+    font-size: 13px;
+    letter-spacing: .04em;
+    transition: color 180ms ease;
+  }
+
+  .detail-back:hover { color: #15181e; }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 340px) minmax(0, 1fr);
+    gap: clamp(64px, 9vw, 128px);
+    align-items: center;
+  }
+
+  .detail-visual {
+    perspective: 1100px;
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .detail-object {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 5px 6px 24px rgba(0,0,0,.12);
+  }
+
+  .kind-book .detail-object {
+    transform: rotateY(-6deg);
+    transform-origin: left center;
+    border-radius: 0 3px 3px 0;
+  }
+
+  .kind-book .detail-object::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 8px;
+    z-index: 2;
+    background: linear-gradient(90deg, rgba(0,0,0,.2), rgba(255,255,255,.1));
+  }
+
+  .detail-cover-copy {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 36px 30px 28px;
+  }
+
+  .detail-cover-copy h2 {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: clamp(20px, 2.15vw, 34px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -.025em;
+  }
+
+  .detail-cover-copy p {
+    margin: auto 0 0;
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: .62;
+  }
+
+  .cover-rule {
+    width: 44px;
+    height: 3px;
+    margin-bottom: 24px;
+    background: #e55830;
+  }
+
+  .kind-poster .detail-cover-copy {
+    justify-content: flex-end;
+  }
+
+  .kind-poster .detail-cover-copy h2 {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 4vw, 60px);
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .kind-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .kind-image .detail-object::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.12), transparent 45%);
+  }
+
+  .variant-mint { background: #b8c9b6; color: #152019; }
+  .variant-sepia { background: #d8c2a5; color: #2b1c12; }
+  .variant-paper, .variant-white { background: #fff; color: #111; }
+  .variant-sand { background: #d7c89e; color: #2a251a; }
+  .variant-red { background: #c72e26; color: #fff; }
+  .variant-black { background: #0e0e0e; color: #f5f1e7; }
+  .variant-navy { background: #1f3445; color: #f3e8d4; }
+  .variant-orange { background: #bd5a2f; color: #fff5e9; }
+  .variant-charcoal { background: #242424; color: #f2f2f2; }
+  .variant-blue { background: #43647a; color: #f2efe8; }
+  .variant-olive { background: #74785a; color: #fff; }
+  .variant-rose { background: #b77d75; color: #fff8f1; }
+  .variant-burgundy { background: #6e2630; color: #f6e8dd; }
+  .variant-cream { background: #eee7d7; color: #2b261d; }
+  .variant-yellow { background: #d6aa3a; color: #231d10; }
+  .variant-graphite { background: #4d4f50; color: #f2f2f2; }
+  .variant-steel { background: #7a8c98; color: #fff; }
+
+  .detail-category {
+    margin: 0 0 22px;
+    color: #9a9da3;
+    font-size: 12px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .detail-copy h1 {
+    max-width: 680px;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(46px, 6vw, 78px);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -.035em;
+  }
+
+  .detail-by {
+    margin: 22px 0 62px;
+    color: #7d8086;
+    font-size: 17px;
+  }
+
+  .detail-meta {
+    margin: 0;
+    border-top: 1px solid #e4e5e7;
+  }
+
+  .detail-meta > div {
+    display: grid;
+    grid-template-columns: 104px 1fr;
+    gap: 20px;
+    padding: 18px 0;
+    border-bottom: 1px solid #e4e5e7;
+  }
+
+  .detail-meta dt {
+    color: #9a9da3;
+    font-size: 12px;
+  }
+
+  .detail-meta dd {
+    margin: 0;
+    font-size: 13px;
+  }
+
+  .detail-meta a { border-bottom: 1px solid #b9bbc0; }
+  .detail-meta span { color: #a3a5aa; }
+
+  .detail-pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 120px;
+    padding-top: 28px;
+    border-top: 1px solid #e4e5e7;
+  }
+
+  .detail-pager a {
+    max-width: 360px;
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1.2;
+  }
+
+  .detail-pager a.next {
+    justify-self: end;
+    text-align: right;
+  }
+
+  .detail-pager a span {
+    display: block;
+    margin-bottom: 9px;
+    color: #9a9da3;
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 720px) {
+    .detail { padding: 118px 24px 72px; }
+    .detail-back { margin-bottom: 40px; }
+    .detail-grid { grid-template-columns: 1fr; gap: 52px; }
+    .detail-visual { max-width: 250px; margin: 0 auto; }
+    .detail-copy h1 { font-size: clamp(40px, 13vw, 60px); }
+    .detail-by { margin-bottom: 40px; }
+    .detail-pager { margin-top: 80px; gap: 24px; }
+    .detail-pager a { font-size: 18px; }
+  }
+</style>

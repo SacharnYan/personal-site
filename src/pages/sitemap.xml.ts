@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import photos from '../data/photos.json';
+import { shelfItems } from '../data/shelf';
 
 const SITE = 'https://sacharn.site';
 const staticPaths = [
@@ -24,6 +25,7 @@ export const GET: APIRoute = async () => {
   const contentPaths = [
     ...articles.map((article) => `/writing/${article.slug}/`),
     ...photos.map((photo) => `/photos/${photo.id}/`),
+    ...shelfItems.map((item) => `/shelf/${item.slug}/`),
   ];
   const paths = [...staticPaths, ...contentPaths];
   const urls = [...paths, ...paths.map((path) => `/en${path}`), '/snow/']
