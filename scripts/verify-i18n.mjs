@@ -134,11 +134,14 @@ const enAbout = await pg.evaluate(() => ({
   intro: document.querySelector('.article-body > p')?.textContent?.trim(),
   stage: document.querySelector('.timeline-stage')?.textContent,
   place: document.querySelector('.timeline-place')?.textContent,
+  timelineText: document.querySelector('.timeline')?.textContent || '',
 }));
 check('EN 关于开头', (enAbout.intro || '').startsWith("I'm Shucheng Yan"), enAbout.intro?.slice(0, 40));
 check('EN 时间线首条', enAbout.stage === 'Work' && enAbout.place === 'Huawei Device BG · Retail Product', enAbout.stage + ' | ' + enAbout.place);
 
-// 10) 英文随记：19 条全译、提示条撤下、英文日期、无中文残留；中文页不受污染
+check('EN 学习经历已合并', enAbout.timelineText.includes('Education') && enAbout.timelineText.includes('M.Eng., Nanjing Univ. of Posts & Telecom'));
+check('EN 时间线不再出现本科学校', !enAbout.timelineText.includes('Nanjing Institute of Technology'));
+// 10) 英文随记：17 条全译、提示条撤下、英文日期、无中文残留；中文页不受污染
 const notesData = JSON.parse(fs.readFileSync('src/data/notes.json', 'utf8'));
 check('notes.json 每条都有 text_en', notesData.every(n => typeof n.text_en === 'string' && n.text_en.length > 10), `${notesData.filter(n => !n.text_en).length} 条缺失`);
 await pg.goto('http://localhost:4597/en/notes/', { waitUntil: 'networkidle' });
@@ -148,7 +151,7 @@ const enNotes = await pg.evaluate(() => ({
   count: document.querySelectorAll('.note-item').length,
   bodyCJK: /[\u4e00-\u9fff]/.test([...document.querySelectorAll('.note-text')].map(n => n.textContent).join('')),
 }));
-check('EN 随记 19 条', enNotes.count === 19, 'count=' + enNotes.count);
+check('EN 随记 17 条', enNotes.count === 17, 'count=' + enNotes.count);
 check('EN 随记提示条已撤', enNotes.notice === null, String(enNotes.notice));
 check('EN 随记英文日期', enNotes.firstDate === 'Jan 8, 2026', enNotes.firstDate);
 check('EN 随记无中文残留', !enNotes.bodyCJK);

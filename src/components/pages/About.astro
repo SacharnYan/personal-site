@@ -9,8 +9,7 @@ const isEn = lang === 'en';
 const timeline = [
   { date: '2025–现在', date_en: '2025–Now', stage: '工作', stage_en: 'Work', place: '华为终端 BG · 零售产品', place_en: 'Huawei Device BG · Retail Product' },
   { date: '2022–2025', date_en: '2022–2025', stage: '工作', stage_en: 'Work', place: '华为终端 BG · 服务产品', place_en: 'Huawei Device BG · Services Product' },
-  { date: '2019–2022', date_en: '2019–2022', stage: '研究生', stage_en: 'Grad School', place: '南京邮电大学 · 电子与通信工程', place_en: 'Nanjing Univ. of Posts & Telecom · Electronic & Communication Engineering' },
-  { date: '2014–2018', date_en: '2014–2018', stage: '本科', stage_en: 'Undergrad', place: '南京工程学院 · 电子与信息工程', place_en: 'Nanjing Institute of Technology · Electronic & Information Engineering' },
+  { date: '2014–2022', date_en: '2014–2022', stage: '学习经历', stage_en: 'Education', place: '电子信息 → 电子与通信工程 · 硕士毕业于南京邮电大学', place_en: 'Electronic Information → Electronic & Communication Engineering · M.Eng., Nanjing Univ. of Posts & Telecom' },
   { date: '2011–2014', date_en: '2011–2014', stage: '高中', stage_en: 'High School', place: '江苏省口岸中学', place_en: "Kou'an High School, Jiangsu" },
   { date: '2008–2011', date_en: '2008–2011', stage: '初中', stage_en: 'Middle School', place: '泰州实验学校', place_en: 'Taizhou Experimental School' },
   { date: '2002–2008', date_en: '2002–2008', stage: '小学', stage_en: 'Primary School', place: '蔡堡中心小学、陈堡中心小学', place_en: 'Caibao & Chenbao Primary Schools' },
@@ -62,10 +61,6 @@ const jsonLd = {
           </div>
         ))}
       </div>
-
-      <h2 class="section-title">{t(lang, 'about.secSite')}</h2>
-
-      <p>{t(lang, 'about.siteText')}</p>
 
       <h2 class="section-title">{t(lang, 'about.secContact')}</h2>
 
