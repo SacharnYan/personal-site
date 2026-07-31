@@ -7,14 +7,14 @@ const { lang } = Astro.props;
 const isEn = lang === 'en';
 
 const timeline = [
-  { date: '2025–现在', date_en: '2025–Now', stage: '工作', stage_en: 'Work', place: '华为终端 BG · 零售产品', place_en: 'Huawei Device BG · Retail Product' },
-  { date: '2022–2025', date_en: '2022–2025', stage: '工作', stage_en: 'Work', place: '华为终端 BG · 服务产品', place_en: 'Huawei Device BG · Services Product' },
-  { date: '2014–2022', date_en: '2014–2022', stage: '高等教育', stage_en: 'Higher Education', place: '电子信息 → 电子与通信工程 · 硕士毕业于南京邮电大学', place_en: 'Electronic Information → Electronic & Communication Engineering · M.Eng., Nanjing Univ. of Posts & Telecom' },
-  { date: '2011–2014', date_en: '2011–2014', stage: '高中', stage_en: 'High School', place: '江苏省口岸中学', place_en: "Kou'an High School, Jiangsu" },
-  { date: '2008–2011', date_en: '2008–2011', stage: '初中', stage_en: 'Middle School', place: '泰州实验学校', place_en: 'Taizhou Experimental School' },
-  { date: '2002–2008', date_en: '2002–2008', stage: '小学', stage_en: 'Primary School', place: '蔡堡中心小学、陈堡中心小学', place_en: 'Caibao & Chenbao Primary Schools' },
-  { date: '2000–2002', date_en: '2000–2002', stage: '幼儿园', stage_en: 'Kindergarten', place: '蔡堡中心幼儿园', place_en: 'Caibao Central Kindergarten' },
-  { date: '1996', date_en: '1996', stage: '出生', stage_en: 'Born', place: '江苏省兴化市', place_en: 'Xinghua, Jiangsu' },
+  { theme: 'origin', date: '1996', date_en: '1996', stage: '出生', stage_en: 'Born', place: '江苏省兴化市', place_en: 'Xinghua, Jiangsu', detail: '故事从这里开始。', detail_en: 'The story begins here.' },
+  { theme: 'play', date: '2000–2002', date_en: '2000–2002', stage: '幼儿园', stage_en: 'Kindergarten', place: '蔡堡中心幼儿园', place_en: 'Caibao Central Kindergarten', detail: '游戏、颜色，以及最初的好奇心。', detail_en: 'Play, color, and the first stirrings of curiosity.' },
+  { theme: 'notebook', date: '2002–2008', date_en: '2002–2008', stage: '小学', stage_en: 'Primary School', place: '蔡堡中心小学、陈堡中心小学', place_en: 'Caibao & Chenbao Primary Schools', detail: '一页页写下，世界开始有了秩序。', detail_en: 'Page by page, the world begins to find an order.' },
+  { theme: 'geometry', date: '2008–2011', date_en: '2008–2011', stage: '初中', stage_en: 'Middle School', place: '泰州实验学校', place_en: 'Taizhou Experimental School', detail: '坐标、尺度，和逐渐扩大的世界。', detail_en: 'Coordinates, scale, and a world growing larger.' },
+  { theme: 'focus', date: '2011–2014', date_en: '2011–2014', stage: '高中', stage_en: 'High School', place: '江苏省口岸中学', place_en: "Kou'an High School, Jiangsu", detail: '在密集的时间里，寻找自己的方向。', detail_en: 'Finding a direction inside an intense stretch of time.' },
+  { theme: 'signal', date: '2014–2022', date_en: '2014–2022', stage: '高等教育', stage_en: 'Higher Education', place: '电子信息 → 电子与通信工程 · 硕士毕业于南京邮电大学', place_en: 'Electronic Information → Electronic & Communication Engineering · M.Eng., Nanjing Univ. of Posts & Telecom', detail: '从电子信息走向通信工程。', detail_en: 'From electronic information to communication engineering.' },
+  { theme: 'network', date: '2022–2025', date_en: '2022–2025', stage: '工作', stage_en: 'Work', place: '华为终端 BG · 服务产品', place_en: 'Huawei Device BG · Services Product', detail: '让服务穿过系统，抵达真实的人。', detail_en: 'Helping services move through systems to reach real people.' },
+  { theme: 'retail', date: '2025–现在', date_en: '2025–Now', stage: '工作', stage_en: 'Work', place: '华为终端 BG · 零售产品', place_en: 'Huawei Device BG · Retail Product', detail: '把复杂的系统，变成可感知的体验。', detail_en: 'Turning complex systems into experiences people can feel.' },
 ];
 
 const jsonLd = {
@@ -43,27 +43,120 @@ const jsonLd = {
       <p class="article-sub">{t(lang, 'about.title2')}</p>
     </header>
 
-    <div class="article-body">
+    <div class="article-intro">
       <p>{t(lang, 'about.intro1')}</p>
-
       <p>{t(lang, 'about.intro2')}</p>
-
       <h2 class="section-title">{t(lang, 'about.secPath')}</h2>
+      <p class="journey-lead">
+        {isEn ? 'Move forward. Each threshold opens onto a chapter.' : '向前走。每一道门廊，通往一段人生。'}
+      </p>
+    </div>
 
-      <div class="timeline">
-        {timeline.map((item) => (
-          <div class="timeline-item">
-            <p class="timeline-date">{isEn ? item.date_en : item.date}</p>
-            <div class="timeline-main">
-              <p class="timeline-stage">{isEn ? item.stage_en : item.stage}</p>
-              <p class="timeline-place">{isEn ? item.place_en : item.place}</p>
+    <section
+      class="threshold-journey"
+      data-threshold-journey
+      style={`--steps:${timeline.length + 1};--daybreak:0`}
+      aria-label={isEn ? 'Life journey' : '人生经历'}
+    >
+      <div class="journey-sticky" aria-hidden="true">
+        <div class="journey-darkness"></div>
+        <div class="journey-daybreak"></div>
+        <div class="journey-floor"></div>
+
+        <div class="portal-world">
+          {timeline.map((item, index) => (
+            <div
+              class="portal-scene"
+              data-portal-scene
+              data-theme={item.theme}
+              data-index={index}
+              style={`--z:${index * -1100}px;--scene-opacity:${index === 0 ? 1 : 0}`}
+            >
+              <div class="stage-field">
+                <span class="field-mark mark-a"></span>
+                <span class="field-mark mark-b"></span>
+                <span class="field-mark mark-c"></span>
+                <span class="field-mark mark-d"></span>
+              </div>
+
+              <div class="portal">
+                <span class="portal-aura"></span>
+                <span class="portal-frame frame-outer"></span>
+                <span class="portal-frame frame-middle"></span>
+                <span class="portal-frame frame-inner"></span>
+                <span class="portal-cut"></span>
+              </div>
+            </div>
+          ))}
+
+          <div
+            class="portal-scene horizon-scene"
+            data-portal-scene
+            data-index={timeline.length}
+            style={`--z:${timeline.length * -1100}px;--scene-opacity:0`}
+          >
+            <div class="far-world">
+              <span class="far-sky"></span>
+              <span class="far-fog fog-one"></span>
+              <span class="far-fog fog-two"></span>
+              <span class="far-ground"></span>
+              <span class="far-path"></span>
+              <span class="far-ray ray-left"></span>
+              <span class="far-ray ray-right"></span>
+              <span class="far-threshold"></span>
             </div>
           </div>
-        ))}
+        </div>
+
+        <div class="copy-layer">
+          {timeline.map((item, index) => (
+            <div class="stage-copy" data-stage-copy style={`--copy-opacity:${index === 0 ? 1 : 0}`}>
+              <p class="stage-index">{String(index + 1).padStart(2, '0')} / {String(timeline.length + 1).padStart(2, '0')}</p>
+              <p class="stage-date">{isEn ? item.date_en : item.date}</p>
+              <h3>{isEn ? item.stage_en : item.stage}</h3>
+              <p class="stage-place">{isEn ? item.place_en : item.place}</p>
+              <p class="stage-detail">{isEn ? item.detail_en : item.detail}</p>
+            </div>
+          ))}
+          <div class="horizon-copy" data-stage-copy style="--copy-opacity:0">
+              <p>{isEn ? 'Beyond the present' : '此刻之后'}</p>
+              <h3>{isEn ? 'The world keeps opening.' : '世界仍在展开。'}</h3>
+            </div>
+        </div>
+
+        <div class="journey-ui">
+          <p class="journey-label">{isEn ? 'A life, in chapters' : '人生 · 章节'}</p>
+          <div class="journey-progress">
+            <span class="progress-value" data-progress-value>01</span>
+            <span class="progress-rule"><i data-progress-rule></i></span>
+            <span>{String(timeline.length + 1).padStart(2, '0')}</span>
+          </div>
+        </div>
+
+        <p class="journey-hint" data-journey-hint>
+          <span>{isEn ? 'Scroll to enter' : '滚动进入'}</span>
+          <i></i>
+        </p>
       </div>
 
-      <h2 class="section-title">{t(lang, 'about.secContact')}</h2>
+      <ol class="journey-accessible">
+        {timeline.map((item) => (
+          <li>
+            <p>{isEn ? item.date_en : item.date}</p>
+            <h3>{isEn ? item.stage_en : item.stage}</h3>
+            <p>{isEn ? item.place_en : item.place}</p>
+            <p>{isEn ? item.detail_en : item.detail}</p>
+          </li>
+        ))}
+        <li>
+          <p>{isEn ? 'Beyond the present' : '此刻之后'}</p>
+          <h3>{isEn ? 'The world keeps opening.' : '世界仍在展开。'}</h3>
+        </li>
+      </ol>
+    </section>
 
+    <div class="article-contact">
+      <h2 class="section-title">{t(lang, 'about.secContact')}</h2>
       {isEn ? (
         <p>
           If an email says it best, write to <a href="mailto:sacharn@163.com" class="inline-link">sacharn@163.com</a>; WeChat: sacharn; code on <a href="https://github.com/SacharnYan" class="inline-link" target="_blank" rel="noopener">GitHub</a>.
@@ -77,119 +170,724 @@ const jsonLd = {
   </article>
 </Base>
 
+<script is:inline>
+  (function () {
+    var journey = document.querySelector('[data-threshold-journey]');
+    if (!journey) return;
+    var scenes = journey.querySelectorAll('[data-portal-scene]');
+    var copies = journey.querySelectorAll('[data-stage-copy]');
+    var value = journey.querySelector('[data-progress-value]');
+    var rule = journey.querySelector('[data-progress-rule]');
+    var hint = journey.querySelector('[data-journey-hint]');
+    var reduced = false;
+    try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    if (reduced || !scenes.length) return;
+
+    var ticking = false;
+    var step = 1100;
+    var clamp = function (n, min, max) { return Math.max(min, Math.min(max, n)); };
+
+    var render = function () {
+      ticking = false;
+      var rect = journey.getBoundingClientRect();
+      var range = Math.max(1, journey.offsetHeight - window.innerHeight);
+      var progress = clamp(-rect.top / range, 0, 1);
+      var camera = progress * (scenes.length - 1) * step;
+      var horizonReveal = clamp((progress - .89) / .09, 0, 1);
+
+      for (var i = 0; i < scenes.length; i++) {
+        var z = camera - i * step;
+        var opacity = clamp(1 - Math.abs(z + 100) / 680, 0, 1);
+        var copyOpacity = Math.pow(clamp(1 - Math.abs(z) / step, 0, 1), .72);
+        scenes[i].style.setProperty('--z', z.toFixed(1) + 'px');
+        scenes[i].style.setProperty('--scene-opacity', opacity.toFixed(3));
+        if (i === scenes.length - 1) {
+          scenes[i].style.opacity = horizonReveal.toFixed(3);
+          scenes[i].style.visibility = horizonReveal > .01 ? 'visible' : 'hidden';
+          copyOpacity = copyOpacity * horizonReveal;
+        } else {
+          scenes[i].style.visibility = z > 520 || z < -6200 ? 'hidden' : 'visible';
+        }
+        if (copies[i]) {
+          copies[i].style.setProperty('--copy-opacity', copyOpacity.toFixed(3));
+          copies[i].style.visibility = copyOpacity > .01 ? 'visible' : 'hidden';
+        }
+      }
+
+      var active = Math.min(scenes.length - 1, Math.max(0, Math.round(camera / step)));
+      if (value) value.textContent = String(active + 1).padStart(2, '0');
+      if (rule) rule.style.transform = 'scaleX(' + progress.toFixed(4) + ')';
+      if (hint) hint.style.opacity = progress > 0.035 ? '0' : '1';
+      journey.style.setProperty('--daybreak', horizonReveal.toFixed(3));
+    };
+
+    var requestRender = function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(render);
+    };
+
+    render();
+    window.addEventListener('scroll', requestRender, { passive: true });
+    window.addEventListener('resize', requestRender);
+  })();
+</script>
+
 <style>
   .article {
     max-width: none;
     margin: 0;
-    padding: 0 96px 160px;
+    padding: 0 0 160px;
+    overflow: clip;
   }
 
-  .article-hero {
+  .article-hero,
+  .article-intro,
+  .article-contact {
     max-width: 768px;
     margin: 0 auto;
-    padding: 160px 0 96px;
   }
+
+  .article-hero { padding: 160px 0 96px; }
 
   .article-eyebrow {
     font-family: var(--font-body);
     font-size: 14px;
-    font-weight: 400;
     line-height: 22px;
-    letter-spacing: -0.28px;
+    letter-spacing: -.02em;
     color: #707070;
-    margin: 0 0 16px 0;
+    margin: 0 0 16px;
   }
 
-  .article-title {
-    font-family: var(--font-display);
-    font-size: 60px;
-    font-weight: 400;
-    line-height: 72px;
-    letter-spacing: -1.2px;
-    color: #000;
-    max-width: 55ch;
-    margin: 0;
-  }
-
+  .article-title,
   .article-sub {
     font-family: var(--font-display);
     font-size: 60px;
     font-weight: 400;
     line-height: 72px;
-    letter-spacing: -1.2px;
-    color: #707070;
+    letter-spacing: -.02em;
     margin: 0;
   }
 
-  .article-body {
-    max-width: 768px;
-    margin: 0 auto;
-  }
+  .article-title { color: #000; }
+  .article-sub { color: #707070; }
 
-  .article-body > p {
+  .article-intro > p,
+  .article-contact > p {
     font-family: var(--font-body);
     font-size: 24px;
-    font-weight: 400;
     line-height: 42px;
-    letter-spacing: 0;
     color: #000;
-    margin: 0 0 0 0;
+    margin: 0;
   }
 
-  .article-body > p + p {
-    text-indent: 0;
-    margin-top: 1.5em;
-  }
+  .article-intro > p + p { margin-top: 1.5em; }
 
   .section-title {
     font-family: var(--font-display);
     font-size: 42px;
     font-weight: 400;
     line-height: 50px;
-    letter-spacing: -0.84px;
+    letter-spacing: -.02em;
     color: #000;
-    margin: 96px 0 32px 0;
+    margin: 96px 0 24px;
   }
 
-  .timeline-item {
+  .journey-lead {
+    color: #707070 !important;
+    font-size: 16px !important;
+    line-height: 28px !important;
+  }
+
+  .threshold-journey {
+    --ink: #e9e7df;
+    --muted: rgba(233,231,223,.54);
+    position: relative;
+    height: calc(var(--steps) * 96vh);
+    margin-top: 48px;
+    background: #0d0e0d;
+  }
+
+  .journey-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    perspective: 1050px;
+    perspective-origin: 50% 48%;
+    background: #0d0e0d;
+    color: var(--ink);
+  }
+
+  .journey-darkness,
+  .journey-daybreak {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .journey-darkness {
+    background:
+      radial-gradient(ellipse at 50% 46%, rgba(53,54,49,.46) 0, rgba(20,21,19,.5) 36%, rgba(8,9,8,.96) 82%),
+      linear-gradient(180deg, #161714, #090a09);
+  }
+
+  .journey-darkness::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(0,0,0,.34), transparent 24%, transparent 76%, rgba(0,0,0,.34)),
+      linear-gradient(180deg, rgba(255,255,255,.025), transparent 35%);
+  }
+
+  .journey-daybreak {
+    opacity: var(--daybreak);
+    background:
+      linear-gradient(180deg, #d9deda 0%, #eef0e9 49%, #c9c5b8 50%, #aaa79d 100%);
+  }
+
+  .journey-floor {
+    position: absolute;
+    left: -28%;
+    right: -28%;
+    bottom: -50%;
+    height: 76%;
+    transform: rotateX(70deg);
+    transform-origin: 50% 0;
+    opacity: calc(.3 - var(--daybreak) * .2);
+    background:
+      repeating-linear-gradient(90deg, transparent 0 9.9%, rgba(235,232,221,.11) 10% 10.08%),
+      repeating-linear-gradient(0deg, transparent 0 112px, rgba(235,232,221,.1) 113px 114px);
+    mask-image: linear-gradient(to bottom, transparent, #000 25%, #000);
+  }
+
+  .portal-world {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+  }
+
+  .portal-scene {
+    position: absolute;
+    inset: 0;
+    transform: translate3d(0, 0, var(--z));
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .stage-field {
+    position: absolute;
+    inset: 0;
+    opacity: var(--scene-opacity);
+  }
+
+  .field-mark {
+    position: absolute;
+    display: block;
+    opacity: .7;
+  }
+
+  .portal {
+    --portal-w: min(26vw, 300px);
+    --portal-h: min(44vw, 500px);
+    --portal-color: #b8b4aa;
+    --portal-glow: rgba(231,220,190,.16);
+    position: absolute;
+    left: 50%;
+    top: 48%;
+    width: var(--portal-w);
+    height: var(--portal-h);
+    transform: translate(-50%, -50%);
+    transform-style: preserve-3d;
+  }
+
+  .portal-frame,
+  .portal-aura,
+  .portal-cut {
+    position: absolute;
+    display: block;
+    inset: 0;
+  }
+
+  .portal-aura {
+    box-shadow: 0 0 110px 16px var(--portal-glow);
+    opacity: .8;
+  }
+
+  .portal-frame {
+    border: 1px solid var(--portal-color);
+    box-shadow:
+      inset 0 0 24px rgba(255,255,255,.025),
+      0 18px 60px rgba(0,0,0,.2);
+  }
+
+  .frame-middle {
+    inset: 12px;
+    opacity: .48;
+    transform: translateZ(-26px);
+  }
+
+  .frame-inner {
+    inset: 24px;
+    opacity: .22;
+    transform: translateZ(-52px);
+  }
+
+  .portal-cut {
+    inset: 25px;
+    background: rgba(3,4,3,.34);
+    box-shadow: inset 0 0 60px rgba(0,0,0,.42);
+    transform: translateZ(-54px);
+  }
+
+  .copy-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .stage-copy {
+    position: absolute;
+    left: 8vw;
+    bottom: 10vh;
+    width: min(36vw, 460px);
+    opacity: var(--copy-opacity);
+    color: var(--ink);
+    transition: opacity 80ms linear;
+  }
+
+  .stage-index,
+  .stage-date,
+  .stage-place,
+  .stage-detail {
+    font-family: var(--font-body);
+    margin: 0;
+  }
+
+  .stage-index {
+    font-size: 10px;
+    line-height: 16px;
+    letter-spacing: .16em;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .stage-date {
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: .08em;
+    color: var(--muted);
+  }
+
+  .stage-copy h3 {
+    font-family: var(--font-display);
+    font-size: clamp(42px, 5vw, 72px);
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -.035em;
+    margin: 9px 0 14px;
+  }
+
+  .stage-place {
+    font-size: 13px;
+    line-height: 22px;
+    color: var(--muted);
+  }
+
+  .stage-detail {
+    max-width: 32em;
+    font-size: 14px;
+    line-height: 24px;
+    color: rgba(233,231,223,.82);
+    margin-top: 24px;
+  }
+
+  /* 起点：一个圆形光阈，空间还没有方向。 */
+  [data-theme='origin'] .portal {
+    --portal-w: min(31vw, 350px);
+    --portal-h: min(31vw, 350px);
+    --portal-color: #bca98c;
+    --portal-glow: rgba(215,184,135,.22);
+  }
+
+  [data-theme='origin'] .portal-frame,
+  [data-theme='origin'] .portal-aura,
+  [data-theme='origin'] .portal-cut { border-radius: 50%; }
+
+  [data-theme='origin'] .mark-a,
+  [data-theme='origin'] .mark-b {
+    left: 50%;
+    top: 48%;
+    border: 1px solid rgba(195,175,144,.18);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  [data-theme='origin'] .mark-a { width: 52vw; height: 52vw; }
+  [data-theme='origin'] .mark-b { width: 70vw; height: 70vw; }
+
+  /* 幼年：柔和的拱，颜色只存在于半透明光面中。 */
+  [data-theme='play'] .portal {
+    --portal-w: min(30vw, 340px);
+    --portal-h: min(43vw, 480px);
+    --portal-color: #c5a67c;
+    --portal-glow: rgba(189,145,91,.2);
+  }
+
+  [data-theme='play'] .portal-frame,
+  [data-theme='play'] .portal-aura,
+  [data-theme='play'] .portal-cut { border-radius: 48% 48% 3px 3px; }
+
+  [data-theme='play'] .mark-a,
+  [data-theme='play'] .mark-b,
+  [data-theme='play'] .mark-c {
+    top: 19%;
+    width: 18vw;
+    height: 62vh;
+    filter: blur(.2px);
+  }
+
+  [data-theme='play'] .mark-a { left: 5%; background: linear-gradient(180deg, rgba(128,101,75,.05), rgba(178,122,83,.16)); transform: skewY(-8deg); }
+  [data-theme='play'] .mark-b { right: 7%; background: linear-gradient(180deg, rgba(78,111,105,.05), rgba(78,111,105,.15)); transform: skewY(7deg); }
+  [data-theme='play'] .mark-c { left: 28%; width: 8vw; background: rgba(174,149,91,.08); transform: skewY(4deg); }
+
+  /* 小学：纸、页边与重复的横向秩序。 */
+  [data-theme='notebook'] .portal {
+    --portal-color: #8799a0;
+    --portal-glow: rgba(108,137,147,.17);
+  }
+
+  [data-theme='notebook'] .portal-cut {
+    background:
+      linear-gradient(90deg, rgba(145,79,67,.12) 0 1px, transparent 1px),
+      repeating-linear-gradient(0deg, rgba(3,4,3,.22) 0 35px, rgba(121,143,151,.2) 36px 37px);
+  }
+
+  [data-theme='notebook'] .stage-field {
+    background: repeating-linear-gradient(0deg, transparent 0 11vh, rgba(129,148,154,.08) calc(11vh + 1px) calc(11vh + 2px));
+  }
+
+  /* 初中：方形被旋转，坐标系开始变得复杂。 */
+  [data-theme='geometry'] .portal {
+    --portal-w: min(31vw, 360px);
+    --portal-h: min(31vw, 360px);
+    --portal-color: #6d8c7c;
+    --portal-glow: rgba(75,116,95,.17);
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  [data-theme='geometry'] .stage-field {
+    background:
+      repeating-linear-gradient(90deg, transparent 0 8vw, rgba(111,140,126,.07) calc(8vw + 1px) calc(8vw + 2px)),
+      repeating-linear-gradient(0deg, transparent 0 12vh, rgba(111,140,126,.07) calc(12vh + 1px) calc(12vh + 2px));
+  }
+
+  [data-theme='geometry'] .mark-a,
+  [data-theme='geometry'] .mark-b {
+    width: 1px;
+    height: 72vh;
+    top: 13%;
+    background: rgba(143,102,75,.24);
+  }
+
+  [data-theme='geometry'] .mark-a { left: 22%; transform: rotate(28deg); }
+  [data-theme='geometry'] .mark-b { right: 22%; transform: rotate(-28deg); }
+
+  /* 高中：入口收窄，只留下一束向上的光。 */
+  [data-theme='focus'] .portal {
+    --portal-w: min(12vw, 148px);
+    --portal-h: min(52vw, 580px);
+    --portal-color: #aaa08d;
+    --portal-glow: rgba(229,201,151,.24);
+  }
+
+  [data-theme='focus'] .portal-cut {
+    background: linear-gradient(180deg, rgba(236,205,151,.22), rgba(4,4,3,.44) 42%);
+  }
+
+  [data-theme='focus'] .stage-field {
+    background: radial-gradient(ellipse at 50% 18%, rgba(218,188,136,.11), transparent 35%);
+  }
+
+  [data-theme='focus'] .mark-a {
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(233,204,154,.5), transparent 72%);
+  }
+
+  /* 高等教育：厚重的结构中出现通信波纹。 */
+  [data-theme='signal'] .portal {
+    --portal-w: min(31vw, 360px);
+    --portal-h: min(45vw, 510px);
+    --portal-color: #8d9290;
+    --portal-glow: rgba(113,139,147,.18);
+  }
+
+  [data-theme='signal'] .frame-outer { border-width: 8px; }
+  [data-theme='signal'] .frame-middle { inset: 20px; }
+  [data-theme='signal'] .frame-inner { inset: 34px; }
+
+  [data-theme='signal'] .mark-a,
+  [data-theme='signal'] .mark-b,
+  [data-theme='signal'] .mark-c {
+    left: 18%;
+    top: 50%;
+    border: 1px solid rgba(117,145,153,.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  [data-theme='signal'] .mark-a { width: 16vw; height: 16vw; }
+  [data-theme='signal'] .mark-b { width: 28vw; height: 28vw; }
+  [data-theme='signal'] .mark-c { width: 42vw; height: 42vw; }
+
+  /* 服务产品：玻璃界面和连接关系。 */
+  [data-theme='network'] .portal {
+    --portal-w: min(34vw, 390px);
+    --portal-h: min(46vw, 530px);
+    --portal-color: rgba(164,191,194,.72);
+    --portal-glow: rgba(94,146,151,.22);
+  }
+
+  [data-theme='network'] .portal-frame {
+    background: linear-gradient(125deg, rgba(179,213,216,.05), transparent 45%, rgba(179,213,216,.07));
+    backdrop-filter: blur(2px);
+  }
+
+  [data-theme='network'] .stage-field {
+    background:
+      linear-gradient(31deg, transparent 49.9%, rgba(108,153,157,.09) 50%, transparent 50.1%),
+      linear-gradient(-24deg, transparent 49.9%, rgba(108,153,157,.08) 50%, transparent 50.1%);
+  }
+
+  [data-theme='network'] .field-mark {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #8eb0b2;
+    box-shadow: 0 0 0 9px rgba(142,176,178,.08);
+  }
+
+  [data-theme='network'] .mark-a { left: 16%; top: 24%; }
+  [data-theme='network'] .mark-b { right: 17%; top: 29%; }
+  [data-theme='network'] .mark-c { left: 22%; bottom: 20%; }
+  [data-theme='network'] .mark-d { right: 21%; bottom: 24%; }
+
+  /* 零售产品：像一间空的展厅，秩序、陈列、体验。 */
+  [data-theme='retail'] .portal {
+    --portal-w: min(36vw, 420px);
+    --portal-h: min(48vw, 550px);
+    --portal-color: #dad8d0;
+    --portal-glow: rgba(238,234,213,.25);
+  }
+
+  [data-theme='retail'] .portal-cut {
+    background:
+      linear-gradient(90deg, transparent 0 19%, rgba(224,221,211,.12) 19.2% 19.5%, transparent 19.7% 80.3%, rgba(224,221,211,.12) 80.5% 80.8%, transparent 81%),
+      linear-gradient(180deg, rgba(255,255,255,.075), rgba(4,4,3,.28));
+  }
+
+  [data-theme='retail'] .mark-a,
+  [data-theme='retail'] .mark-b {
+    top: 23%;
+    width: 14vw;
+    height: 54vh;
+    border: 1px solid rgba(218,216,208,.13);
+    background: repeating-linear-gradient(0deg, transparent 0 24%, rgba(218,216,208,.1) 24.3% 24.6%);
+  }
+
+  [data-theme='retail'] .mark-a { left: 6%; }
+  [data-theme='retail'] .mark-b { right: 6%; }
+
+  .horizon-scene {
+    color: #20211e;
+    opacity: 0;
+    transition: opacity 120ms linear;
+  }
+
+  .far-world,
+  .far-sky,
+  .far-ground,
+  .far-path,
+  .far-fog,
+  .far-ray,
+  .far-threshold {
+    position: absolute;
+    display: block;
+  }
+
+  .far-world { inset: 0; overflow: hidden; background: #e7e9e3; }
+
+  .far-sky {
+    inset: 0 0 48%;
+    background:
+      radial-gradient(ellipse at 50% 78%, rgba(255,251,227,.95), rgba(226,231,226,.5) 30%, transparent 62%),
+      linear-gradient(180deg, #cfd7d4, #eef0e9);
+  }
+
+  .far-ground {
+    inset: 52% 0 0;
+    background: linear-gradient(180deg, #c9c7bd, #a5a59d);
+  }
+
+  .far-fog { left: -10%; right: -10%; height: 15%; filter: blur(22px); }
+  .fog-one { top: 42%; background: rgba(247,246,235,.72); }
+  .fog-two { top: 49%; background: rgba(218,217,207,.58); }
+
+  .far-path {
+    left: 50%;
+    bottom: -8%;
+    width: 52%;
+    height: 60%;
+    transform: translateX(-50%);
+    clip-path: polygon(47.5% 0, 52.5% 0, 88% 100%, 12% 100%);
+    background: linear-gradient(180deg, #ebe6d8, #cbc4b5);
+    box-shadow: 0 0 40px rgba(255,246,218,.42);
+  }
+
+  .far-ray {
+    top: 52%;
+    bottom: -10%;
+    width: 1px;
+    background: linear-gradient(180deg, rgba(63,65,59,.22), transparent);
+    transform-origin: 50% 0;
+  }
+
+  .ray-left { left: 48.7%; transform: rotate(17deg); }
+  .ray-right { right: 48.7%; transform: rotate(-17deg); }
+
+  .far-threshold {
+    left: 50%;
+    top: 52%;
+    width: 86px;
+    height: 1px;
+    transform: translate(-50%, -50%);
+    background: rgba(56,58,53,.42);
+    box-shadow: 0 0 44px 18px rgba(255,248,218,.86);
+  }
+
+  .horizon-copy {
+    position: absolute;
+    left: 8vw;
+    bottom: 10vh;
+    width: min(48vw, 560px);
+    color: #20211e;
+    opacity: var(--copy-opacity);
+    transition: opacity 80ms linear;
+  }
+
+  .horizon-copy p {
+    font-family: var(--font-body);
+    font-size: 11px;
+    line-height: 18px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+    color: rgba(32,33,30,.56);
+  }
+
+  .horizon-copy h3 {
+    font-family: var(--font-display);
+    font-size: clamp(46px, 6vw, 82px);
+    line-height: 1.02;
+    font-weight: 400;
+    letter-spacing: -.04em;
+    margin: 0;
+  }
+
+  .journey-ui {
+    position: absolute;
+    left: 32px;
+    right: 32px;
+    top: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(233,231,223,.5);
+    mix-blend-mode: difference;
+  }
+
+  .journey-label { margin: 0; }
+
+  .journey-progress {
     display: grid;
-    grid-template-columns: 160px 1fr;
-    gap: 24px;
-    padding: 20px 0;
-    border-bottom: 1px solid #d0d0d0;
+    grid-template-columns: 24px 104px 24px;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
   }
 
-  .timeline-item:first-child {
-    border-top: 1px solid #d0d0d0;
+  .progress-rule {
+    height: 1px;
+    background: rgba(233,231,223,.2);
   }
 
-  .timeline-date {
+  .progress-rule i {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: rgba(233,231,223,.85);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+
+  .journey-hint {
+    position: absolute;
+    right: 32px;
+    bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
     font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 24px;
-    color: #707070;
+    font-size: 10px;
+    line-height: 16px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(233,231,223,.56);
     margin: 0;
-    padding-top: 2px;
+    transition: opacity 400ms ease;
   }
 
-  .timeline-stage {
-    font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 28px;
-    color: #000;
-    margin: 0;
+  .journey-hint i {
+    position: relative;
+    width: 40px;
+    height: 1px;
+    overflow: hidden;
+    background: rgba(233,231,223,.2);
   }
 
-  .timeline-place {
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 24px;
-    color: #707070;
-    margin: 2px 0 0 0;
+  .journey-hint i::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(233,231,223,.9);
+    transform: translateX(-100%);
+    animation: hint-travel 1.8s ease-in-out infinite;
   }
+
+  @keyframes hint-travel {
+    0% { transform: translateX(-100%); }
+    55%, 100% { transform: translateX(100%); }
+  }
+
+  .journey-accessible {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .article-contact { padding-top: 32px; }
 
   .inline-link {
     color: #000;
@@ -203,26 +901,26 @@ const jsonLd = {
   }
 
   @media (max-width: 768px) {
-    .article {
-      padding: 0 24px 80px;
+    .article { padding-bottom: 80px; }
+
+    .article-hero,
+    .article-intro,
+    .article-contact {
+      margin-left: 24px;
+      margin-right: 24px;
     }
 
-    .article-hero {
-      padding: 120px 0 64px;
-    }
+    .article-hero { padding: 120px 0 64px; }
 
     .article-title,
     .article-sub {
       font-size: 36px;
       line-height: 44px;
-      letter-spacing: -0.72px;
+      letter-spacing: -.02em;
     }
 
-    .article-body {
-      margin-left: 0;
-    }
-
-    .article-body > p {
+    .article-intro > p,
+    .article-contact > p {
       font-size: 19px;
       line-height: 33px;
     }
@@ -230,25 +928,79 @@ const jsonLd = {
     .section-title {
       font-size: 30px;
       line-height: 38px;
-      letter-spacing: -0.6px;
-      margin: 72px 0 24px 0;
+      margin-top: 72px;
     }
 
-    .timeline-item {
-      grid-template-columns: 1fr;
-      gap: 4px;
-      padding: 18px 0;
+    .threshold-journey { margin-top: 32px; }
+
+    .portal {
+      --portal-w: 40vw;
+      --portal-h: 64vw;
+      top: 43%;
     }
 
-    .timeline-date {
-      font-size: 14px;
-      line-height: 22px;
-      padding-top: 0;
+    [data-theme='origin'] .portal {
+      --portal-w: 48vw;
+      --portal-h: 48vw;
     }
 
-    .timeline-stage {
-      font-size: 17px;
-      line-height: 26px;
+    [data-theme='geometry'] .portal {
+      --portal-w: 44vw;
+      --portal-h: 44vw;
     }
+
+    [data-theme='focus'] .portal {
+      --portal-w: 18vw;
+      --portal-h: 72vw;
+    }
+
+    .stage-copy,
+    .horizon-copy {
+      left: 24px;
+      right: 24px;
+      bottom: 8vh;
+      width: auto;
+    }
+
+    .stage-copy h3,
+    .horizon-copy h3 { font-size: 38px; }
+    .stage-index { margin-bottom: 9px; }
+    .stage-detail { margin-top: 12px; }
+    .journey-ui { left: 16px; right: 16px; top: 18px; }
+    .journey-label { display: none; }
+    .journey-progress { margin-left: auto; grid-template-columns: 20px 72px 20px; }
+    .journey-hint { right: 16px; bottom: 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .threshold-journey {
+      height: auto;
+      margin: 40px 24px 0;
+      background: #0d0e0d;
+    }
+
+    .journey-sticky { display: none; }
+
+    .journey-accessible {
+      position: static;
+      width: auto;
+      height: auto;
+      overflow: visible;
+      clip: auto;
+      clip-path: none;
+      white-space: normal;
+      list-style: none;
+      padding: 30px 24px;
+      margin: 0;
+      color: #e9e7df;
+    }
+
+    .journey-accessible li {
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(233,231,223,.18);
+    }
+
+    .journey-accessible p { font: 14px/22px var(--font-body); color: rgba(233,231,223,.55); margin: 0; }
+    .journey-accessible h3 { font: 400 24px/34px var(--font-display); color: #e9e7df; margin: 4px 0; }
   }
 </style>
