@@ -72,6 +72,24 @@ const jsonLd = {
           </section>
         </div>
 
+        <button class="journey-door-action" data-enter-door type="button" aria-label={isEn ? 'Knock to enter the current chapter' : '敲门进入当前阶段'}>
+          <span data-door-action-label>01</span>
+          {isEn ? 'Knock to enter' : '敲门进入'}
+        </button>
+
+        <aside class="journey-room" data-journey-room aria-hidden="true" aria-label={isEn ? 'Chapter detail' : '阶段详情'}>
+          <div class="room-threshold" aria-hidden="true"></div>
+          <button class="room-back" data-room-back type="button">← {isEn ? 'Back to corridor' : '回到走廊'}</button>
+          <div class="room-copy">
+            <p class="room-number" data-room-number></p>
+            <p class="room-date" data-room-date></p>
+            <h2 data-room-title></h2>
+            <p class="room-place" data-room-place></p>
+            <p class="room-detail" data-room-detail></p>
+          </div>
+          <p class="room-ghost" data-room-ghost aria-hidden="true"></p>
+        </aside>
+
         <p class="journey-hint" data-journey-hint aria-hidden="true">
           {isEn ? 'Scroll to walk' : '滚动，向前走'}
           <span></span>
@@ -109,6 +127,16 @@ const jsonLd = {
     var progressBar = root.querySelector('[data-progress-bar]');
     var hint = root.querySelector('[data-journey-hint]');
     var note = root.querySelector('[data-webgl-note]');
+    var doorButton = root.querySelector('[data-enter-door]');
+    var doorActionLabel = root.querySelector('[data-door-action-label]');
+    var room = root.querySelector('[data-journey-room]');
+    var roomBack = root.querySelector('[data-room-back]');
+    var roomNumber = root.querySelector('[data-room-number]');
+    var roomDate = root.querySelector('[data-room-date]');
+    var roomTitle = root.querySelector('[data-room-title]');
+    var roomPlace = root.querySelector('[data-room-place]');
+    var roomDetail = root.querySelector('[data-room-detail]');
+    var roomGhost = root.querySelector('[data-room-ghost]');
     var reduced = false;
     try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 
@@ -231,6 +259,9 @@ const jsonLd = {
       group.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
       world.add(group);
 
+      var leaf = new THREE.Group();
+      group.add(leaf);
+
       var wallPaper = addPaperPlane(group, 8.4, 8.6, paper, 1);
       wallPaper.position.set(0, 4.3, 0.035);
 
@@ -238,7 +269,7 @@ const jsonLd = {
       accent.position.set(0, 3.0, 0.085);
       accent.userData.targetOpacity = 0;
 
-      var doorPaper = addPaperPlane(group, 3.25, 5.7, 0xf5f1e7, 1);
+      var doorPaper = addPaperPlane(leaf, 3.25, 5.7, 0xf5f1e7, 1);
       doorPaper.position.set(0, 3.0, 0.1);
 
       var frameMat = lineMaterial(ink, 0.9);
@@ -250,14 +281,14 @@ const jsonLd = {
         new THREE.MeshBasicMaterial({ map: makeDoorLabelTexture(index), transparent: true, side: THREE.DoubleSide, depthWrite: false })
       );
       label.position.set(0, 3.0, 0.19);
-      group.add(label);
+      leaf.add(label);
 
-      addLine(group, [[-1.62, 5.72, .18], [1.62, 5.68, .18]], lineMaterial(ink, .62));
-      addLine(group, [[-1.62, .18, .18], [1.62, .22, .18]], lineMaterial(ink, .45));
+      addLine(leaf, [[-1.62, 5.72, .18], [1.62, 5.68, .18]], lineMaterial(ink, .62));
+      addLine(leaf, [[-1.62, .18, .18], [1.62, .22, .18]], lineMaterial(ink, .45));
 
       var motif = new THREE.Group();
       motif.position.set(0, 3.0, 0.24);
-      group.add(motif);
+      leaf.add(motif);
       var faint = lineMaterial(ink, .38);
 
       if (index === 0) {
@@ -292,7 +323,7 @@ const jsonLd = {
         for (var x = -1; x <= 1; x++) addLine(motif, [[x*.72,-1.2,0],[x*.72,1.2,0]], lineMaterial(ink,.2));
       }
 
-      group.userData = { accent: accent, side: side, z: z };
+      group.userData = { accent: accent, side: side, z: z, leaf: leaf, doorPaper: doorPaper, index: index };
       return group;
     }
 
@@ -349,9 +380,62 @@ const jsonLd = {
     addEdges(horizon, new THREE.CircleGeometry(.19, 24), lineMaterial(ink,.18), [3.04,5.09,.05]);
 
     var pointerX = 0, pointerY = 0, targetProgress = 0, smoothProgress = 0, smoothGlance = 0;
+    var activeDoorIndex = 0;
+    var enteringDoor = -1;
+    var enteringStartedAt = 0;
+    var roomOpen = false;
+    var roomShown = false;
+    var pointerDown = null;
+    var raycaster = new THREE.Raycaster();
+    var pointer = new THREE.Vector2();
     var clock = new THREE.Clock();
 
     function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+
+    function chapterText(chapter, selector) {
+      var element = chapter && chapter.querySelector(selector);
+      return element ? element.textContent.trim() : '';
+    }
+
+    function showRoom(index) {
+      if (!room || roomShown || index < 0 || index >= stages.length) return;
+      var chapter = chapters[index];
+      var number = String(index + 1).padStart(2, '0');
+      if (roomNumber) roomNumber.textContent = number;
+      if (roomDate) roomDate.textContent = chapterText(chapter, '.chapter-date');
+      if (roomTitle) roomTitle.textContent = chapterText(chapter, 'h3');
+      if (roomPlace) roomPlace.textContent = chapterText(chapter, '.chapter-place');
+      if (roomDetail) roomDetail.textContent = chapterText(chapter, '.chapter-detail');
+      if (roomGhost) roomGhost.textContent = chapterText(chapter, 'h3');
+      room.style.setProperty('--room-accent', '#' + wash[index].toString(16).padStart(6, '0'));
+      room.setAttribute('aria-hidden', 'false');
+      room.classList.add('is-visible');
+      root.classList.add('is-room-open');
+      roomOpen = true;
+      roomShown = true;
+      if (roomBack) roomBack.focus({ preventScroll: true });
+    }
+
+    function knockDoor(index) {
+      if (roomOpen || enteringDoor >= 0 || index < 0 || index >= stages.length) return;
+      enteringDoor = index;
+      enteringStartedAt = performance.now();
+      roomShown = false;
+      root.classList.add('is-entering');
+      try { if (navigator.vibrate) navigator.vibrate([22, 70, 22]); } catch (e) {}
+      if (doorButton) doorButton.disabled = true;
+    }
+
+    function closeRoom() {
+      if (!roomOpen) return;
+      room.classList.remove('is-visible');
+      room.setAttribute('aria-hidden', 'true');
+      root.classList.remove('is-room-open', 'is-entering');
+      roomOpen = false;
+      roomShown = false;
+      enteringDoor = -1;
+      if (doorButton) doorButton.focus({ preventScroll: true });
+    }
     function updateScroll() {
       var rect = root.getBoundingClientRect();
       var range = Math.max(1, root.offsetHeight - window.innerHeight);
@@ -367,9 +451,17 @@ const jsonLd = {
         opacity = opacity * opacity * (3 - 2 * opacity);
         chapters[j].style.setProperty('--chapter-opacity', opacity.toFixed(3));
       }
+      activeDoorIndex = active < stages.length ? active : -1;
       if (progressLabel) progressLabel.textContent = String(active + 1).padStart(2, '0') + ' / ' + String(count).padStart(2, '0');
       if (progressBar) progressBar.style.transform = 'scaleX(' + progress.toFixed(4) + ')';
       if (hint) hint.style.opacity = progress > .025 ? '0' : '1';
+      if (doorActionLabel && activeDoorIndex >= 0) doorActionLabel.textContent = String(activeDoorIndex + 1).padStart(2, '0');
+      if (doorButton) {
+        var canEnter = activeDoorIndex >= 0 && enteringDoor < 0 && !roomOpen;
+        doorButton.disabled = !canEnter;
+        doorButton.setAttribute('aria-hidden', canEnter ? 'false' : 'true');
+        doorButton.style.setProperty('--door-action-opacity', canEnter ? '1' : '0');
+      }
     }
 
     function resize() {
@@ -400,14 +492,38 @@ const jsonLd = {
       smoothGlance += (glance - smoothGlance) * (1 - Math.exp(-5 * dt));
       renderDom(smoothProgress);
 
-      camera.position.x += ((smoothGlance * 1.0 + pointerX * .34) - camera.position.x) * (1 - Math.exp(-4 * dt));
+      var entryFocus = 0;
+      var entrySide = 0;
+      if (enteringDoor >= 0) {
+        entryFocus = clamp(((performance.now() - enteringStartedAt) / 1000 - .46) / .62, 0, 1);
+        entryFocus = entryFocus * entryFocus * (3 - 2 * entryFocus);
+        entrySide = stages[enteringDoor].userData.side;
+      }
+      var corridorX = smoothGlance * 1.0 + pointerX * .34;
+      var desiredX = corridorX * (1 - entryFocus) + entrySide * 3.35 * entryFocus;
+      camera.position.x += (desiredX - camera.position.x) * (1 - Math.exp(-4 * dt));
       camera.position.y += ((3.25 - pointerY * .22 + Math.sin(performance.now() * .00035) * .035) - camera.position.y) * (1 - Math.exp(-4 * dt));
-      camera.position.z = z;
-      camera.lookAt(camera.position.x + smoothGlance * 3.5 + pointerX * .45, 3.15 - pointerY * .25, z - 10);
+      camera.position.z = z - entryFocus * 1.85;
+      var lookX = camera.position.x + (smoothGlance * 3.5 + pointerX * .45) * (1 - entryFocus) + entrySide * 2.4 * entryFocus;
+      camera.lookAt(lookX, 3.15 - pointerY * .25, camera.position.z - 10 + entryFocus * 6);
 
       for (var k = 0; k < stages.length; k++) {
         var approach = clamp(1 - Math.abs(chapterFloat - k) / .8, 0, 1);
-        stages[k].userData.accent.material.opacity += ((approach * .18) - stages[k].userData.accent.material.opacity) * (1 - Math.exp(-6 * dt));
+        var stage = stages[k];
+        var leaf = stage.userData.leaf;
+        var openAmount = 0;
+        var knockOffset = 0;
+        if (k === enteringDoor) {
+          var elapsed = (performance.now() - enteringStartedAt) / 1000;
+          if (elapsed < .52) knockOffset = Math.sin(elapsed * 42) * Math.max(0, 1 - elapsed / .52) * .045;
+          openAmount = clamp((elapsed - .5) / .68, 0, 1);
+          openAmount = openAmount * openAmount * (3 - 2 * openAmount);
+          if (elapsed > 1.12) showRoom(k);
+        }
+        leaf.position.z += ((knockOffset + openAmount * .05) - leaf.position.z) * (1 - Math.exp(-14 * dt));
+        leaf.position.x += ((-1.5 * openAmount) - leaf.position.x) * (1 - Math.exp(-9 * dt));
+        leaf.scale.x += ((1 - openAmount * .92) - leaf.scale.x) * (1 - Math.exp(-9 * dt));
+        stage.userData.accent.material.opacity += (((approach * .18) + openAmount * .2) - stage.userData.accent.material.opacity) * (1 - Math.exp(-6 * dt));
       }
 
       horizon.visible = endReveal > .01;
@@ -418,6 +534,29 @@ const jsonLd = {
       renderer.render(scene, camera);
     }
 
+    if (doorButton) doorButton.addEventListener('click', function () { knockDoor(activeDoorIndex); });
+    if (roomBack) roomBack.addEventListener('click', closeRoom);
+    if (room) {
+      room.addEventListener('wheel', function (event) { if (roomOpen) event.preventDefault(); }, { passive: false });
+      room.addEventListener('touchmove', function (event) { if (roomOpen) event.preventDefault(); }, { passive: false });
+    }
+    canvas.addEventListener('pointerdown', function (event) {
+      pointerDown = { x: event.clientX, y: event.clientY, time: performance.now() };
+    }, { passive: true });
+    canvas.addEventListener('pointerup', function (event) {
+      if (!pointerDown || roomOpen || enteringDoor >= 0 || activeDoorIndex < 0) return;
+      var moved = Math.hypot(event.clientX - pointerDown.x, event.clientY - pointerDown.y);
+      var held = performance.now() - pointerDown.time;
+      pointerDown = null;
+      if (moved > 10 || held > 700) return;
+      var rect = canvas.getBoundingClientRect();
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      var hit = raycaster.intersectObject(stages[activeDoorIndex].userData.doorPaper, false);
+      if (hit.length) knockDoor(activeDoorIndex);
+    }, { passive: true });
+    window.addEventListener('keydown', function (event) { if (event.key === 'Escape') closeRoom(); });
     window.addEventListener('scroll', updateScroll, { passive: true });
     window.addEventListener('resize', function () { resize(); updateScroll(); });
     window.addEventListener('pointermove', function (e) {
@@ -618,6 +757,159 @@ const jsonLd = {
   }
   .chapter[data-side='right'] .chapter-detail { margin-left: auto; }
   .chapter-horizon h3 { font-size: clamp(52px, 7vw, 100px); }
+  .journey-door-action {
+    --door-action-opacity: 0;
+    position: absolute;
+    z-index: 6;
+    right: 42px;
+    bottom: 38px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(23,24,20,.42);
+    color: #171814;
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: .08em;
+    opacity: var(--door-action-opacity);
+    pointer-events: auto;
+    transition: opacity 240ms ease, border-color 200ms ease;
+  }
+  .journey-door-action span {
+    font-family: var(--font-display);
+    color: rgba(23,24,20,.48);
+  }
+  .journey-door-action:hover { border-color: #171814; }
+  .journey-door-action:disabled { pointer-events: none; }
+  .journey-room {
+    --room-accent: #b76f55;
+    position: absolute;
+    z-index: 10;
+    inset: 0;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(1.018);
+    background: #eeeade;
+    pointer-events: none;
+    transition: opacity 480ms cubic-bezier(.22,1,.36,1), transform 680ms cubic-bezier(.22,1,.36,1), visibility 0s linear 680ms;
+  }
+  .journey-room::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 0 58%;
+    background: var(--room-accent);
+    opacity: .13;
+  }
+  .journey-room::after {
+    content: '';
+    position: absolute;
+    inset: 22px;
+    border: 1px solid rgba(23,24,20,.16);
+    pointer-events: none;
+  }
+  .journey-room.is-visible {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
+  .room-threshold {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 58%;
+    width: 1px;
+    background: rgba(23,24,20,.16);
+  }
+  .room-threshold::before,
+  .room-threshold::after {
+    content: '';
+    position: absolute;
+    left: -14px;
+    width: 28px;
+    height: 1px;
+    background: rgba(23,24,20,.3);
+  }
+  .room-threshold::before { top: 22%; }
+  .room-threshold::after { bottom: 22%; }
+  .room-back {
+    position: absolute;
+    z-index: 2;
+    top: 40px;
+    left: 42px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(23,24,20,.36);
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: .06em;
+  }
+  .room-copy {
+    position: absolute;
+    z-index: 2;
+    left: 8vw;
+    bottom: 13vh;
+    width: min(42vw, 560px);
+  }
+  .room-number,
+  .room-date,
+  .room-place,
+  .room-detail { margin: 0; }
+  .room-number {
+    font-family: var(--font-display);
+    font-size: 13px;
+    color: rgba(23,24,20,.42);
+    margin-bottom: 38px;
+  }
+  .room-date {
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: .14em;
+    color: rgba(23,24,20,.54);
+  }
+  .room-copy h2 {
+    margin: 10px 0 20px;
+    font-family: var(--font-display);
+    font-size: clamp(58px, 8vw, 112px);
+    line-height: .92;
+    font-weight: 400;
+    letter-spacing: -.045em;
+  }
+  .room-place {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 22px;
+    color: rgba(23,24,20,.64);
+  }
+  .room-detail {
+    max-width: 430px;
+    margin-top: 30px;
+    font-family: var(--font-display);
+    font-size: 19px;
+    line-height: 31px;
+    color: rgba(23,24,20,.78);
+  }
+  .room-ghost {
+    position: absolute;
+    z-index: 1;
+    right: -2vw;
+    bottom: 7vh;
+    width: 44vw;
+    margin: 0;
+    color: #171814;
+    font-family: var(--font-display);
+    font-size: clamp(120px, 20vw, 320px);
+    line-height: .75;
+    text-align: right;
+    opacity: .055;
+    white-space: nowrap;
+  }
+  .is-entering .journey-door-action,
+  .is-room-open .journey-heading,
+  .is-room-open .chapter-layer,
+  .is-room-open .journey-progress { opacity: 0; }
   .journey-hint {
     position: absolute;
     z-index: 4;
@@ -704,6 +996,41 @@ const jsonLd = {
     .section-title { font-size: 34px; line-height: 42px; margin-top: 72px; }
     .sketch-journey { margin-left: 0; margin-right: 0; }
     .journey-heading { top: 24px; left: 20px; right: 20px; }
+    .journey-door-action {
+      right: 20px;
+      bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
+      font-size: 10px;
+    }
+    .journey-room::before { inset: 54% 0 0; }
+    .journey-room::after { inset: 12px; }
+    .room-threshold {
+      top: 54%;
+      bottom: auto;
+      left: 0;
+      right: 0;
+      width: auto;
+      height: 1px;
+    }
+    .room-threshold::before,
+    .room-threshold::after { display: none; }
+    .room-back { top: 22px; left: 20px; font-size: 10px; }
+    .room-copy {
+      left: 20px;
+      right: 20px;
+      bottom: max(72px, calc(env(safe-area-inset-bottom) + 56px));
+      width: auto;
+    }
+    .room-number { margin-bottom: 26px; }
+    .room-copy h2 { font-size: clamp(50px, 17vw, 74px); margin: 8px 0 16px; }
+    .room-place { font-size: 12px; line-height: 19px; }
+    .room-detail { max-width: 300px; margin-top: 20px; font-size: 16px; line-height: 26px; }
+    .room-ghost {
+      top: 16vh;
+      right: -5vw;
+      bottom: auto;
+      width: 90vw;
+      font-size: clamp(104px, 38vw, 164px);
+    }
     .chapter {
       top: auto;
       bottom: max(68px, calc(env(safe-area-inset-bottom) + 52px));
