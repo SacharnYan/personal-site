@@ -790,68 +790,55 @@ const jsonLd = {
     overflow: hidden;
     visibility: hidden;
     opacity: 0;
-    transform: scale(1.018);
-    background: #eeeade;
+    transform: translateY(10px);
+    background: linear-gradient(90deg, rgba(238,234,222,.92) 0%, rgba(238,234,222,.72) 30%, rgba(238,234,222,.18) 61%, transparent 82%);
     pointer-events: none;
-    transition: opacity 480ms cubic-bezier(.22,1,.36,1), transform 680ms cubic-bezier(.22,1,.36,1), visibility 0s linear 680ms;
+    transition: opacity 420ms cubic-bezier(.22,1,.36,1), transform 620ms cubic-bezier(.22,1,.36,1), visibility 0s linear 620ms;
   }
   .journey-room::before {
     content: '';
     position: absolute;
-    inset: 0 0 0 58%;
+    left: 7vw;
+    bottom: calc(13vh + 232px);
+    width: 38px;
+    height: 2px;
     background: var(--room-accent);
-    opacity: .13;
+    opacity: .72;
   }
-  .journey-room::after {
-    content: '';
-    position: absolute;
-    inset: 22px;
-    border: 1px solid rgba(23,24,20,.16);
-    pointer-events: none;
-  }
+  .journey-room::after,
+  .room-threshold,
+  .room-ghost { display: none; }
   .journey-room.is-visible {
     visibility: visible;
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
     pointer-events: auto;
     transition-delay: 0s;
   }
-  .room-threshold {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 58%;
-    width: 1px;
-    background: rgba(23,24,20,.16);
-  }
-  .room-threshold::before,
-  .room-threshold::after {
-    content: '';
-    position: absolute;
-    left: -14px;
-    width: 28px;
-    height: 1px;
-    background: rgba(23,24,20,.3);
-  }
-  .room-threshold::before { top: 22%; }
-  .room-threshold::after { bottom: 22%; }
   .room-back {
     position: absolute;
     z-index: 2;
-    top: 40px;
+    top: 38px;
     left: 42px;
     padding: 8px 0;
-    border-bottom: 1px solid rgba(23,24,20,.36);
+    border-bottom: 1px solid rgba(23,24,20,.32);
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: .06em;
+    pointer-events: auto;
+  }
+  .room-back:focus-visible {
+    outline: 1px solid rgba(23,24,20,.34);
+    outline-offset: 4px;
+    border-radius: 0;
   }
   .room-copy {
     position: absolute;
     z-index: 2;
-    left: 8vw;
+    left: 7vw;
     bottom: 13vh;
-    width: min(42vw, 560px);
+    width: min(34vw, 430px);
+    text-shadow: 0 1px 16px rgba(238,234,222,.72);
   }
   .room-number,
   .room-date,
@@ -859,52 +846,37 @@ const jsonLd = {
   .room-detail { margin: 0; }
   .room-number {
     font-family: var(--font-display);
-    font-size: 13px;
+    font-size: 11px;
     color: rgba(23,24,20,.42);
-    margin-bottom: 38px;
+    margin-bottom: 22px;
   }
   .room-date {
     font-family: var(--font-body);
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: .14em;
     color: rgba(23,24,20,.54);
   }
   .room-copy h2 {
-    margin: 10px 0 20px;
+    margin: 8px 0 15px;
     font-family: var(--font-display);
-    font-size: clamp(58px, 8vw, 112px);
-    line-height: .92;
+    font-size: clamp(42px, 5vw, 66px);
+    line-height: .96;
     font-weight: 400;
-    letter-spacing: -.045em;
+    letter-spacing: -.035em;
   }
   .room-place {
     font-family: var(--font-body);
-    font-size: 13px;
-    line-height: 22px;
-    color: rgba(23,24,20,.64);
+    font-size: 12px;
+    line-height: 20px;
+    color: rgba(23,24,20,.62);
   }
   .room-detail {
-    max-width: 430px;
-    margin-top: 30px;
+    max-width: 390px;
+    margin-top: 20px;
     font-family: var(--font-display);
-    font-size: 19px;
-    line-height: 31px;
-    color: rgba(23,24,20,.78);
-  }
-  .room-ghost {
-    position: absolute;
-    z-index: 1;
-    right: -2vw;
-    bottom: 7vh;
-    width: 44vw;
-    margin: 0;
-    color: #171814;
-    font-family: var(--font-display);
-    font-size: clamp(120px, 20vw, 320px);
-    line-height: .75;
-    text-align: right;
-    opacity: .055;
-    white-space: nowrap;
+    font-size: 17px;
+    line-height: 28px;
+    color: rgba(23,24,20,.76);
   }
   .is-entering .journey-door-action,
   .is-room-open .journey-heading,
@@ -1001,36 +973,25 @@ const jsonLd = {
       bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
       font-size: 10px;
     }
-    .journey-room::before { inset: 54% 0 0; }
-    .journey-room::after { inset: 12px; }
-    .room-threshold {
-      top: 54%;
-      bottom: auto;
-      left: 0;
-      right: 0;
-      width: auto;
-      height: 1px;
+    .journey-room {
+      background: linear-gradient(0deg, rgba(238,234,222,.97) 0%, rgba(238,234,222,.9) 34%, rgba(238,234,222,.26) 66%, transparent 84%);
     }
-    .room-threshold::before,
-    .room-threshold::after { display: none; }
+    .journey-room::before {
+      left: 20px;
+      bottom: max(286px, calc(env(safe-area-inset-bottom) + 270px));
+      width: 30px;
+    }
     .room-back { top: 22px; left: 20px; font-size: 10px; }
     .room-copy {
       left: 20px;
-      right: 20px;
-      bottom: max(72px, calc(env(safe-area-inset-bottom) + 56px));
-      width: auto;
+      right: auto;
+      bottom: max(70px, calc(env(safe-area-inset-bottom) + 54px));
+      width: min(76vw, 300px);
     }
-    .room-number { margin-bottom: 26px; }
-    .room-copy h2 { font-size: clamp(50px, 17vw, 74px); margin: 8px 0 16px; }
-    .room-place { font-size: 12px; line-height: 19px; }
-    .room-detail { max-width: 300px; margin-top: 20px; font-size: 16px; line-height: 26px; }
-    .room-ghost {
-      top: 16vh;
-      right: -5vw;
-      bottom: auto;
-      width: 90vw;
-      font-size: clamp(104px, 38vw, 164px);
-    }
+    .room-number { margin-bottom: 18px; font-size: 10px; }
+    .room-copy h2 { font-size: clamp(38px, 12vw, 50px); margin: 6px 0 11px; }
+    .room-place { font-size: 11px; line-height: 18px; }
+    .room-detail { max-width: 280px; margin-top: 15px; font-size: 15px; line-height: 24px; }
     .chapter {
       top: auto;
       bottom: max(68px, calc(env(safe-area-inset-bottom) + 52px));
