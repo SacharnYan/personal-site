@@ -351,7 +351,7 @@ const jsonLd = {
     addEdges(horizon, new THREE.CircleGeometry(.28, 24), lineMaterial(ink,.18), [2.65,5.15,.05]);
     addEdges(horizon, new THREE.CircleGeometry(.19, 24), lineMaterial(ink,.18), [3.04,5.09,.05]);
 
-    var pointerX = 0, pointerY = 0, targetProgress = 0, smoothProgress = 0, ticking = false;
+    var pointerX = 0, pointerY = 0, targetProgress = 0, smoothProgress = 0, smoothGlance = 0;
     var clock = new THREE.Clock();
 
     function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
@@ -359,21 +359,18 @@ const jsonLd = {
       var rect = root.getBoundingClientRect();
       var range = Math.max(1, root.offsetHeight - window.innerHeight);
       targetProgress = clamp(-rect.top / range, 0, 1);
-      if (!ticking) { ticking = true; requestAnimationFrame(renderDom); }
     }
 
-    function renderDom() {
-      ticking = false;
-      var raw = targetProgress * (count - 1);
+    function renderDom(progress) {
+      var raw = progress * (count - 1);
       var active = Math.min(count - 1, Math.max(0, Math.round(raw)));
       for (var j = 0; j < chapters.length; j++) {
         var opacity = j === active ? 1 : 0;
         chapters[j].style.setProperty('--chapter-opacity', opacity.toFixed(3));
-        chapters[j].style.visibility = opacity > .015 ? 'visible' : 'hidden';
       }
       if (progressLabel) progressLabel.textContent = String(active + 1).padStart(2, '0') + ' / ' + String(count).padStart(2, '0');
-      if (progressBar) progressBar.style.transform = 'scaleX(' + targetProgress.toFixed(4) + ')';
-      if (hint) hint.style.opacity = targetProgress > .025 ? '0' : '1';
+      if (progressBar) progressBar.style.transform = 'scaleX(' + progress.toFixed(4) + ')';
+      if (hint) hint.style.opacity = progress > .025 ? '0' : '1';
     }
 
     function resize() {
@@ -392,14 +389,22 @@ const jsonLd = {
       var endReveal = clamp((smoothProgress - .91) / .075, 0, 1);
       var travelEnd = endZ + 9;
       var z = 3 + (travelEnd - 3) * smoothProgress;
-      var nearest = Math.min(count - 2, Math.max(0, Math.round(chapterFloat)));
-      var local = 1 - clamp(Math.abs(chapterFloat - nearest), 0, 1);
-      var glance = nearest < stages.length ? stages[nearest].userData.side * local : 0;
+      var glance = 0;
+      var glanceWeight = 0;
+      for (var g = 0; g < stages.length; g++) {
+        var influence = clamp(1 - Math.abs(chapterFloat - g), 0, 1);
+        influence = influence * influence * (3 - 2 * influence);
+        glance += stages[g].userData.side * influence;
+        glanceWeight += influence;
+      }
+      if (glanceWeight > 0) glance /= glanceWeight;
+      smoothGlance += (glance - smoothGlance) * (1 - Math.exp(-5 * dt));
+      renderDom(smoothProgress);
 
-      camera.position.x += ((glance * 1.0 + pointerX * .34) - camera.position.x) * (1 - Math.exp(-4 * dt));
+      camera.position.x += ((smoothGlance * 1.0 + pointerX * .34) - camera.position.x) * (1 - Math.exp(-4 * dt));
       camera.position.y += ((3.25 - pointerY * .22 + Math.sin(performance.now() * .00035) * .035) - camera.position.y) * (1 - Math.exp(-4 * dt));
       camera.position.z = z;
-      camera.lookAt(camera.position.x + glance * 3.5 + pointerX * .45, 3.15 - pointerY * .25, z - 10);
+      camera.lookAt(camera.position.x + smoothGlance * 3.5 + pointerX * .45, 3.15 - pointerY * .25, z - 10);
 
       for (var k = 0; k < stages.length; k++) {
         var approach = clamp(1 - Math.abs(chapterFloat - k) / .8, 0, 1);
@@ -424,7 +429,8 @@ const jsonLd = {
     camera.position.set(0, 3.25, 3);
     resize();
     updateScroll();
-    renderDom();
+    smoothProgress = targetProgress;
+    renderDom(smoothProgress);
     animate();
   })();
 </script>
@@ -556,7 +562,7 @@ const jsonLd = {
     width: min(34vw, 460px);
     transform: translateY(-46%);
     opacity: var(--chapter-opacity);
-    transition: opacity 80ms linear;
+    transition: opacity 340ms cubic-bezier(.22, 1, .36, 1);
   }
   .chapter[data-side='left'] { left: 7vw; }
   .chapter[data-side='right'] { right: 7vw; text-align: right; }
