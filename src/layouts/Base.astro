@@ -10,9 +10,10 @@ interface Props {
   image?: string;
   lang?: Lang;
   jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
+  hideFooter?: boolean;
 }
 
-const { title, lang = 'zh' } = Astro.props;
+const { title, lang = 'zh', hideFooter = false } = Astro.props;
 const url = Astro.url;
 const siteName = t(lang, 'site.name');
 const description = Astro.props.description ?? t(lang, 'site.desc');
@@ -167,7 +168,8 @@ const currentPath = url.pathname.replace(/\/+$/, '') || '/';
       <slot />
     </main>
 
-    <footer class="site-footer">
+    {!hideFooter && (
+      <footer class="site-footer">
       <div class="footer-contact">
         <p class="footer-contact-kicker">{t(lang, 'foot.contactKicker')}</p>
         <h2 class="footer-contact-title">{t(lang, 'foot.contactTitle')}</h2>
@@ -196,7 +198,8 @@ const currentPath = url.pathname.replace(/\/+$/, '') || '/';
         </ul>
         <a href="#" class="footer-link footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">{t(lang, 'foot.top')}</a>
       </div>
-    </footer>
+      </footer>
+    )}
 
     <script is:inline>
       /* 经典脚本（非 module）：任何支持 ES5 的浏览器都会执行，不依赖 Astro 打包与 module 支持。
