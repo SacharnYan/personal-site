@@ -207,23 +207,46 @@ const jsonLd = {
       return mesh;
     }
 
-    function makeNumberTexture(number) {
+    function makeDoorLabelTexture(index) {
+      var chapter = chapters[index];
+      var stage = chapter && chapter.querySelector('h3');
+      var date = chapter && chapter.querySelector('.chapter-date');
+      var stageText = stage ? stage.textContent.trim() : '';
+      var dateText = date ? date.textContent.trim() : '';
+      var numberText = String(index + 1).padStart(2, '0');
       var c = document.createElement('canvas');
-      c.width = 256; c.height = 256;
+      c.width = 512; c.height = 900;
       var ctx = c.getContext('2d');
-      ctx.clearRect(0, 0, 256, 256);
-      ctx.fillStyle = '#171814';
-      ctx.font = '400 118px Georgia, serif';
-      ctx.textAlign = 'center';
+      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.fillStyle = 'rgba(23,24,20,.58)';
       ctx.textBaseline = 'middle';
-      ctx.fillText(number, 128, 133);
-      ctx.strokeStyle = 'rgba(23,24,20,.2)';
+      ctx.textAlign = 'left';
+      ctx.font = '400 28px Arial, sans-serif';
+      ctx.fillText(numberText, 42, 58);
+      ctx.textAlign = 'right';
+      ctx.font = '400 22px Arial, sans-serif';
+      ctx.fillText(dateText, 470, 58);
+      ctx.strokeStyle = 'rgba(23,24,20,.25)';
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(52, 201); ctx.lineTo(204, 197);
+      ctx.moveTo(42, 91); ctx.lineTo(470, 88);
+      ctx.stroke();
+      ctx.fillStyle = '#171814';
+      ctx.textAlign = 'center';
+      var fontSize = stageText.length > 10 ? 46 : (stageText.length > 6 ? 56 : 70);
+      ctx.font = '400 ' + fontSize + 'px "Noto Serif SC", Georgia, serif';
+      while (ctx.measureText(stageText).width > 420 && fontSize > 34) {
+        fontSize -= 2;
+        ctx.font = '400 ' + fontSize + 'px "Noto Serif SC", Georgia, serif';
+      }
+      ctx.fillText(stageText, 256, 806);
+      ctx.strokeStyle = 'rgba(23,24,20,.18)';
+      ctx.beginPath();
+      ctx.moveTo(116, 850); ctx.lineTo(396, 847);
       ctx.stroke();
       var texture = new THREE.CanvasTexture(c);
       texture.minFilter = THREE.LinearFilter;
+      texture.generateMipmaps = false;
       return texture;
     }
 
@@ -248,12 +271,12 @@ const jsonLd = {
       addEdges(group, new THREE.BoxGeometry(3.55, 6.0, 0.12), frameMat, [0, 3.0, 0.1]);
       addEdges(group, new THREE.BoxGeometry(3.25, 5.7, 0.08), lineMaterial(ink, 0.45), [0, 3.0, 0.12]);
 
-      var number = new THREE.Mesh(
-        new THREE.PlaneGeometry(1.55, 1.55),
-        new THREE.MeshBasicMaterial({ map: makeNumberTexture(String(index + 1).padStart(2, '0')), transparent: true, side: THREE.DoubleSide })
+      var label = new THREE.Mesh(
+        new THREE.PlaneGeometry(3.06, 5.38),
+        new THREE.MeshBasicMaterial({ map: makeDoorLabelTexture(index), transparent: true, side: THREE.DoubleSide, depthWrite: false })
       );
-      number.position.set(0, 3.15, 0.18);
-      group.add(number);
+      label.position.set(0, 3.0, 0.19);
+      group.add(label);
 
       addLine(group, [[-1.62, 5.72, .18], [1.62, 5.68, .18]], lineMaterial(ink, .62));
       addLine(group, [[-1.62, .18, .18], [1.62, .22, .18]], lineMaterial(ink, .45));
