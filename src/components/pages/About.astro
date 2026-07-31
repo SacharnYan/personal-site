@@ -48,6 +48,7 @@ const jsonLd = {
         <canvas class="journey-canvas" data-journey-canvas aria-hidden="true"></canvas>
         <div class="paper-grain" aria-hidden="true"></div>
         <div class="journey-vignette" aria-hidden="true"></div>
+        <div class="journey-transition" data-journey-transition aria-hidden="true"></div>
 
         <div class="journey-heading">
           <h1>{t(lang, 'about.secPath')}</h1>
@@ -116,6 +117,7 @@ const jsonLd = {
 </Base>
 
 <script is:inline src="/snow/three.min.js"></script>
+<script is:inline src="/about-stage-rooms.js"></script>
 <script is:inline>
   (function () {
     var root = document.querySelector('[data-sketch-journey]');
@@ -137,6 +139,7 @@ const jsonLd = {
     var roomPlace = root.querySelector('[data-room-place]');
     var roomDetail = root.querySelector('[data-room-detail]');
     var roomGhost = root.querySelector('[data-room-ghost]');
+    var transition = root.querySelector('[data-journey-transition]');
     var reduced = false;
     try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 
@@ -173,6 +176,9 @@ const jsonLd = {
     var endZ = lastStageZ - 19;
     var world = new THREE.Group();
     scene.add(world);
+    var roomWorld = new THREE.Group();
+    roomWorld.visible = false;
+    scene.add(roomWorld);
 
     function lineMaterial(color, opacity) {
       return new THREE.LineBasicMaterial({ color: color || ink, transparent: opacity < 1, opacity: opacity == null ? 1 : opacity });
@@ -385,6 +391,8 @@ const jsonLd = {
     var enteringStartedAt = 0;
     var roomOpen = false;
     var roomShown = false;
+    var roomMode = false;
+    var stageRooms = null;
     var pointerDown = null;
     var raycaster = new THREE.Raycaster();
     var pointer = new THREE.Vector2();
@@ -397,23 +405,45 @@ const jsonLd = {
       return element ? element.textContent.trim() : '';
     }
 
+    if (window.JourneyStageRooms) {
+      stageRooms = window.JourneyStageRooms.create({
+        THREE: THREE,
+        group: roomWorld,
+        chapters: chapters,
+        wash: wash,
+        ink: ink,
+        paper: paper,
+        lineMaterial: lineMaterial,
+        addLine: addLine,
+        addEdges: addEdges,
+        chapterText: chapterText
+      });
+    }
+
     function showRoom(index) {
-      if (!room || roomShown || index < 0 || index >= stages.length) return;
+      if (!room || roomShown || !stageRooms || index < 0 || index >= stages.length) return;
+      roomShown = true;
       var chapter = chapters[index];
-      var number = String(index + 1).padStart(2, '0');
-      if (roomNumber) roomNumber.textContent = number;
+      if (roomNumber) roomNumber.textContent = String(index + 1).padStart(2, '0');
       if (roomDate) roomDate.textContent = chapterText(chapter, '.chapter-date');
       if (roomTitle) roomTitle.textContent = chapterText(chapter, 'h3');
       if (roomPlace) roomPlace.textContent = chapterText(chapter, '.chapter-place');
       if (roomDetail) roomDetail.textContent = chapterText(chapter, '.chapter-detail');
-      if (roomGhost) roomGhost.textContent = chapterText(chapter, 'h3');
-      room.style.setProperty('--room-accent', '#' + wash[index].toString(16).padStart(6, '0'));
-      room.setAttribute('aria-hidden', 'false');
-      room.classList.add('is-visible');
-      root.classList.add('is-room-open');
-      roomOpen = true;
-      roomShown = true;
-      if (roomBack) roomBack.focus({ preventScroll: true });
+      if (transition) transition.classList.add('is-covering');
+      window.setTimeout(function () {
+        var roomZ = stageRooms.build(index);
+        world.visible = false;
+        roomWorld.visible = true;
+        roomMode = true;
+        roomOpen = true;
+        camera.position.set(0, 3.35, roomZ);
+        camera.lookAt(0, 3.4, -9);
+        room.setAttribute('aria-hidden', 'false');
+        room.classList.add('is-visible');
+        root.classList.add('is-room-open');
+        if (roomBack) roomBack.focus({ preventScroll: true });
+        if (transition) requestAnimationFrame(function () { transition.classList.remove('is-covering'); });
+      }, 230);
     }
 
     function knockDoor(index) {
@@ -428,13 +458,23 @@ const jsonLd = {
 
     function closeRoom() {
       if (!roomOpen) return;
-      room.classList.remove('is-visible');
-      room.setAttribute('aria-hidden', 'true');
-      root.classList.remove('is-room-open', 'is-entering');
+      if (transition) transition.classList.add('is-covering');
       roomOpen = false;
-      roomShown = false;
-      enteringDoor = -1;
-      if (doorButton) doorButton.focus({ preventScroll: true });
+      window.setTimeout(function () {
+        room.classList.remove('is-visible');
+        room.setAttribute('aria-hidden', 'true');
+        root.classList.remove('is-room-open', 'is-entering');
+        roomMode = false;
+        roomWorld.visible = false;
+        if (stageRooms) stageRooms.dispose();
+        world.visible = true;
+        roomShown = false;
+        enteringDoor = -1;
+        camera.position.set(smoothGlance, 3.25, 3 + ((endZ + 9) - 3) * smoothProgress);
+        camera.lookAt(camera.position.x + smoothGlance * 3.5, 3.15, camera.position.z - 10);
+        if (doorButton) doorButton.focus({ preventScroll: true });
+        if (transition) requestAnimationFrame(function () { transition.classList.remove('is-covering'); });
+      }, 230);
     }
     function updateScroll() {
       var rect = root.getBoundingClientRect();
@@ -491,6 +531,12 @@ const jsonLd = {
       if (glanceWeight > 0) glance /= glanceWeight;
       smoothGlance += (glance - smoothGlance) * (1 - Math.exp(-5 * dt));
       renderDom(smoothProgress);
+
+      if (roomMode) {
+        if (stageRooms) stageRooms.animate(performance.now() * .001, pointerX, pointerY, camera, dt);
+        renderer.render(scene, camera);
+        return;
+      }
 
       var entryFocus = 0;
       var entrySide = 0;
@@ -670,6 +716,16 @@ const jsonLd = {
       linear-gradient(90deg, rgba(75,65,45,.12), transparent 18%, transparent 82%, rgba(75,65,45,.12)),
       linear-gradient(180deg, rgba(255,255,255,.08), transparent 55%, rgba(70,60,40,.1));
   }
+  .journey-transition {
+    position: absolute;
+    z-index: 20;
+    inset: 0;
+    background: #eeeade;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 230ms cubic-bezier(.4,0,.2,1);
+  }
+  .journey-transition.is-covering { opacity: 1; }
   .journey-heading {
     position: absolute;
     z-index: 3;
@@ -783,45 +839,29 @@ const jsonLd = {
   .journey-door-action:hover { border-color: #171814; }
   .journey-door-action:disabled { pointer-events: none; }
   .journey-room {
-    --room-accent: #b76f55;
     position: absolute;
-    z-index: 10;
+    z-index: 12;
     inset: 0;
-    overflow: hidden;
     visibility: hidden;
-    opacity: 0;
-    transform: translateY(10px);
-    background: linear-gradient(90deg, rgba(238,234,222,.92) 0%, rgba(238,234,222,.72) 30%, rgba(238,234,222,.18) 61%, transparent 82%);
     pointer-events: none;
-    transition: opacity 420ms cubic-bezier(.22,1,.36,1), transform 620ms cubic-bezier(.22,1,.36,1), visibility 0s linear 620ms;
   }
-  .journey-room::before {
-    content: '';
-    position: absolute;
-    left: 7vw;
-    bottom: calc(13vh + 232px);
-    width: 38px;
-    height: 2px;
-    background: var(--room-accent);
-    opacity: .72;
-  }
+  .journey-room::before,
   .journey-room::after,
   .room-threshold,
   .room-ghost { display: none; }
   .journey-room.is-visible {
     visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
     pointer-events: auto;
-    transition-delay: 0s;
   }
   .room-back {
     position: absolute;
     z-index: 2;
-    top: 38px;
+    top: 34px;
     left: 42px;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(23,24,20,.32);
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(23,24,20,.34);
+    background: rgba(238,234,222,.62);
+    box-shadow: 0 0 24px 16px rgba(238,234,222,.42);
     font-family: var(--font-body);
     font-size: 10px;
     letter-spacing: .06em;
@@ -834,21 +874,12 @@ const jsonLd = {
   }
   .room-copy {
     position: absolute;
-    z-index: 2;
-    left: 7vw;
-    bottom: 13vh;
-    width: min(34vw, 430px);
-    text-shadow: 0 1px 16px rgba(238,234,222,.72);
-  }
-  .room-number,
-  .room-date,
-  .room-place,
-  .room-detail { margin: 0; }
-  .room-number {
-    font-family: var(--font-display);
-    font-size: 11px;
-    color: rgba(23,24,20,.42);
-    margin-bottom: 22px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
   .room-date {
     font-family: var(--font-body);
@@ -973,25 +1004,7 @@ const jsonLd = {
       bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
       font-size: 10px;
     }
-    .journey-room {
-      background: linear-gradient(0deg, rgba(238,234,222,.97) 0%, rgba(238,234,222,.9) 34%, rgba(238,234,222,.26) 66%, transparent 84%);
-    }
-    .journey-room::before {
-      left: 20px;
-      bottom: max(286px, calc(env(safe-area-inset-bottom) + 270px));
-      width: 30px;
-    }
     .room-back { top: 22px; left: 20px; font-size: 10px; }
-    .room-copy {
-      left: 20px;
-      right: auto;
-      bottom: max(70px, calc(env(safe-area-inset-bottom) + 54px));
-      width: min(76vw, 300px);
-    }
-    .room-number { margin-bottom: 18px; font-size: 10px; }
-    .room-copy h2 { font-size: clamp(38px, 12vw, 50px); margin: 6px 0 11px; }
-    .room-place { font-size: 11px; line-height: 18px; }
-    .room-detail { max-width: 280px; margin-top: 15px; font-size: 15px; line-height: 24px; }
     .chapter {
       top: auto;
       bottom: max(68px, calc(env(safe-area-inset-bottom) + 52px));
@@ -1007,25 +1020,10 @@ const jsonLd = {
     }
     .chapter-number,
     .chapter-detail { display: none; }
-    .chapter-date {
-      font-size: 9px;
-      line-height: 14px;
-      letter-spacing: .12em;
-    }
-    .chapter h3 {
-      font-size: clamp(28px, 9vw, 36px);
-      line-height: .98;
-      margin: 5px 0 8px;
-    }
-    .chapter-place {
-      max-width: 220px;
-      font-size: 11px;
-      line-height: 17px;
-      color: rgba(23,24,20,.62);
-    }
-    .chapter-horizon {
-      width: calc(100vw - 40px) !important;
-    }
+    .chapter-date { font-size: 9px; line-height: 14px; letter-spacing: .12em; }
+    .chapter h3 { font-size: clamp(28px, 9vw, 36px); line-height: .98; margin: 5px 0 8px; }
+    .chapter-place { max-width: 220px; font-size: 11px; line-height: 17px; color: rgba(23,24,20,.62); }
+    .chapter-horizon { width: calc(100vw - 40px) !important; }
     .chapter-horizon h3 { font-size: clamp(38px, 12vw, 52px); }
     .chapter-horizon .chapter-detail { display: block; margin-top: 10px !important; font-size: 13px; line-height: 20px; }
     .journey-hint {
