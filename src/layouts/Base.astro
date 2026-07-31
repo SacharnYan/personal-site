@@ -170,21 +170,13 @@ const currentPath = url.pathname.replace(/\/+$/, '') || '/';
 
     {!hideFooter && (
       <footer class="site-footer">
-      <div class="footer-contact">
-        <p class="footer-contact-line">
-          <span>{t(lang, 'foot.contactKicker')}</span>
-          <a href="mailto:sacharn@163.com" data-mail="sacharn@163.com">sacharn@163.com</a>
-          <span>{t(lang, 'foot.wechat')} sacharn</span>
-          <a href="https://github.com/SacharnYan" target="_blank" rel="noopener">GitHub ↗</a>
-        </p>
-      </div>
       <div class="footer-base">
         <p class="footer-copy">{t(lang, 'foot.copy', { year })}</p>
         <ul class="footer-links">
-          <li><a href={aboutHref} class="footer-link">{t(lang, 'foot.about')}</a></li>
-
+          <li><a href="mailto:sacharn@163.com" class="footer-link" data-mail="sacharn@163.com">{t(lang, 'foot.email')}</a></li>
+          <li><span class="footer-link footer-wechat">{t(lang, 'foot.wechat')} sacharn</span></li>
+          <li><a href="https://github.com/SacharnYan" class="footer-link" target="_blank" rel="noopener">GitHub</a></li>
           <li><a href={href(lang, '/rss.xml')} class="footer-link">RSS</a></li>
-
         </ul>
         <a href="#" class="footer-link footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">{t(lang, 'foot.top')}</a>
       </div>
