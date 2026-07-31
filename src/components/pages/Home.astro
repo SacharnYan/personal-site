@@ -13,6 +13,13 @@ const isEn = lang === 'en';
     <div class="hero-inner">
       <h1 class="hero-title">{t(lang, 'home.heroTitle')}</h1>
       <p class="hero-subtitle">{t(lang, 'home.heroSub')}</p>
+      <div class="hero-intro">
+        <p>{t(lang, 'about.intro1')}</p>
+        <p>{t(lang, 'about.intro2')}</p>
+        <a href={href(lang, '/about/')} class="hero-path-link">
+          {isEn ? 'Walk through my path' : '走进我的经历'} <span aria-hidden="true">→</span>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -127,6 +134,34 @@ const isEn = lang === 'en';
     color: #707070;
     margin: 0;
   }
+  .hero-intro {
+    max-width: 680px;
+    margin: 54px auto 0;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 30px;
+    color: #292929;
+  }
+
+  .hero-intro p { margin: 0; }
+  .hero-intro p + p { margin-top: 8px; color: #707070; }
+
+  .hero-path-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 24px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgba(0,0,0,.35);
+    font-size: 14px;
+    line-height: 22px;
+    color: #000;
+    transition: border-color 200ms, color 200ms;
+  }
+
+  .hero-path-link:hover { color: #707070; border-color: #707070; }
+  .hero-path-link span { transition: transform 220ms cubic-bezier(.22,1,.36,1); }
+  .hero-path-link:hover span { transform: translateX(4px); }
 
   /* ===== Modules ===== */
   .modules {
@@ -288,6 +323,13 @@ const isEn = lang === 'en';
       line-height: 32px;
       letter-spacing: -0.52px;
     }
+    .hero-intro {
+      margin-top: 38px;
+      font-size: 15px;
+      line-height: 26px;
+    }
+
+    .hero-path-link { margin-top: 20px; }
 
     .module-grid {
       grid-template-columns: 1fr;

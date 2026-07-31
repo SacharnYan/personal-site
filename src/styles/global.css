@@ -248,39 +248,64 @@ button {
   font-size: 16px;
 }
 
-.footer-news {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
+.footer-contact {
+  max-width: 1248px;
+  margin: 0 auto;
 }
 
-.footer-news-text {
-  font-size: 16px;
+.footer-contact-kicker {
+  font-size: 13px;
+  line-height: 20px;
+  letter-spacing: .08em;
+  color: var(--color-fg-muted);
+  margin: 0 0 18px;
+}
+
+.footer-contact-title {
+  max-width: 820px;
+  font-family: var(--font-display);
+  font-size: 42px;
   font-weight: 400;
-  line-height: 24px;
-  letter-spacing: -0.32px;
-  color: #000;
+  line-height: 1.2;
+  letter-spacing: -.02em;
   margin: 0;
 }
 
-.footer-arrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid #000;
-  border-radius: 50%;
+.footer-methods {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 48px;
+  border-top: 1px solid var(--color-rule);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.footer-method {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 22px 24px 24px 0;
   color: #000;
-  transition: background 200ms, color 200ms;
 }
 
-.footer-arrow:hover {
-  background: #000;
-  color: #fff;
+.footer-method + .footer-method {
+  padding-left: 24px;
+  border-left: 1px solid var(--color-rule);
 }
 
+.footer-method span {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-fg-muted);
+}
+
+.footer-method strong {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  transition: color 200ms;
+}
+
+a.footer-method:hover strong { color: var(--color-fg-muted); }
 .footer-base {
   display: flex;
   align-items: baseline;
@@ -376,6 +401,20 @@ html.js [data-fade].is-visible {
   .site-footer {
     padding: 64px 24px 40px;
   }
+  .footer-contact-title { font-size: 32px; }
+
+  .footer-methods {
+    grid-template-columns: 1fr;
+    margin-top: 36px;
+  }
+
+  .footer-method,
+  .footer-method + .footer-method {
+    padding: 18px 0;
+    border-left: 0;
+  }
+
+  .footer-method + .footer-method { border-top: 1px solid var(--color-rule); }
 
   .footer-base {
     flex-direction: column;

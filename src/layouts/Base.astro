@@ -168,13 +168,23 @@ const currentPath = url.pathname.replace(/\/+$/, '') || '/';
     </main>
 
     <footer class="site-footer">
-      <div class="footer-news">
-        <p class="footer-news-text">{t(lang, 'foot.news')}</p>
-        <a href={`mailto:sacharn@163.com?subject=${encodeURIComponent(t(lang, 'mail.subject'))}`} class="footer-arrow" aria-label={t(lang, 'foot.subscribe')} data-mail="sacharn@163.com">
-          <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
-            <path d="M1 6h13M10 1.5L14.5 6 10 10.5" stroke="currentColor" stroke-width="1.2" />
-          </svg>
-        </a>
+      <div class="footer-contact">
+        <p class="footer-contact-kicker">{t(lang, 'foot.contactKicker')}</p>
+        <h2 class="footer-contact-title">{t(lang, 'foot.contactTitle')}</h2>
+        <div class="footer-methods">
+          <a href="mailto:sacharn@163.com" class="footer-method" data-mail="sacharn@163.com">
+            <span>{t(lang, 'foot.email')}</span>
+            <strong>sacharn@163.com</strong>
+          </a>
+          <div class="footer-method">
+            <span>{t(lang, 'foot.wechat')}</span>
+            <strong>sacharn</strong>
+          </div>
+          <a href="https://github.com/SacharnYan" class="footer-method" target="_blank" rel="noopener">
+            <span>GitHub</span>
+            <strong>SacharnYan ↗</strong>
+          </a>
+        </div>
       </div>
       <div class="footer-base">
         <p class="footer-copy">{t(lang, 'foot.copy', { year })}</p>

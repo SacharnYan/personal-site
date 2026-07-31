@@ -37,21 +37,6 @@ const jsonLd = {
   jsonLd={jsonLd}
 >
   <article class="article">
-    <header class="article-hero" data-fade>
-      <p class="article-eyebrow">About</p>
-      <h1 class="article-title">{t(lang, 'about.title1')}</h1>
-      <p class="article-sub">{t(lang, 'about.title2')}</p>
-    </header>
-
-    <div class="article-intro">
-      <p>{t(lang, 'about.intro1')}</p>
-      <p>{t(lang, 'about.intro2')}</p>
-      <h2 class="section-title">{t(lang, 'about.secPath')}</h2>
-      <p class="journey-lead">
-        {isEn ? 'Walk forward. The corridor will remember where you have been.' : '向前走。长廊会记得来时的每一段路。'}
-      </p>
-    </div>
-
     <section
       class="sketch-journey"
       data-sketch-journey
@@ -63,8 +48,8 @@ const jsonLd = {
         <div class="paper-grain" aria-hidden="true"></div>
         <div class="journey-vignette" aria-hidden="true"></div>
 
-        <div class="journey-heading" aria-hidden="true">
-          <p>{isEn ? 'A life in chapters' : '一生 · 数章'}</p>
+        <div class="journey-heading">
+          <h1>{t(lang, 'about.secPath')}</h1>
           <span data-progress-label>01 / {String(timeline.length + 1).padStart(2, '0')}</span>
         </div>
 
@@ -108,18 +93,6 @@ const jsonLd = {
       </ol>
     </section>
 
-    <div class="article-contact">
-      <h2 class="section-title">{t(lang, 'about.secContact')}</h2>
-      {isEn ? (
-        <p>
-          If an email says it best, write to <a href="mailto:sacharn@163.com" class="inline-link">sacharn@163.com</a>; WeChat: sacharn; code on <a href="https://github.com/SacharnYan" class="inline-link" target="_blank" rel="noopener">GitHub</a>.
-        </p>
-      ) : (
-        <p>
-          如果邮件能讲清楚，请写信到 <a href="mailto:sacharn@163.com" class="inline-link">sacharn@163.com</a>；微信加 sacharn；代码在 <a href="https://github.com/SacharnYan" class="inline-link" target="_blank" rel="noopener">GitHub</a>。
-        </p>
-      )}
-    </div>
   </article>
 </Base>
 
@@ -462,7 +435,7 @@ const jsonLd = {
   .article {
     max-width: none;
     margin: 0;
-    padding: 0 0 160px;
+    padding: 0;
     overflow: clip;
   }
 
@@ -520,7 +493,7 @@ const jsonLd = {
   .sketch-journey {
     position: relative;
     height: calc(var(--steps) * 100vh);
-    margin-top: 48px;
+    margin-top: 0;
     background: #eeeade;
   }
   .journey-sticky {
@@ -570,8 +543,13 @@ const jsonLd = {
     letter-spacing: .17em;
     text-transform: uppercase;
   }
-  .journey-heading p,
+  .journey-heading h1,
   .journey-heading span { margin: 0; }
+  .journey-heading h1 {
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+  }
   .chapter-layer {
     position: absolute;
     inset: 0;
@@ -711,7 +689,7 @@ const jsonLd = {
   }
 
   @media (max-width: 820px) {
-    .article { padding: 0 20px 100px; }
+    .article { padding: 0; }
     .article-hero,
     .article-intro,
     .article-contact { max-width: none; }
@@ -721,7 +699,7 @@ const jsonLd = {
     .article-intro > p,
     .article-contact > p { font-size: 18px; line-height: 32px; }
     .section-title { font-size: 34px; line-height: 42px; margin-top: 72px; }
-    .sketch-journey { margin-left: -20px; margin-right: -20px; }
+    .sketch-journey { margin-left: 0; margin-right: 0; }
     .journey-heading { top: 24px; left: 20px; right: 20px; }
     .chapter {
       top: auto;
