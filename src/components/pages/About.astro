@@ -362,7 +362,9 @@ const jsonLd = {
       var raw = progress * (count - 1);
       var active = Math.min(count - 1, Math.max(0, Math.round(raw)));
       for (var j = 0; j < chapters.length; j++) {
-        var opacity = j === active ? 1 : 0;
+        var distance = Math.abs(raw - j);
+        var opacity = clamp(1 - (distance - .12) / .72, 0, 1);
+        opacity = opacity * opacity * (3 - 2 * opacity);
         chapters[j].style.setProperty('--chapter-opacity', opacity.toFixed(3));
       }
       if (progressLabel) progressLabel.textContent = String(active + 1).padStart(2, '0') + ' / ' + String(count).padStart(2, '0');
@@ -704,20 +706,45 @@ const jsonLd = {
     .journey-heading { top: 24px; left: 20px; right: 20px; }
     .chapter {
       top: auto;
-      bottom: 14vh;
-      left: 24px !important;
-      right: 24px !important;
-      width: auto !important;
+      bottom: max(68px, calc(env(safe-area-inset-bottom) + 52px));
+      left: 20px !important;
+      right: auto !important;
+      width: min(64vw, 252px) !important;
       text-align: left !important;
-      transform: none !important;
-      padding: 20px 18px 18px;
-      background: rgba(238,234,222,.78);
-      backdrop-filter: blur(5px);
+      transform: translateY(calc((1 - var(--chapter-opacity)) * 8px)) !important;
+      padding: 0;
+      background: none;
+      backdrop-filter: none;
+      text-shadow: 0 1px 12px rgba(238,234,222,.9);
     }
-    .chapter-number { margin-bottom: 18px; }
-    .chapter h3 { font-size: 44px; }
-    .chapter-detail { margin: 15px 0 0 !important; font-size: 15px; line-height: 24px; }
-    .journey-hint { bottom: 30px; }
+    .chapter-number,
+    .chapter-detail { display: none; }
+    .chapter-date {
+      font-size: 9px;
+      line-height: 14px;
+      letter-spacing: .12em;
+    }
+    .chapter h3 {
+      font-size: clamp(28px, 9vw, 36px);
+      line-height: .98;
+      margin: 5px 0 8px;
+    }
+    .chapter-place {
+      max-width: 220px;
+      font-size: 11px;
+      line-height: 17px;
+      color: rgba(23,24,20,.62);
+    }
+    .chapter-horizon {
+      width: calc(100vw - 40px) !important;
+    }
+    .chapter-horizon h3 { font-size: clamp(38px, 12vw, 52px); }
+    .chapter-horizon .chapter-detail { display: block; margin-top: 10px !important; font-size: 13px; line-height: 20px; }
+    .journey-hint {
+      left: 20px;
+      bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
+      transform: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
