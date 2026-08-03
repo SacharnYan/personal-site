@@ -156,14 +156,14 @@ const jsonLd = {
       scene.background = new THREE.Color(0xeeeade);
       scene.fog = new THREE.Fog(0xeeeade, 10, 58);
       camera = new THREE.PerspectiveCamera(50, 1, 0.1, 260);
-      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false, powerPreference: 'default' });
     } catch (e) {
       root.classList.add('is-static');
       if (note) note.hidden = false;
       return;
     }
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.4));
     renderer.outputEncoding = THREE.sRGBEncoding;
 
     var ink = 0x171814;
@@ -443,6 +443,7 @@ const jsonLd = {
         root.classList.add('is-room-open');
         if (roomBack) roomBack.focus({ preventScroll: true });
         if (transition) requestAnimationFrame(function () { transition.classList.remove('is-covering'); });
+        requestRender();
       }, 230);
     }
 
@@ -474,6 +475,7 @@ const jsonLd = {
         camera.lookAt(camera.position.x + smoothGlance * 3.5, 3.15, camera.position.z - 10);
         if (doorButton) doorButton.focus({ preventScroll: true });
         if (transition) requestAnimationFrame(function () { transition.classList.remove('is-covering'); });
+        requestRender();
       }, 230);
     }
     function updateScroll() {
@@ -512,8 +514,17 @@ const jsonLd = {
       renderer.setSize(w, h, false);
     }
 
-    function animate() {
+    /* 事件驱动渲染循环：静止时停帧（公司电脑核显/无 GPU 时避免 60fps 空转吃满 CPU/GPU）。
+       滚动、指针移动、敲门、进出房间等交互通过 requestRender() 唤醒。 */
+    var rafActive = false;
+    function requestRender() {
+      if (rafActive) return;
+      rafActive = true;
       requestAnimationFrame(animate);
+    }
+
+    function animate() {
+      rafActive = false;
       var dt = Math.min(clock.getDelta(), .05);
       smoothProgress += (targetProgress - smoothProgress) * (1 - Math.exp(-5.2 * dt));
       var chapterFloat = smoothProgress * (count - 1);
@@ -535,6 +546,7 @@ const jsonLd = {
       if (roomMode) {
         if (stageRooms) stageRooms.animate(performance.now() * .001, pointerX, pointerY, camera, dt);
         renderer.render(scene, camera);
+        requestRender(); /* 房间内浮动物持续动画，保持渲染 */
         return;
       }
 
@@ -578,10 +590,21 @@ const jsonLd = {
       opening.material.opacity = endReveal * .72;
       scene.fog.far = 58 + endReveal * 82;
       renderer.render(scene, camera);
+
+      /* 静止判定：所有缓动收敛且无进行中动画才停帧（省 CPU/GPU）。
+         相机 y 目标含 ±.035 的呼吸波动，阈值需覆盖它；x 无波动可精确收敛。 */
+      var desiredX = corridorX * (1 - entryFocus) + entrySide * 3.35 * entryFocus;
+      var desiredY = 3.25 - pointerY * .22;
+      var animating = enteringDoor >= 0 || roomOpen
+        || Math.abs(targetProgress - smoothProgress) > 0.0001
+        || Math.abs(glance - smoothGlance) > 0.0001
+        || Math.abs(desiredX - camera.position.x) > 0.002
+        || Math.abs(desiredY - camera.position.y) > 0.05;
+      if (animating) requestRender();
     }
 
-    if (doorButton) doorButton.addEventListener('click', function () { knockDoor(activeDoorIndex); });
-    if (roomBack) roomBack.addEventListener('click', closeRoom);
+    if (doorButton) doorButton.addEventListener('click', function () { knockDoor(activeDoorIndex); requestRender(); });
+    if (roomBack) roomBack.addEventListener('click', function () { closeRoom(); requestRender(); });
     if (room) {
       room.addEventListener('wheel', function (event) { if (roomOpen) event.preventDefault(); }, { passive: false });
       room.addEventListener('touchmove', function (event) { if (roomOpen) event.preventDefault(); }, { passive: false });
@@ -600,14 +623,15 @@ const jsonLd = {
       pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
       raycaster.setFromCamera(pointer, camera);
       var hit = raycaster.intersectObject(stages[activeDoorIndex].userData.doorPaper, false);
-      if (hit.length) knockDoor(activeDoorIndex);
+      if (hit.length) { knockDoor(activeDoorIndex); requestRender(); }
     }, { passive: true });
-    window.addEventListener('keydown', function (event) { if (event.key === 'Escape') closeRoom(); });
-    window.addEventListener('scroll', updateScroll, { passive: true });
-    window.addEventListener('resize', function () { resize(); updateScroll(); });
+    window.addEventListener('keydown', function (event) { if (event.key === 'Escape') { closeRoom(); requestRender(); } });
+    window.addEventListener('scroll', function () { updateScroll(); requestRender(); }, { passive: true });
+    window.addEventListener('resize', function () { resize(); updateScroll(); requestRender(); });
     window.addEventListener('pointermove', function (e) {
       pointerX = (e.clientX / window.innerWidth - .5) * 2;
       pointerY = (e.clientY / window.innerHeight - .5) * 2;
+      requestRender();
     }, { passive: true });
 
     camera.position.set(0, 3.25, 3);
@@ -615,7 +639,7 @@ const jsonLd = {
     updateScroll();
     smoothProgress = targetProgress;
     renderDom(smoothProgress);
-    animate();
+    requestRender();
   })();
 </script>
 
