@@ -143,8 +143,26 @@ const jsonLd = {
     var reduced = false;
     try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 
-    if (reduced || !window.THREE) {
+    /* 软渲染检测：公司电脑无 GPU 加速时 Chrome 用 SwiftShader 软渲染 WebGL，
+       全屏 3D 即使停帧也吃大量内存。检测到软渲染直接降级为静态列表，不启动 3D。
+       用独立临时 canvas 探测，避免占用主 canvas 的 WebGL context。 */
+    function isSoftwareGL() {
+      try {
+        var probe = document.createElement('canvas');
+        var gl = probe.getContext('webgl2') || probe.getContext('webgl') || probe.getContext('experimental-webgl');
+        if (!gl) return true;
+        var dbg = gl.getExtension('WEBGL_debug_renderer_info');
+        var name = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
+        if (!name) return false;
+        return /swiftshader|llvmpipe|softpipe|software/i.test(name);
+      } catch (e) { return true; }
+    }
+
+    if (reduced || !window.THREE || isSoftwareGL()) {
       root.classList.add('is-static');
+      /* 软渲染/加载失败（非 reduced-motion）走静态章节列表降级；
+         reduced-motion 走无障碍列表（reduced-motion CSS 分支处理）。 */
+      if (!reduced) root.classList.add('is-fallback');
       if (!window.THREE && note) note.hidden = false;
       return;
     }
@@ -753,7 +771,7 @@ const jsonLd = {
   .journey-heading {
     position: absolute;
     z-index: 3;
-    top: 34px;
+    top: 88px;
     left: 42px;
     right: 42px;
     display: flex;
@@ -880,7 +898,7 @@ const jsonLd = {
   .room-back {
     position: absolute;
     z-index: 2;
-    top: 34px;
+    top: 88px;
     left: 42px;
     padding: 9px 0;
     border-bottom: 1px solid rgba(23,24,20,.34);
@@ -1022,13 +1040,13 @@ const jsonLd = {
     .article-contact > p { font-size: 18px; line-height: 32px; }
     .section-title { font-size: 34px; line-height: 42px; margin-top: 72px; }
     .sketch-journey { margin-left: 0; margin-right: 0; }
-    .journey-heading { top: 24px; left: 20px; right: 20px; }
+    .journey-heading { top: 72px; left: 20px; right: 20px; }
     .journey-door-action {
       right: 20px;
       bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
       font-size: 10px;
     }
-    .room-back { top: 22px; left: 20px; font-size: 10px; }
+    .room-back { top: 72px; left: 20px; font-size: 10px; }
     .chapter {
       top: auto;
       bottom: max(68px, calc(env(safe-area-inset-bottom) + 52px));
@@ -1055,6 +1073,86 @@ const jsonLd = {
       bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
       transform: none;
     }
+  }
+
+  /* 降级模式（THREE 加载失败 / 软渲染，非 reduced-motion）：静态章节列表，不依赖 3D */
+  .sketch-journey.is-static.is-fallback {
+    height: auto;
+    background: #eeeade;
+    padding: 96px 24px 48px;
+  }
+  .sketch-journey.is-static.is-fallback .journey-sticky {
+    position: static;
+    height: auto;
+    overflow: visible;
+    background: transparent;
+  }
+  .sketch-journey.is-static.is-fallback .journey-canvas,
+  .sketch-journey.is-static.is-fallback .journey-vignette,
+  .sketch-journey.is-static.is-fallback .journey-heading,
+  .sketch-journey.is-static.is-fallback .journey-door-action,
+  .sketch-journey.is-static.is-fallback .journey-transition {
+    display: none;
+  }
+  .sketch-journey.is-static.is-fallback .chapter-layer {
+    position: static;
+    display: grid;
+    gap: 0;
+    pointer-events: auto;
+  }
+  .sketch-journey.is-static.is-fallback .chapter {
+    --chapter-opacity: 1;
+    position: static;
+    width: auto;
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 40px 0;
+    border-bottom: 1px solid rgba(23,24,20,.18);
+    opacity: 1;
+    transform: none;
+    text-align: left;
+  }
+  .sketch-journey.is-static.is-fallback .chapter-number {
+    font-size: 11px;
+    letter-spacing: .17em;
+    color: rgba(23,24,20,.48);
+    margin-bottom: 8px;
+  }
+  .sketch-journey.is-static.is-fallback .chapter h3 {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 50px;
+    letter-spacing: -.02em;
+    margin: 0 0 12px;
+  }
+  .sketch-journey.is-static.is-fallback .chapter-date {
+    font-size: 11px;
+    letter-spacing: .12em;
+    color: rgba(23,24,20,.55);
+    margin-bottom: 6px;
+  }
+  .sketch-journey.is-static.is-fallback .chapter-place {
+    font-size: 15px;
+    line-height: 24px;
+    color: rgba(23,24,20,.78);
+    margin-bottom: 12px;
+  }
+  .sketch-journey.is-static.is-fallback .chapter-detail {
+    font-size: 15px;
+    line-height: 26px;
+    color: rgba(23,24,20,.6);
+  }
+  .sketch-journey.is-static.is-fallback .journey-hint {
+    display: none;
+  }
+  .sketch-journey.is-static.is-fallback + .journey-accessible {
+    display: none;
+  }
+  @media (max-width: 820px) {
+    .sketch-journey.is-static.is-fallback { padding: 72px 20px 40px; }
+    .sketch-journey.is-static.is-fallback .chapter { padding: 32px 0; }
+    .sketch-journey.is-static.is-fallback .chapter h3 { font-size: 30px; line-height: 38px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
