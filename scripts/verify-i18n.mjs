@@ -50,6 +50,8 @@ const enHome = await pg.evaluate(() => ({
   copy: document.querySelector('.footer-copy')?.textContent,
   firstCard: document.querySelector('.project-story h3')?.textContent,
   cta: document.querySelector('.project-story .text-link')?.textContent,
+  shelfTitle: document.querySelector('.collection-item:nth-child(3) h3')?.textContent,
+  shelfPreviewCount: document.querySelectorAll('.collection-item:nth-child(3) .shelf-preview-book').length,
   homeVideos: document.querySelectorAll('video').length,
   og: document.querySelector('meta[property="og:image"]')?.getAttribute('content'),
 }));
@@ -60,6 +62,8 @@ check('EN 桌面主导航可发现', enHome.primaryNav.join(',') === 'Projects,W
 check('EN 署名', enHome.copy?.includes('Shucheng Yan'), enHome.copy);
 check('EN 首页第一张卡', enHome.firstCard === 'Snow at Huxin Pavilion', enHome.firstCard);
 check('EN 卡片 CTA', normalize(enHome.cta) === 'Read the story→', normalize(enHome.cta));
+check('EN 书架入口文案明确', normalize(enHome.shelfTitle) === 'My reading and viewing list', normalize(enHome.shelfTitle));
+check('EN 书架入口展示真实条目', enHome.shelfPreviewCount === 3, 'count=' + enHome.shelfPreviewCount);
 check('首页不再嵌入自动加载视频', enHome.homeVideos === 0, 'videos=' + enHome.homeVideos);
 check('首页使用新分享卡', enHome.og?.endsWith('/og.png'), enHome.og);
 

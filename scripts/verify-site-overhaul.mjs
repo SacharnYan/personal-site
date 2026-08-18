@@ -54,6 +54,8 @@ try {
     practiceCount: document.querySelectorAll('.practice-item').length,
     projectCount: document.querySelectorAll('.project-story').length,
     collectionCount: document.querySelectorAll('.collection-item').length,
+    shelfTitle: document.querySelector('.collection-item:nth-child(3) h3')?.textContent,
+    shelfPreviewCount: document.querySelectorAll('.collection-item:nth-child(3) .shelf-preview-book').length,
     videos: document.querySelectorAll('video').length,
     overflow: document.documentElement.scrollWidth > window.innerWidth,
     title: document.title,
@@ -68,6 +70,8 @@ try {
   check('三项工作方法完整', home.practiceCount === 3, `count=${home.practiceCount}`);
   check('两个精选项目完整', home.projectCount === 2, `count=${home.projectCount}`);
   check('五个持续记录入口完整', home.collectionCount === 5, `count=${home.collectionCount}`);
+  check('书架入口文案明确', tidy(home.shelfTitle) === '我的阅读与观看清单', tidy(home.shelfTitle));
+  check('书架入口展示真实条目', home.shelfPreviewCount === 3, `count=${home.shelfPreviewCount}`);
   check('首页不嵌入视频', home.videos === 0, `count=${home.videos}`);
   check('桌面无横向溢出', !home.overflow);
   check('首页标题与描述已更新', home.title.includes('解决方案设计师') && home.description.includes('可验收'), `${home.title} | ${home.description}`);

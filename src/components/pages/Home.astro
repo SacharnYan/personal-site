@@ -28,7 +28,7 @@ const copy = isEn ? {
   featuredLead: 'Two small projects show the range I care about: useful structure on one side, memorable experience on the other.',
   collectionEyebrow: '03 / Ongoing archive',
   collectionTitle: 'Writing, images, and things worth keeping',
-  collectionLead: 'This site is not only a portfolio. It is a working archive of what I make, notice, learn, and return to.',
+  collectionLead: 'This site is not only a portfolio. It is a working archive of projects, writing, photography, video, and a reading list.',
   aboutEyebrow: '04 / About',
   aboutTitle: 'The work makes more sense when you know the path behind it.',
   aboutBody: 'Walk through an interactive timeline, or read the professional profile first. Both lead to the same question: how can complicated systems become experiences people can actually understand?',
@@ -54,7 +54,7 @@ const copy = isEn ? {
   featuredLead: '两个小项目，分别代表我在意的两端：一端是清晰有用的结构，一端是让人愿意停留的体验。',
   collectionEyebrow: '03 / 持续记录',
   collectionTitle: '写作、影像，以及值得留下的东西',
-  collectionLead: '这里不只是作品集，也是一个持续生长的个人档案：记录我做过什么、看见什么、学到什么，以及反复回到什么。',
+  collectionLead: '这里不只是作品集，也是一个持续生长的个人档案：有项目，也有文章、照片、视频和阅读清单。',
   aboutEyebrow: '04 / 关于',
   aboutTitle: '知道一段经历，才能更完整地理解一个人为什么这样工作。',
   aboutBody: '你可以先读职业介绍，也可以走进一条可交互的时间线。它们最终指向同一个问题：怎样让复杂的系统，变成真实的人能够理解和使用的体验？',
@@ -111,7 +111,7 @@ const featured = isEn ? [
   },
 ];
 
-const collectionItems = sections.slice(1).map((section: any) => {
+const collectionItems: any[] = sections.slice(1).map((section: any) => {
   const en = section.en || {};
   return {
     eyebrow: isEn ? (en.eyebrow || section.eyebrow) : section.eyebrow,
@@ -127,12 +127,21 @@ const collectionItems = sections.slice(1).map((section: any) => {
 
 collectionItems.splice(2, 0, {
   eyebrow: isEn ? 'Bookshelf' : '书架',
-  title: isEn ? 'Things I return to' : '反复回到的东西',
-  sub: isEn ? 'Books, essays, films, talks, and fragments that continue to shape how I think.' : '书、文章、影像、演讲和碎片——它们持续塑造我看问题的方式。',
+  title: isEn ? 'My reading and viewing list' : '我的阅读与观看清单',
+  sub: isEn ? 'Books, essays, films, and talks that have shaped how I think, collected in one place.' : '收录对我有启发的书、文章、电影与演讲，并记录它们留下的观点。',
   href: href(lang, '/shelf/'),
   cta: isEn ? 'Browse the shelf' : '打开书架',
   image: null,
   images: null,
+  shelfPreview: isEn ? [
+    { title: 'Within the System', by: 'Lan Xiaohuan' },
+    { title: 'To Live', by: 'Yu Hua' },
+    { title: "Dream Reminiscences", by: 'Zhang Dai' },
+  ] : [
+    { title: '置身事内', by: '兰小欢' },
+    { title: '活着', by: '余华' },
+    { title: '陶庵梦忆', by: '张岱' },
+  ],
   alt: '',
 });
 ---
@@ -246,10 +255,17 @@ collectionItems.splice(2, 0, {
                 </span>
               ) : item.image ? (
                 <img src={item.image} alt={item.alt} loading="lazy" />
-              ) : (
-                <span class="shelf-mark" aria-hidden="true">
-                  <i></i><i></i><i></i><i></i><i></i>
+              ) : item.shelfPreview ? (
+                <span class="shelf-preview">
+                  {item.shelfPreview.map((entry: { title: string; by: string }, previewIndex: number) => (
+                    <span class:list={['shelf-preview-book', `tone-${previewIndex + 1}`]}>
+                      <strong>{entry.title}</strong>
+                      <small>{entry.by}</small>
+                    </span>
+                  ))}
                 </span>
+              ) : (
+                <span aria-hidden="true"></span>
               )}
             </a>
           </article>
@@ -567,20 +583,44 @@ collectionItems.splice(2, 0, {
 
   .photo-grid img { width: 100%; height: 100%; object-fit: cover; }
 
-  .shelf-mark {
+  .shelf-preview {
     height: 100%;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
-    gap: 9px;
-    padding: 18% 12%;
+    gap: 16px;
+    padding: 28px;
+    background: #f2f2f2;
   }
 
-  .shelf-mark i { display: block; width: 12%; height: 76%; border: 1px solid #8a8a8a; background: #fff; }
-  .shelf-mark i:nth-child(2) { height: 92%; }
-  .shelf-mark i:nth-child(3) { height: 64%; }
-  .shelf-mark i:nth-child(4) { height: 84%; transform: rotate(4deg); transform-origin: bottom; }
-  .shelf-mark i:nth-child(5) { height: 70%; }
+  .shelf-preview-book {
+    width: 28%;
+    min-height: 154px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 18px 14px;
+    border: 1px solid rgba(0, 0, 0, .22);
+    background: #fff;
+    color: #151515;
+  }
+
+  .shelf-preview-book strong {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.28;
+  }
+
+  .shelf-preview-book small {
+    font-size: 10px;
+    line-height: 1.4;
+    color: var(--color-fg-muted);
+  }
+
+  .shelf-preview-book.tone-1 { background: #e9eee8; }
+  .shelf-preview-book.tone-2 { background: #eee7dd; transform: translateY(7px); }
+  .shelf-preview-book.tone-3 { background: #f3eee2; }
 
   .about-cta {
     padding: 104px 96px;
