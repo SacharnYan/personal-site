@@ -48,8 +48,8 @@ const enHome = await pg.evaluate(() => ({
   nav: [...document.querySelectorAll('.menu-link')].map(a => a.textContent),
   primaryNav: [...document.querySelectorAll('.primary-nav-link')].map(a => a.textContent),
   copy: document.querySelector('.footer-copy')?.textContent,
-  firstCard: document.querySelector('.project-card h3')?.textContent,
-  cta: document.querySelector('.project-card .text-link')?.textContent,
+  firstCard: document.querySelector('.project-story h3')?.textContent,
+  cta: document.querySelector('.project-story .text-link')?.textContent,
   homeVideos: document.querySelectorAll('video').length,
   og: document.querySelector('meta[property="og:image"]')?.getAttribute('content'),
 }));

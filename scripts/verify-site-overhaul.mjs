@@ -52,7 +52,7 @@ try {
       rect: link.getBoundingClientRect().toJSON(),
     })),
     practiceCount: document.querySelectorAll('.practice-item').length,
-    projectCount: document.querySelectorAll('.project-card').length,
+    projectCount: document.querySelectorAll('.project-story').length,
     collectionCount: document.querySelectorAll('.collection-item').length,
     videos: document.querySelectorAll('video').length,
     overflow: document.documentElement.scrollWidth > window.innerWidth,
