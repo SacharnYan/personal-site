@@ -5,7 +5,7 @@ import { existsSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
 
-const DIST = 'C:/Users/sacha/personal-site/dist';
+const DIST = path.resolve('dist');
 const PORT = 4595;
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.mp4': 'video/mp4' };
 const server = http.createServer(async (req, res) => {
@@ -25,7 +25,7 @@ const browser = await chromium.launch();
 let failed = 0;
 const check = (name, ok, detail) => { if (!ok) failed++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}  ${detail ?? ''}`); };
 
-/* 1. 正常浏览器：html.js 存在、fade 动画生效、notes 19 条 */
+/* 1. 正常浏览器：html.js 存在、fade 动画生效、notes 17 条 */
 {
   const p = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await p.goto(`http://localhost:${PORT}/notes/`, { waitUntil: 'networkidle' });
@@ -37,7 +37,7 @@ const check = (name, ok, detail) => { if (!ok) failed++; console.log(`${ok ? 'PA
     heroOp: getComputedStyle(document.querySelector('.article-hero[data-fade]')).opacity,
   }));
   check('正常浏览器 html.js 存在', r.js === true);
-  check('notes 19 条渲染', r.items === 19, `实际 ${r.items}`);
+  check('notes 17 条渲染', r.items === 17, `实际 ${r.items}`);
   check('fade 动画生效（hero opacity=1）', r.heroOp === '1', r.heroOp);
   await p.close();
 }
@@ -81,25 +81,18 @@ const check = (name, ok, detail) => { if (!ok) failed++; console.log(`${ok ? 'PA
   await p.close();
 }
 
-/* 4. 首页视频延迟加载：打开首页时 video 无 src，网络无 mp4 请求 */
+/* 4. 首页只使用海报缩略图，不嵌入视频，也不产生 mp4 请求 */
 {
   const p = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   const mp4Reqs = [];
   p.on('request', req => { if (req.url().endsWith('.mp4')) mp4Reqs.push(req.url()); });
   await p.goto(`http://localhost:${PORT}/`, { waitUntil: 'networkidle' });
-  await p.waitForTimeout(1500);
+  await p.waitForTimeout(3500);
   const r1 = await p.evaluate(() => {
-    const v = document.querySelector('video.module-video');
-    return { hasSrc: !!(v && v.src), hasDataSrc: !!(v && v.dataset.src), preload: v?.getAttribute('preload') };
+    return { videos: document.querySelectorAll('video').length };
   });
-  check('首页加载后 video 无 src（未下载）', r1.hasSrc === false && r1.hasDataSrc === true, JSON.stringify(r1));
-  check('首页加载后无 mp4 请求', mp4Reqs.length === 0, `${mp4Reqs.length} 个`);
-  /* 滚动到视频区域，应开始加载 */
-  await p.evaluate(() => document.querySelector('video.module-video')?.scrollIntoView({ block: 'center' }));
-  await p.waitForTimeout(1500);
-  const r2 = await p.evaluate(() => { const v = document.querySelector('video.module-video'); return { hasSrc: !!v.src, src: v.src }; });
-  check('滚到视频区后 src 被赋值', r2.hasSrc === true, r2.src);
-  check('滚动后产生 mp4 请求', mp4Reqs.length >= 1, `${mp4Reqs.length} 个`);
+  check('首页不嵌入视频', r1.videos === 0, JSON.stringify(r1));
+  check('首页停留 3.5 秒仍无 mp4 请求', mp4Reqs.length === 0, `${mp4Reqs.length} 个`);
   await p.close();
 }
 

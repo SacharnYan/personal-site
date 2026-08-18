@@ -26,23 +26,23 @@ await pg.evaluate(() => {
   });
 });
 
-// 点页脚箭头（滚动到页脚先）
-await pg.evaluate(() => document.querySelector('.footer-arrow').scrollIntoView());
-await pg.waitForTimeout(400);
-await pg.click('.footer-arrow');
+// 打开菜单，点菜单里的联系入口
+await pg.click('.menu-toggle');
+await pg.waitForTimeout(200);
+await pg.click('.menu-foot-link[data-mail]');
 await pg.waitForTimeout(500);
 const r1 = await pg.evaluate(() => ({
   toastVisible: !!document.querySelector('#site-toast.show'),
   toastText: document.getElementById('site-toast')?.textContent,
 }));
-console.log('点箭头后:', JSON.stringify(r1));
+console.log('点菜单联系后:', JSON.stringify(r1));
 
 // 2.6 秒后应自动消失
 await pg.waitForTimeout(2800);
 const gone = await pg.evaluate(() => !document.querySelector('#site-toast.show'));
 console.log('自动消失:', gone);
 
-// 页脚"联系"链接触发同样行为
+// 页脚邮件链接触发同样行为
 await pg.click('.footer-base a.footer-link[data-mail]');
 await pg.waitForTimeout(400);
 const r2 = await pg.evaluate(() => !!document.querySelector('#site-toast.show'));

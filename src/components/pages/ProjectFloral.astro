@@ -9,14 +9,15 @@ const isEn = lang === 'en';
 
 <Base
   title={isEn ? 'Floral Course Schedule Posters' : '花艺课程表海报'}
-  description={isEn ? 'An experiment in AI-assisted poster design.' : '一次 AI 辅助海报设计的尝试。'}
+  description={isEn ? 'Turning a dense floral curriculum into two clear enrollment posters through AI-assisted exploration and human refinement.' : '把密集的花艺课程信息，整理成两张结构清楚的招生海报。'}
+  image="/cards/projects-card.jpg"
   lang={lang}
 >
   <article class="story">
     <header class="story-hero" data-fade>
       <p class="story-eyebrow">Design · 2026</p>
       <h1 class="story-title">{isEn ? 'Floral Course Schedule Posters' : '花艺课程表海报'}</h1>
-      <p class="story-sub">{isEn ? 'An experiment in AI-assisted poster design.' : '一次 AI 辅助海报设计的尝试。'}</p>
+      <p class="story-sub">{isEn ? 'Dense course information, made easier to understand.' : '把密集课程，变成一眼能看懂的信息。'}</p>
     </header>
 
     <div class="story-body">
@@ -30,15 +31,51 @@ const isEn = lang === 'en';
 
       {isEn ? (
         <>
-          <p>
-            A course schedule poster designed for a floral studio to introduce its zero-basis startup class and all-around startup class to prospective students during enrollment. It was also an experiment in AI-assisted poster design: using AI to explore information hierarchy and layout, then refining the result around the studio’s actual course content.
-          </p>
+          <p class="story-lead">A floral studio needed to introduce two course tracks during enrollment: a zero-basis startup class and an all-around startup class. The material was complete, but the density of dates, course modules, and outcomes made it difficult for a prospective student to see the difference quickly.</p>
+          <dl class="case-facts">
+            <div><dt>Focus</dt><dd>Information hierarchy</dd></div>
+            <div><dt>Method</dt><dd>AI exploration + human refinement</dd></div>
+            <div><dt>Deliverable</dt><dd>Two aligned enrollment posters</dd></div>
+          </dl>
+          <section class="case-section">
+            <p class="case-kicker">01 · Problem</p>
+            <h2>Two audiences, one visual system.</h2>
+            <p>The posters had to feel like part of the same studio while still making the purpose of each class unmistakable. The real design task was not decoration; it was deciding what someone should notice first, second, and third.</p>
+          </section>
+          <section class="case-section">
+            <p class="case-kicker">02 · Process</p>
+            <h2>Use AI to widen the search, then narrow it with judgment.</h2>
+            <p>AI was used to explore possible layouts and relationships between the two posters. The useful directions were then rebuilt around the studio’s actual curriculum, with course groups, dates, and outcomes aligned to a consistent reading order.</p>
+          </section>
+          <section class="case-section">
+            <p class="case-kicker">03 · Result</p>
+            <h2>Clarity became the shared style.</h2>
+            <p>The final pair uses the same structural logic while giving each program its own content emphasis. It is a small project, but it reflects a principle I return to often: AI can accelerate variation; responsibility for hierarchy and meaning still belongs to the designer.</p>
+          </section>
         </>
       ) : (
         <>
-          <p>
-            为一家花艺工作室制作的招生课程海报，用来在招生阶段向潜在学员介绍零基础创业班和创业全能班的课程安排。这也是一次 AI 辅助海报设计的尝试：借助 AI 探索信息层级和版式，再结合工作室的真实课程内容完成调整。
-          </p>
+          <p class="story-lead">一家花艺工作室需要在招生阶段介绍两套课程：零基础创业班与创业全能班。课程信息本身很完整，但日期、模块与学习收获同时出现，潜在学员很难在短时间内看清两者差别。</p>
+          <dl class="case-facts">
+            <div><dt>设计重点</dt><dd>信息层级</dd></div>
+            <div><dt>工作方式</dt><dd>AI 探索 + 人工收敛</dd></div>
+            <div><dt>最终交付</dt><dd>两张统一体系的招生海报</dd></div>
+          </dl>
+          <section class="case-section">
+            <p class="case-kicker">01 · 问题</p>
+            <h2>两类人群，需要一套统一又能区分的视觉系统。</h2>
+            <p>两张海报既要让人看出属于同一家工作室，又要让每个课程的目标足够明确。真正需要设计的不是装饰，而是读者第一眼、第二眼、第三眼分别应该看到什么。</p>
+          </section>
+          <section class="case-section">
+            <p class="case-kicker">02 · 过程</p>
+            <h2>用 AI 扩大探索范围，再用人的判断完成收敛。</h2>
+            <p>先借助 AI 尝试不同的信息层级与双海报关系，再围绕工作室的真实课程内容重新整理，把课程分组、日期与学习结果放进一致的阅读顺序里。</p>
+          </section>
+          <section class="case-section">
+            <p class="case-kicker">03 · 结果</p>
+            <h2>清晰，本身就是两张海报共同的风格。</h2>
+            <p>最终两张海报使用同一套结构逻辑，同时保留各自的内容重点。项目很小，却体现了我反复坚持的一点：AI 可以加快方案变化，信息层级与意义判断仍然必须由人负责。</p>
+          </section>
         </>
       )}
     </div>
@@ -101,6 +138,45 @@ const isEn = lang === 'en';
     margin: 0;
   }
 
+  .story-lead { margin-bottom: 56px !important; }
+
+  .case-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    margin: 0 0 88px;
+    padding: 22px 0;
+    border-top: 1px solid #d0d0d0;
+    border-bottom: 1px solid #d0d0d0;
+  }
+
+  .case-facts dt,
+  .case-kicker {
+    font-size: 12px !important;
+    line-height: 18px !important;
+    color: #707070 !important;
+  }
+
+  .case-facts dd {
+    margin: 8px 0 0;
+    font-family: var(--font-display);
+    font-size: 16px;
+    line-height: 25px;
+  }
+
+  .case-section { margin-top: 88px; }
+  .case-kicker { margin: 0 0 18px !important; }
+  .case-section h2 {
+    margin: 0 0 24px;
+    font-family: var(--font-display);
+    font-size: 38px;
+    font-weight: 400;
+    line-height: 48px;
+    letter-spacing: -.02em;
+  }
+
+  .case-section > p:last-child { font-size: 19px; line-height: 34px; color: #292929; }
+
   .story-body p + p {
     margin-top: 1.5em;
   }
@@ -140,6 +216,12 @@ const isEn = lang === 'en';
       font-size: 19px;
       line-height: 33px;
     }
+
+    .story-lead { margin-bottom: 40px !important; }
+    .case-facts { grid-template-columns: 1fr; gap: 18px; margin-bottom: 64px; }
+    .case-section { margin-top: 64px; }
+    .case-section h2 { font-size: 30px; line-height: 38px; }
+    .case-section > p:last-child { font-size: 17px; line-height: 30px; }
 
     .story-figure {
       margin: 40px 0;
