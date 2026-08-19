@@ -14,8 +14,8 @@ export function href(lang: Lang, path: string): string {
 export function switchPath(lang: Lang, pathname: string): string {
   if (lang === 'zh') return pathname === '/' ? '/en/' : '/en' + pathname;
   const stripped = pathname.replace(/^\/en/, '');
-  /* Astro 将根 404 输出为 /404.html（非目录形式），英文镜像才是 /en/404/ */
-  if (stripped === '/404/' || stripped === '/404' || stripped === '/404.html') return '/404.html';
+  /* Astro 将根 404 输出为 404.html；Cloudflare Pages 的规范地址是 /404（.html 会 308 跳过去） */
+  if (stripped === '/404/' || stripped === '/404' || stripped === '/404.html') return '/404';
   return stripped === '' ? '/' : stripped;
 }
 

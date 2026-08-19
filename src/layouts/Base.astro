@@ -29,8 +29,8 @@ const navItems = [
 const homeHref = href(lang, '/');
 const aboutHref = href(lang, '/about/');
 const otherPath = switchPath(lang, url.pathname);
-/* 根 404 实际产物是 /404.html，规范化为真实文件地址 */
-const selfPath = url.pathname === '/404/' ? '/404.html' : url.pathname;
+/* 根 404 实际产物是 404.html；线上规范地址为 /404 */
+const selfPath = url.pathname === '/404/' ? '/404' : url.pathname;
 const zhUrl = url.origin + (lang === 'zh' ? selfPath : otherPath);
 const enUrl = url.origin + (lang === 'en' ? url.pathname : otherPath);
 const year = new Date().getFullYear();
