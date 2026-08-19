@@ -7,7 +7,7 @@ import { t, href, switchPath, type Lang } from '../i18n/ui';
 interface Props {
   title: string;
   description?: string;
-  image?: string | null;
+  image?: string;
   lang?: Lang;
   jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
   hideFooter?: boolean;
@@ -17,8 +17,7 @@ const { title, lang = 'zh', hideFooter = false } = Astro.props;
 const url = Astro.url;
 const siteName = t(lang, 'site.name');
 const description = Astro.props.description ?? t(lang, 'site.desc');
-const imageProp = Astro.props.image;
-const ogImage = imageProp === null ? null : url.origin + (imageProp ?? '/og.png');
+const ogImage = url.origin + (Astro.props.image ?? '/og-default.jpg');
 const navItems = [
   { href: href(lang, '/projects/'), label: t(lang, 'nav.projects') },
   { href: href(lang, '/writing/'), label: t(lang, 'nav.writing') },
@@ -47,12 +46,6 @@ const jsonLd = Astro.props.jsonLd ?? {
 };
 const safeJsonLd = JSON.stringify(jsonLd).replaceAll('<', '\\u003c');
 const currentPath = url.pathname.replace(/\/+$/, '') || '/';
-const canonicalUrl = url.origin + url.pathname;
-const primaryNavItems = [
-  { href: href(lang, '/projects/'), label: t(lang, 'nav.projects') },
-  { href: href(lang, '/writing/'), label: t(lang, 'nav.writing') },
-  { href: aboutHref, label: t(lang, 'nav.about') },
-];
 ---
 <!DOCTYPE html>
 <html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
@@ -107,17 +100,19 @@ const primaryNavItems = [
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#ffffff" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:url" content={url.href} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
-    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    {ogImage && <meta name="twitter:image" content={ogImage} />}
-    <link rel="canonical" href={canonicalUrl} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="canonical" href={url.href} />
     <link rel="alternate" hreflang="zh-CN" href={zhUrl} />
     <link rel="alternate" hreflang="en" href={enUrl} />
     <link rel="alternate" hreflang="x-default" href={zhUrl} />
@@ -128,28 +123,15 @@ const primaryNavItems = [
     <a href="#main" class="skip-link">{t(lang, 'a11y.skip')}</a>
 
     <header class="site-header">
-      <a href={homeHref} class="site-brand" aria-label={t(lang, 'a11y.home')}>
+      <a href={homeHref} class="logo" aria-label={t(lang, 'a11y.home')}>
         <img src="/logo-variants/logo-spiral.svg" alt="" class="logo-mark" />
-        <span class="brand-name">{lang === 'en' ? 'Shucheng Yan' : '严树成'}</span>
       </a>
-      <nav class="primary-nav" aria-label={t(lang, 'a11y.primary')}>
-        {primaryNavItems.map((item) => (
-          <a
-            href={item.href}
-            class="primary-nav-link"
-            aria-current={(item.href.replace(/\/+$/, '') || '/') === currentPath ? 'page' : undefined}
-          >{item.label}</a>
-        ))}
-      </nav>
-      <div class="header-actions">
-        <a href={otherPath} class="header-lang menu-lang" aria-label={t(lang, 'lang.switchAria')} hreflang={lang === 'zh' ? 'en' : 'zh-CN'}>{t(lang, 'lang.switch')}</a>
-        <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-menu" aria-label={t(lang, 'a11y.menuOpen')}>
-          {t(lang, 'nav.menu')}
-          <svg class="menu-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
-            <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.2" />
-          </svg>
-        </button>
-      </div>
+      <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-menu" aria-label={t(lang, 'a11y.menuOpen')}>
+        Menu
+        <svg class="menu-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+          <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.2" />
+        </svg>
+      </button>
     </header>
 
     <div class="menu-overlay" id="site-menu" role="dialog" aria-modal="true" aria-label={t(lang, 'a11y.menu')} tabindex="-1" hidden>
@@ -159,7 +141,7 @@ const primaryNavItems = [
           <a href={homeHref} class="logo" aria-label={t(lang, 'a11y.home')}>
             <img src="/logo-variants/logo-spiral.svg" alt="" class="logo-mark" />
           </a>
-          <button type="button" class="menu-close" aria-label={t(lang, 'a11y.menuClose')}>{t(lang, 'nav.close')}</button>
+          <button type="button" class="menu-close" aria-label={t(lang, 'a11y.menuClose')}>Close</button>
         </div>
         <nav class="menu-nav" aria-label={t(lang, 'a11y.menu')}>
           <ul class="menu-list">
@@ -191,7 +173,6 @@ const primaryNavItems = [
       <div class="footer-base">
         <p class="footer-copy">{t(lang, 'foot.copy', { year })}</p>
         <ul class="footer-links">
-          <li><a href={aboutHref} class="footer-link">{t(lang, 'foot.about')}</a></li>
           <li><a href="mailto:sacharn@163.com" class="footer-link" data-mail="sacharn@163.com">{t(lang, 'foot.email')}</a></li>
           <li><span class="footer-link footer-wechat">{t(lang, 'foot.wechat')} sacharn</span></li>
           <li><a href="https://github.com/SacharnYan" class="footer-link" target="_blank" rel="noopener">GitHub</a></li>

@@ -22,7 +22,6 @@ const check = (name, ok, extra = '') => {
   if (!ok) fail++;
 };
 const hasCJK = (s) => /[\u4e00-\u9fff]/.test(s || '');
-const normalize = (s) => (s || '').replace(/\s+/g, ' ').trim();
 
 // 所有应有双语镜像的静态路径（动态页抽查代表）
 const ZH_PATHS = ['/', '/about/', '/projects/', '/projects/snow/', '/projects/floral/', '/writing/', '/shelf/', '/notes/', '/photos/', '/vlog/', '/life/'];
@@ -44,24 +43,20 @@ for (const p of ZH_PATHS) {
 await pg.goto('http://localhost:4597/en/', { waitUntil: 'networkidle' });
 const enHome = await pg.evaluate(() => ({
   hero: document.querySelector('.hero-title')?.textContent,
-  lead: document.querySelector('.hero-lead')?.textContent,
+  heroSub: document.querySelector('.hero-subtitle')?.textContent,
   nav: [...document.querySelectorAll('.menu-link')].map(a => a.textContent),
-  primaryNav: [...document.querySelectorAll('.primary-nav-link')].map(a => a.textContent),
+  foot: document.querySelector('.footer-news-text')?.textContent,
   copy: document.querySelector('.footer-copy')?.textContent,
-  firstCard: document.querySelector('.project-story h3')?.textContent,
-  cta: document.querySelector('.project-story .text-link')?.textContent,
-  homeVideos: document.querySelectorAll('video').length,
-  og: document.querySelector('meta[property="og:image"]')?.getAttribute('content'),
+  firstCard: document.querySelector('.module-title')?.textContent,
+  cta: document.querySelector('.module-cta')?.textContent?.trim(),
 }));
-check('EN 首页 Hero', normalize(enHome.hero) === 'I turn complex problems into clear, usable products.', normalize(enHome.hero));
-check('EN 首页价值说明', (enHome.lead || '').includes('business analysis') && (enHome.lead || '').includes('build, test, and use'), enHome.lead);
+check('EN 首页 Hero', enHome.hero === 'Learn always. Create with care. Express freely.', enHome.hero);
+check('EN 首页副题', enHome.heroSub === 'The leopard transforms; his coat grows splendid.', enHome.heroSub);
 check('EN 菜单六项英文', enHome.nav.join(',') === 'Projects,Writing,Bookshelf,Notes,Photos,Vlog', enHome.nav.join(','));
-check('EN 桌面主导航可发现', enHome.primaryNav.join(',') === 'Projects,Writing,About', enHome.primaryNav.join(','));
+check('EN 页脚订阅文案', !hasCJK(enHome.foot), enHome.foot?.slice(0, 30));
 check('EN 署名', enHome.copy?.includes('Shucheng Yan'), enHome.copy);
 check('EN 首页第一张卡', enHome.firstCard === 'Snow at Huxin Pavilion', enHome.firstCard);
-check('EN 卡片 CTA', normalize(enHome.cta) === 'Read the story→', normalize(enHome.cta));
-check('首页不再嵌入自动加载视频', enHome.homeVideos === 0, 'videos=' + enHome.homeVideos);
-check('首页使用新分享卡', enHome.og?.endsWith('/og.png'), enHome.og);
+check('EN 卡片 CTA', enHome.cta === 'Enter the scene', enHome.cta);
 
 // 3) 语言切换：中文页菜单有 EN 链到 /en/ 同路径；英文页有 中文 链回
 await pg.goto('http://localhost:4597/photos/01/', { waitUntil: 'networkidle' });
@@ -126,27 +121,25 @@ for (const slug of SLUGS) {
 await pg.goto('http://localhost:4597/', { waitUntil: 'networkidle' });
 const zhHome = await pg.evaluate(() => ({
   hero: document.querySelector('.hero-title')?.textContent,
-  lead: document.querySelector('.hero-lead')?.textContent,
+  foot: document.querySelector('.footer-news-text')?.textContent,
   copy: document.querySelector('.footer-copy')?.textContent,
 }));
-check('中文首页 Hero 更新', normalize(zhHome.hero) === '把复杂的问题， 做成清晰、可用的产品。', normalize(zhHome.hero));
-check('中文首页价值说明', (zhHome.lead || '').includes('业务问题结构化') && (zhHome.lead || '').includes('开发、测试'), zhHome.lead);
+check('中文首页 Hero 不变', zhHome.hero === '终身学习，认真创造，自由表达。', zhHome.hero);
+check('中文页脚不变', zhHome.foot === '订阅更新。有新项目或文章时，我会写邮件告诉你。', zhHome.foot);
 check('中文署名不变', zhHome.copy?.includes('严树成'), zhHome.copy);
 
 // 9) 英文关于页：时间线英译
 await pg.goto('http://localhost:4597/en/about/', { waitUntil: 'networkidle' });
 const enAbout = await pg.evaluate(() => ({
-  title: document.querySelector('.profile-hero h1')?.textContent?.trim(),
-  intro: document.querySelector('.profile-intro > p')?.textContent?.trim(),
-  facts: document.querySelector('.profile-facts')?.textContent || '',
-  capabilities: document.querySelectorAll('.capability-grid > li').length,
-  timelineText: document.querySelector('.journey-accessible')?.textContent || '',
+  intro: document.querySelector('.article-body > p')?.textContent?.trim(),
+  stage: document.querySelector('.timeline-stage')?.textContent,
+  place: document.querySelector('.timeline-place')?.textContent,
+  timelineText: document.querySelector('.timeline')?.textContent || '',
 }));
-check('EN 关于职业标题', enAbout.title?.includes('business, product, and technology'), enAbout.title);
-check('EN 关于开头', (enAbout.intro || '').startsWith('I am Shucheng Yan'), enAbout.intro?.slice(0, 50));
-check('EN 关于事实信息', enAbout.facts.includes('Huawei Device BG') && enAbout.facts.includes('Nanjing, China'), enAbout.facts.replace(/\s+/g, ' ').trim());
-check('EN 三项能力', enAbout.capabilities === 3, 'count=' + enAbout.capabilities);
-check('EN 学习经历已合并', enAbout.timelineText.includes('Higher Education') && enAbout.timelineText.includes('M.Eng., Nanjing Univ. of Posts & Telecom'));
+check('EN 关于开头', (enAbout.intro || '').startsWith("I'm Shucheng Yan"), enAbout.intro?.slice(0, 40));
+check('EN 时间线首条', enAbout.stage === 'Work' && enAbout.place === 'Huawei Device BG · Retail Product', enAbout.stage + ' | ' + enAbout.place);
+
+check('EN 学习经历已合并', enAbout.timelineText.includes('Education') && enAbout.timelineText.includes('M.Eng., Nanjing Univ. of Posts & Telecom'));
 check('EN 时间线不再出现本科学校', !enAbout.timelineText.includes('Nanjing Institute of Technology'));
 // 10) 英文随记：17 条全译、提示条撤下、英文日期、无中文残留；中文页不受污染
 const notesData = JSON.parse(fs.readFileSync('src/data/notes.json', 'utf8'));

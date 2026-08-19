@@ -33,9 +33,6 @@ const items = [
     <header class="article-hero" data-fade>
       <p class="article-eyebrow">Projects</p>
       <h1 class="article-title">{t(lang, 'projects.title')}</h1>
-      <p class="article-intro">{isEn
-        ? 'Small, complete projects where information, interaction, and technology become something another person can actually use.'
-        : '一些规模不大、但完整做出来的项目：让信息、交互与技术，最终变成另一个人真正可以使用的东西。'}</p>
     </header>
 
     <div class="article-body">
@@ -85,14 +82,6 @@ const items = [
     color: #000;
     max-width: 55ch;
     margin: 0;
-  }
-
-  .article-intro {
-    max-width: 680px;
-    margin: 28px 0 0;
-    font-size: 17px;
-    line-height: 30px;
-    color: #707070;
   }
 
   .article-body {
@@ -177,18 +166,18 @@ const items = [
       letter-spacing: -0.72px;
     }
 
-    .article-intro { margin-top: 20px; font-size: 16px; line-height: 28px; }
-
     .article-body {
       margin-left: 0;
     }
 
-    .project-item { display: grid; gap: 20px; padding: 28px 0 34px; }
+    .project-item {
+      gap: 20px;
+      padding: 28px 0;
+    }
 
     .project-thumb {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 3 / 2;
+      width: 128px;
+      height: 85px;
     }
 
     .project-item-title {

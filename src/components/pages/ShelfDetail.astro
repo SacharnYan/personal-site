@@ -25,7 +25,7 @@ const shelfPath = href(lang, '/shelf/');
 const description = `${title} · ${by}`;
 ---
 
-<Base title={`${title} — ${isEn ? 'Bookshelf' : '书架'}`} description={description} image={item.kind === 'image' && item.image ? item.image : null} lang={lang}>
+<Base title={`${title} — ${isEn ? 'Bookshelf' : '书架'}`} description={description} lang={lang}>
   <main class="detail">
     <a class="detail-back" href={shelfPath}>← {isEn ? 'Bookshelf' : '返回书架'}</a>
 

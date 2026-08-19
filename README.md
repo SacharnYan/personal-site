@@ -6,7 +6,7 @@
 
 ## 技术栈
 
-- **Astro** — 静态生成，零运行时，HTML 直接出（当前 108 页）
+- **Astro** — 静态生成，零运行时，HTML 直接出（62 页）
 - **纯 CSS** — 不上 Tailwind / UI 库
 - **Markdown + JSON** — 内容文件，不依赖 CMS
 - **Cloudflare Pages** — 推送 `main` 分支自动构建发布
@@ -92,7 +92,6 @@ npm.cmd run build              # 构建 62 页
 node scripts/verify-i18n.mjs   # 双语主验证（镜像存在、界面字、译文、徽标、无中文残留等 ~68 项）
 node scripts/verify-photos.mjs        # 照片墙与卡牌详情
 node scripts/verify-writing-migration.mjs  # 中文文章完整性
-node scripts/verify-site-overhaul.mjs # 首页结构、导航、触控、分享元数据、减少动态与桌面/手机截图
 ```
 
 验证脚本用 Playwright 起本地静态服务跑 `dist`，全绿才算完。
@@ -116,7 +115,5 @@ node scripts/verify-site-overhaul.mjs # 首页结构、导航、触控、分享�
 - 黑 / 白 / 灰阶，不用彩色、emoji、阴影堆砌
 - 动效只用 fade-in，不玩 parallax / scroll-jacking
 - 正文栏居中（对齐 SJA about 页），不大面积左对齐留白
-- 首页首屏必须先回答「我是谁、做什么、下一步去哪里」，价值观退居辅助信息
-- 桌面端直接展示项目 / 写作 / 关于三个主入口，其余内容保留在完整菜单中
 
 改版决策的完整记录见 `REDESIGN.md`。改任何一条宪法之前先想清楚——一旦破例，就会开始丑。

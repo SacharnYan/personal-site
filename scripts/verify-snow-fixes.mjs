@@ -1,11 +1,11 @@
-/* 湖心亭场景 + About 职业首屏的程序化验证 */
+/* 湖心亭场景 + about 双色标题 的程序化验证（截图工具不可用时的替代方案） */
 import http from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { existsSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
 
-const DIST = path.resolve('dist');
+const DIST = 'C:/Users/sacha/personal-site/dist';
 const PORT = 4599;
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.mp4': 'video/mp4', '.json': 'application/json', '.webmanifest': 'application/manifest+json' };
 
@@ -29,11 +29,11 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 const results = [];
 const check = (name, ok, detail) => { results.push({ name, ok, detail }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}  ${detail ?? ''}`); };
 
-/* ---------- 1. About 职业首屏 ---------- */
+/* ---------- 1. about 双色标题 ---------- */
 await page.goto(`http://localhost:${PORT}/about/`, { waitUntil: 'networkidle' });
 const aboutTitle = await page.evaluate(() => {
-  const h1 = document.querySelector('.profile-hero h1');
-  const sub = document.querySelector('.profile-intro p:last-child');
+  const h1 = document.querySelector('.article-title');
+  const sub = document.querySelector('.article-sub');
   if (!h1 || !sub) return null;
   return {
     h1Text: h1.textContent.trim(),
@@ -42,10 +42,10 @@ const aboutTitle = await page.evaluate(() => {
     subColor: getComputedStyle(sub).color,
   };
 });
-check('About 职业标题存在', !!aboutTitle, JSON.stringify(aboutTitle));
+check('about 标题存在', !!aboutTitle, JSON.stringify(aboutTitle));
 if (aboutTitle) {
-  check('About 主标题为黑色', aboutTitle.h1Color === 'rgb(0, 0, 0)', aboutTitle.h1Color);
-  check('About 补充说明为灰色 #707070', aboutTitle.subColor === 'rgb(112, 112, 112)', aboutTitle.subColor);
+  check('about 主标题为黑色', aboutTitle.h1Color === 'rgb(0, 0, 0)', aboutTitle.h1Color);
+  check('about 副标题为灰色 #707070', aboutTitle.subColor === 'rgb(112, 112, 112)', aboutTitle.subColor);
 }
 
 /* ---------- 2. snow intro 竖排标题不折列 ---------- */
@@ -85,7 +85,7 @@ check('点击水面后生成行舟目标', hasTarget === true, String(hasTarget)
 await page.waitForTimeout(3000);
 const after = await page.evaluate(() => window.__snow.boatPos());
 const moved = Math.hypot(after.x - before.x, after.z - before.z);
-check('船向点击位置移动（3s 位移 > 0.75）', moved > 0.75, `位移 ${moved.toFixed(1)}`);
+check('船向点击位置移动（3s 位移 > 2）', moved > 2, `位移 ${moved.toFixed(1)}`);
 
 /* ---------- 5. 登亭人数变化 ---------- */
 await page.evaluate(() => { window.__snow.warpTo(0, -6); window.__snow.setMode('pavilion'); });
@@ -112,7 +112,7 @@ const mTarget = await mob.evaluate(() => window.__snow.hasTarget());
 await mob.waitForTimeout(6000);
 const mAfter = await mob.evaluate(() => window.__snow.boatPos());
 const mMoved = Math.hypot(mAfter.x - mBefore.x, mAfter.z - mBefore.z);
-check('移动端点按水面生成目标并移动', mTarget === true && mMoved > 0.75, `target=${mTarget} 位移 ${mMoved.toFixed(1)}`);
+check('移动端点按水面生成目标并移动', mTarget === true && mMoved > 1.5, `target=${mTarget} 位移 ${mMoved.toFixed(1)}`);
 
 const failed = results.filter(r => !r.ok).length;
 console.log(`\n== ${results.length - failed}/${results.length} 项通过 ==`);
