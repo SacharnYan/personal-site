@@ -298,21 +298,28 @@ const isEn = lang === 'en';
     align-items: center;
     gap: 8px;
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: 14px;
     line-height: 24px;
     color: #707070;
     padding-bottom: 2px;
-    border-bottom: 1px solid rgba(0,0,0,.18);
-    transition: color 200ms, border-color 200ms;
+    border-bottom: 1px solid transparent;
+    transition: color 250ms, border-color 250ms;
   }
 
   .module-more:hover {
     color: #000;
-    border-color: #000;
+    border-color: rgba(0,0,0,.55);
   }
 
-  .module-more span { transition: transform 220ms cubic-bezier(.22,1,.36,1); }
-  .module-more:hover span { transform: translateX(3px); }
+  .module-more span {
+    color: #b8b8b8;
+    transition: transform 250ms cubic-bezier(.22,1,.36,1), color 250ms;
+  }
+
+  .module-more:hover span {
+    color: #000;
+    transform: translateX(4px);
+  }
 
   .module-figure {
     margin: 0;
