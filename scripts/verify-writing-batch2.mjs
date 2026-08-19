@@ -2,9 +2,10 @@ import http from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { existsSync, statSync } from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
-const DIST = 'C:/Users/sacha/personal-site/dist';
+const DIST = fileURLToPath(new URL('../dist/', import.meta.url));
 const PORT = 4596;
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.mp4': 'video/mp4' };
 const server = http.createServer(async (req, res) => {

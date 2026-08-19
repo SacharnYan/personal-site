@@ -45,7 +45,7 @@ const enHome = await pg.evaluate(() => ({
   hero: document.querySelector('.hero-title')?.textContent,
   heroSub: document.querySelector('.hero-subtitle')?.textContent,
   nav: [...document.querySelectorAll('.menu-link')].map(a => a.textContent),
-  foot: document.querySelector('.footer-news-text')?.textContent,
+  foot: [...document.querySelectorAll('.footer-link')].map(a => a.textContent.trim()).join('|'),
   copy: document.querySelector('.footer-copy')?.textContent,
   firstCard: document.querySelector('.module-title')?.textContent,
   cta: document.querySelector('.module-cta')?.textContent?.trim(),
@@ -53,7 +53,7 @@ const enHome = await pg.evaluate(() => ({
 check('EN 首页 Hero', enHome.hero === 'Learn always. Create with care. Express freely.', enHome.hero);
 check('EN 首页副题', enHome.heroSub === 'The leopard transforms; his coat grows splendid.', enHome.heroSub);
 check('EN 菜单六项英文', enHome.nav.join(',') === 'Projects,Writing,Bookshelf,Notes,Photos,Vlog', enHome.nav.join(','));
-check('EN 页脚订阅文案', !hasCJK(enHome.foot), enHome.foot?.slice(0, 30));
+check('EN 页脚链接英文且无中文', !hasCJK(enHome.foot) && /Email/.test(enHome.foot) && /GitHub/.test(enHome.foot), enHome.foot?.slice(0, 40));
 check('EN 署名', enHome.copy?.includes('Shucheng Yan'), enHome.copy);
 check('EN 首页第一张卡', enHome.firstCard === 'Snow at Huxin Pavilion', enHome.firstCard);
 check('EN 卡片 CTA', enHome.cta === 'Enter the scene', enHome.cta);
@@ -117,30 +117,31 @@ for (const slug of SLUGS) {
     `notice=${enPost.notice} cjk=${enPost.bodyCJK} empty=${enPost.empty}`);
 }
 
-// 8) 中文页不受污染：首页 Hero 仍中文，无 English 界面字
+// 8) 中文页不受污染：首页 Hero 仍中文，页脚链接完整
 await pg.goto('http://localhost:4597/', { waitUntil: 'networkidle' });
 const zhHome = await pg.evaluate(() => ({
   hero: document.querySelector('.hero-title')?.textContent,
-  foot: document.querySelector('.footer-news-text')?.textContent,
+  footLinks: [...document.querySelectorAll('.footer-link')].map(a => a.textContent.trim()).join('|'),
   copy: document.querySelector('.footer-copy')?.textContent,
 }));
 check('中文首页 Hero 不变', zhHome.hero === '终身学习，认真创造，自由表达。', zhHome.hero);
-check('中文页脚不变', zhHome.foot === '订阅更新。有新项目或文章时，我会写邮件告诉你。', zhHome.foot);
+check('中文页脚链接完整', /邮件/.test(zhHome.footLinks) && /GitHub/.test(zhHome.footLinks) && /RSS/.test(zhHome.footLinks), zhHome.footLinks);
 check('中文署名不变', zhHome.copy?.includes('严树成'), zhHome.copy);
 
-// 9) 英文关于页：时间线英译
+// 9) 英文关于页：journey 章节英译
 await pg.goto('http://localhost:4597/en/about/', { waitUntil: 'networkidle' });
 const enAbout = await pg.evaluate(() => ({
-  intro: document.querySelector('.article-body > p')?.textContent?.trim(),
-  stage: document.querySelector('.timeline-stage')?.textContent,
-  place: document.querySelector('.timeline-place')?.textContent,
-  timelineText: document.querySelector('.timeline')?.textContent || '',
+  h1: document.querySelector('.journey-heading h1')?.textContent?.trim(),
+  stage: document.querySelector('.chapter h3')?.textContent,
+  place: document.querySelector('.chapter-place')?.textContent,
+  timelineText: document.querySelector('.chapter-layer')?.textContent || '',
 }));
-check('EN 关于开头', (enAbout.intro || '').startsWith("I'm Shucheng Yan"), enAbout.intro?.slice(0, 40));
-check('EN 时间线首条', enAbout.stage === 'Work' && enAbout.place === 'Huawei Device BG · Retail Product', enAbout.stage + ' | ' + enAbout.place);
+check('EN 关于标题', enAbout.h1 === 'Path', enAbout.h1);
+check('EN 时间线首条', enAbout.stage === 'Born' && enAbout.place === 'Xinghua, Jiangsu', enAbout.stage + ' | ' + enAbout.place);
 
-check('EN 学习经历已合并', enAbout.timelineText.includes('Education') && enAbout.timelineText.includes('M.Eng., Nanjing Univ. of Posts & Telecom'));
+check('EN 学习经历已合并', enAbout.timelineText.includes('Higher Education') && enAbout.timelineText.includes('M.Eng., Nanjing Univ. of Posts & Telecom'));
 check('EN 时间线不再出现本科学校', !enAbout.timelineText.includes('Nanjing Institute of Technology'));
+check('EN 工作经历英译', enAbout.timelineText.includes('Huawei Device BG · Retail Product'));
 // 10) 英文随记：17 条全译、提示条撤下、英文日期、无中文残留；中文页不受污染
 const notesData = JSON.parse(fs.readFileSync('src/data/notes.json', 'utf8'));
 check('notes.json 每条都有 text_en', notesData.every(n => typeof n.text_en === 'string' && n.text_en.length > 10), `${notesData.filter(n => !n.text_en).length} 条缺失`);

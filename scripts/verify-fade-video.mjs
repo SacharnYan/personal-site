@@ -3,9 +3,10 @@ import http from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { existsSync, statSync } from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
-const DIST = 'C:/Users/sacha/personal-site/dist';
+const DIST = fileURLToPath(new URL('../dist/', import.meta.url));
 const PORT = 4595;
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.mp4': 'video/mp4' };
 const server = http.createServer(async (req, res) => {
@@ -25,8 +26,9 @@ const browser = await chromium.launch();
 let failed = 0;
 const check = (name, ok, detail) => { if (!ok) failed++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}  ${detail ?? ''}`); };
 
-/* 1. 正常浏览器：html.js 存在、fade 动画生效、notes 19 条 */
+/* 1. 正常浏览器：html.js 存在、fade 动画生效、notes 与 notes.json 条数一致 */
 {
+  const notesCount = JSON.parse(await readFile(new URL('../src/data/notes.json', import.meta.url), 'utf8')).length;
   const p = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await p.goto(`http://localhost:${PORT}/notes/`, { waitUntil: 'networkidle' });
   await p.waitForTimeout(1200);
@@ -37,7 +39,7 @@ const check = (name, ok, detail) => { if (!ok) failed++; console.log(`${ok ? 'PA
     heroOp: getComputedStyle(document.querySelector('.article-hero[data-fade]')).opacity,
   }));
   check('正常浏览器 html.js 存在', r.js === true);
-  check('notes 19 条渲染', r.items === 19, `实际 ${r.items}`);
+  check(`notes 渲染条数与 notes.json 一致（${notesCount} 条）`, r.items === notesCount, `实际 ${r.items}`);
   check('fade 动画生效（hero opacity=1）', r.heroOp === '1', r.heroOp);
   await p.close();
 }
