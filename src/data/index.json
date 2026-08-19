@@ -6,11 +6,13 @@
     "image": "/projects/snow/card.jpg",
     "image_alt": "雪夜西湖：小舟驶向湖心亭",
     "cta": { "href": "/snow/", "label": "进入场景" },
+    "more": { "href": "/projects/", "label": "全部项目" },
     "en": {
       "title": "Snow at Huxin Pavilion",
       "sub": "Zhang Dai's \"all in white\", made into a lake you can row into.",
       "image_alt": "West Lake on a snowy night: a small boat heading for Huxin Pavilion",
-      "cta_label": "Enter the scene"
+      "cta_label": "Enter the scene",
+      "more_label": "All projects"
     }
   },
   {
@@ -20,12 +22,14 @@
     "image": "/cards/writing-home.jpg",
     "image_alt": "《家园》书封式卡片",
     "cta": { "href": "/writing/home/", "label": "读全文" },
+    "more": { "href": "/writing/", "label": "全部文章" },
     "en": {
       "title": "Home",
       "sub": "Earth returns to humankind; the AI sails away.",
       "image_alt": "Cover card of \"Home\"",
       "cta_label": "Read",
-      "cta_href": "/en/writing/home/"
+      "cta_href": "/en/writing/home/",
+      "more_label": "All writing"
     }
   },
   {

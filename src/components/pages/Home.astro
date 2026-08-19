@@ -16,9 +16,6 @@ const isEn = lang === 'en';
       <div class="hero-intro">
         <p>{t(lang, 'about.intro1')}</p>
         <p>{t(lang, 'about.intro2')}</p>
-        <a href={href(lang, '/about/')} class="hero-path-link">
-          {isEn ? 'Walk through my path' : '走进我的经历'} <span aria-hidden="true">→</span>
-        </a>
       </div>
     </div>
   </section>
@@ -38,6 +35,13 @@ const isEn = lang === 'en';
               : section.cta.href,
           }
         : null;
+      const moreData = (section as any).more;
+      const more = moreData
+        ? {
+            label: isEn ? ((en as any).more_label || moreData.label) : moreData.label,
+            href: isEn ? href('en', moreData.href) : moreData.href,
+          }
+        : null;
       return (
         <article class="module" data-fade>
           <div class="module-grid">
@@ -47,10 +51,19 @@ const isEn = lang === 'en';
                 <h2 class="module-title">{title}</h2>
                 {sub && <p class="module-subtitle">{sub}</p>}
               </hgroup>
-              {cta && (
-                <a href={cta.href} class="module-cta">
-                  {cta.label}
-                </a>
+              {(cta || more) && (
+                <div class="module-actions">
+                  {cta && (
+                    <a href={cta.href} class="module-cta">
+                      {cta.label}
+                    </a>
+                  )}
+                  {more && (
+                    <a href={more.href} class="module-more">
+                      {more.label} <span aria-hidden="true">→</span>
+                    </a>
+                  )}
+                </div>
               )}
             </div>
 
@@ -96,6 +109,13 @@ const isEn = lang === 'en';
       );
     })}
   </div>
+
+  <section class="home-end" data-fade>
+    <p class="home-end-eyebrow">{isEn ? 'About' : '关于'}</p>
+    <a href={href(lang, '/about/')} class="path-link">
+      {isEn ? 'Walk through my path' : '走进我的经历'} <span aria-hidden="true">→</span>
+    </a>
+  </section>
 </Base>
 
 <style>
@@ -146,11 +166,10 @@ const isEn = lang === 'en';
   .hero-intro p { margin: 0; }
   .hero-intro p + p { margin-top: 8px; color: #707070; }
 
-  .hero-path-link {
+  .path-link {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    margin-top: 24px;
     padding-bottom: 3px;
     border-bottom: 1px solid rgba(0,0,0,.35);
     font-size: 14px;
@@ -159,9 +178,25 @@ const isEn = lang === 'en';
     transition: border-color 200ms, color 200ms;
   }
 
-  .hero-path-link:hover { color: #707070; border-color: #707070; }
-  .hero-path-link span { transition: transform 220ms cubic-bezier(.22,1,.36,1); }
-  .hero-path-link:hover span { transform: translateX(4px); }
+  .path-link:hover { color: #707070; border-color: #707070; }
+  .path-link span { transition: transform 220ms cubic-bezier(.22,1,.36,1); }
+  .path-link:hover span { transform: translateX(4px); }
+
+  /* ===== 页尾出口（About） ===== */
+  .home-end {
+    padding: 120px 24px 140px;
+    text-align: center;
+  }
+
+  .home-end-eyebrow {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #b8b8b8;
+    margin: 0 0 20px 0;
+  }
 
   /* ===== Modules ===== */
   .modules {
@@ -232,6 +267,13 @@ const isEn = lang === 'en';
     margin-top: 0;
   }
 
+  .module-actions {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
   .module-cta {
     display: inline-block;
     font-family: var(--font-body);
@@ -250,6 +292,27 @@ const isEn = lang === 'en';
     background: #000;
     color: #fff;
   }
+
+  .module-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 24px;
+    color: #707070;
+    padding-bottom: 2px;
+    border-bottom: 1px solid rgba(0,0,0,.18);
+    transition: color 200ms, border-color 200ms;
+  }
+
+  .module-more:hover {
+    color: #000;
+    border-color: #000;
+  }
+
+  .module-more span { transition: transform 220ms cubic-bezier(.22,1,.36,1); }
+  .module-more:hover span { transform: translateX(3px); }
 
   .module-figure {
     margin: 0;
@@ -329,7 +392,9 @@ const isEn = lang === 'en';
       line-height: 26px;
     }
 
-    .hero-path-link { margin-top: 20px; }
+    .home-end {
+      padding: 88px 24px 96px;
+    }
 
     .module-grid {
       grid-template-columns: 1fr;
