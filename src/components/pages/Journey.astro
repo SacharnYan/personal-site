@@ -83,6 +83,10 @@ const timeline = [
           {isEn ? 'Scroll to walk' : '滚动，向前走'}
           <span></span>
         </p>
+        <div class="journey-exit" data-journey-exit aria-hidden="true">
+          <button type="button" class="journey-exit-btn" data-exit-restart>{isEn ? 'Walk again' : '再走一遍'}</button>
+          <a class="journey-exit-btn" href={href(lang, '/about/')}>{isEn ? 'Back to About' : '回到关于'}</a>
+        </div>
         <div class="journey-progress" aria-hidden="true"><i data-progress-bar></i></div>
         <p class="webgl-note" data-webgl-note hidden>
           {isEn ? 'Your browser cannot display this 3D scene. The complete timeline follows.' : '当前浏览器无法显示 3D 场景，完整经历见下方。'}
@@ -99,6 +103,7 @@ const timeline = [
           </li>
         ))}
       </ol>
+      <p class="journey-exit-plain"><a href={href(lang, '/about/')}>← {isEn ? 'Back to About' : '回到关于'}</a></p>
     </section>
 
   </article>
@@ -116,6 +121,8 @@ const timeline = [
     var progressLabel = root.querySelector('[data-progress-label]');
     var progressBar = root.querySelector('[data-progress-bar]');
     var hint = root.querySelector('[data-journey-hint]');
+    var exit = root.querySelector('[data-journey-exit]');
+    var exitRestart = root.querySelector('[data-exit-restart]');
     var note = root.querySelector('[data-webgl-note]');
     var doorButton = root.querySelector('[data-enter-door]');
     var doorActionLabel = root.querySelector('[data-door-action-label]');
@@ -130,6 +137,13 @@ const timeline = [
     var transition = root.querySelector('[data-journey-transition]');
     var reduced = false;
     try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+
+    /* 「再走一遍」与 3D 初始化无关，提前绑定——fallback/降级路径下脚本提前返回，
+       按钮也必须可用 */
+    if (exitRestart) exitRestart.addEventListener('click', function () {
+      try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      catch (e) { window.scrollTo(0, 0); }
+    });
 
     /* 软渲染检测：公司电脑无 GPU 加速时 Chrome 用 SwiftShader 软渲染 WebGL，
        全屏 3D 即使停帧也吃大量内存。检测到软渲染直接降级为静态列表，不启动 3D。
@@ -503,6 +517,13 @@ const timeline = [
       if (progressLabel) progressLabel.textContent = String(active + 1).padStart(2, '0') + ' / ' + String(count).padStart(2, '0');
       if (progressBar) progressBar.style.transform = 'scaleX(' + progress.toFixed(4) + ')';
       if (hint) hint.style.opacity = progress > .025 ? '0' : '1';
+      /* 终点出口：走廊走到头（对应 endReveal > .6）时浮现；
+         房间打开时藏起，回走廊后仍按进度恢复 */
+      if (exit) {
+        var atEnd = progress > .955 && !roomOpen;
+        exit.classList.toggle('is-visible', atEnd);
+        exit.setAttribute('aria-hidden', atEnd ? 'false' : 'true');
+      }
       if (doorActionLabel && activeDoorIndex >= 0) doorActionLabel.textContent = String(activeDoorIndex + 1).padStart(2, '0');
       if (doorButton) {
         var canEnter = activeDoorIndex >= 0 && enteringDoor < 0 && !roomOpen;
@@ -982,6 +1003,41 @@ const timeline = [
     background: #171814;
     animation: walk-line 1.8s ease-in-out infinite;
   }
+  .journey-exit {
+    position: absolute;
+    z-index: 4;
+    left: 50%;
+    bottom: 96px;
+    transform: translateX(-50%) translateY(16px);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 600ms ease, transform 600ms cubic-bezier(.16,1,.3,1);
+  }
+  .journey-exit.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  .journey-exit-btn {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+    color: #171814;
+    background: rgba(238,234,222,.62);
+    border: 1px solid rgba(23,24,20,.28);
+    border-radius: 999px;
+    padding: 12px 22px;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: border-color 200ms;
+  }
+  .journey-exit-btn:hover { border-color: #171814; }
+  .journey-exit-plain { display: none; }
   .journey-progress {
     position: absolute;
     z-index: 4;
@@ -1146,6 +1202,14 @@ const timeline = [
   .sketch-journey.is-static.is-fallback .journey-hint {
     display: none;
   }
+  .sketch-journey.is-static.is-fallback .journey-exit {
+    position: static;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+    justify-content: center;
+    margin: 64px 0 24px;
+  }
   .sketch-journey.is-static.is-fallback + .journey-accessible {
     display: none;
   }
@@ -1177,5 +1241,17 @@ const timeline = [
     .journey-accessible li { padding: 28px 0; border-top: 1px solid rgba(23,24,20,.2); }
     .journey-accessible h3 { font-family: var(--font-display); font-size: 32px; font-weight: 400; margin: 4px 0 10px; }
     .journey-accessible p { font-size: 14px; line-height: 24px; color: rgba(23,24,20,.72); }
+    .journey-exit-plain {
+      display: block;
+      max-width: 768px;
+      margin: 32px auto 0;
+      font-size: 14px;
+      line-height: 24px;
+    }
+    .journey-exit-plain a {
+      color: #171814;
+      border-bottom: 1px solid rgba(23,24,20,.4);
+      padding-bottom: 2px;
+    }
   }
 </style>

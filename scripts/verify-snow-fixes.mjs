@@ -49,6 +49,24 @@ if (aboutTitle) {
   check('journey 进度计数存在', /^\d{2} \/ \d{2}$/.test(aboutTitle.progressText), aboutTitle.progressText);
 }
 
+/* journey 终点出口（fallback 下静态可见；3D 下由进度驱动浮现） */
+const journeyExit = await page.evaluate(() => {
+  const exit = document.querySelector('.journey-exit');
+  const link = exit && exit.querySelector('a.journey-exit-btn');
+  const btn = exit && exit.querySelector('[data-exit-restart]');
+  if (!exit || !link || !btn) return null;
+  return {
+    href: link.getAttribute('href'),
+    restart: btn.textContent.trim(),
+    visible: exit.getBoundingClientRect().height > 0,
+  };
+});
+check('journey 出口存在且可见', !!journeyExit && journeyExit.visible, JSON.stringify(journeyExit));
+if (journeyExit) {
+  check('journey 出口指向 /about/', journeyExit.href === '/about/', journeyExit.href);
+  check('journey 出口含「再走一遍」', journeyExit.restart === '再走一遍', journeyExit.restart);
+}
+
 /* ---------- 2. snow intro 竖排标题不折列 ---------- */
 await page.goto(`http://localhost:${PORT}/snow/`, { waitUntil: 'domcontentloaded' });
 await page.waitForFunction(() => window.__snow !== undefined, null, { timeout: 20000 });
