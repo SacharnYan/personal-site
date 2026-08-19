@@ -20,7 +20,7 @@ const jsonLd = {
 
 const path = [
   {
-    date: isEn ? '1996–2014' : '1996–2014',
+    date: '1996–2014',
     title: isEn ? 'Growing up' : '成长',
     place: isEn ? 'Xinghua & Taizhou, Jiangsu' : '江苏兴化 · 泰州',
     detail: isEn
@@ -28,7 +28,7 @@ const path = [
       : '出生于兴化。从蔡堡到泰州实验学校，再到口岸中学——游戏、坐标和密集的时间里，世界逐渐有了秩序和方向。',
   },
   {
-    date: isEn ? '2014–2022' : '2014–2022',
+    date: '2014–2022',
     title: isEn ? 'Higher Education' : '高等教育',
     place: isEn ? 'Nanjing Univ. of Posts & Telecom · M.Eng.' : '南京邮电大学 · 硕士',
     detail: isEn
@@ -36,7 +36,7 @@ const path = [
       : '从电子信息到电子与通信工程。在南京的八年，这座城市成了家。',
   },
   {
-    date: isEn ? '2022–2025' : '2022–2025',
+    date: '2022–2025',
     title: isEn ? 'Services Product' : '服务产品',
     place: isEn ? 'Huawei Device BG' : '华为终端 BG',
     detail: isEn
@@ -80,18 +80,16 @@ const beliefs = [
       <p class="eyebrow">{isEn ? 'About' : '关于'}</p>
       <h1 class="about-name">{isEn ? 'Shucheng Yan' : '严树成'}</h1>
       <p class="about-role">{isEn ? 'Solution Designer · Huawei · Nanjing' : '解决方案设计师 · 华为 · 南京'}</p>
-      <div class="about-lede">
-        {isEn ? (
-          <p>I'm Shucheng Yan, an INFJ based in Nanjing. I enjoy turning ideas into interesting products — this site is where the process stays visible.</p>
-        ) : (
-          <p>我是严树成，INFJ，现居南京。喜欢把想法做成有趣的产品——这个网站是过程留下来的地方。</p>
-        )}
-      </div>
+      <p class="about-lede">
+        {isEn
+          ? "I'm Shucheng Yan, an INFJ based in Nanjing. I enjoy turning ideas into interesting products — this site is where the process stays visible."
+          : '我是严树成，INFJ，现居南京。喜欢把想法做成有趣的产品——这个网站是过程留下来的地方。'}
+      </p>
     </header>
 
     <section class="about-section" data-fade>
       <p class="eyebrow">{isEn ? 'Now' : '现在'}</p>
-      <div class="about-prose">
+      <div class="about-content about-prose">
         {isEn ? (
           <>
             <p>I work on retail products at Huawei Device BG: turning complex systems into experiences people can actually feel in a store.</p>
@@ -106,39 +104,41 @@ const beliefs = [
       </div>
     </section>
 
-    <section class="about-section" data-fade>
+    <section class="about-section">
       <p class="eyebrow">{isEn ? 'Path' : '经历'}</p>
-      <ol class="path-list">
-        {path.map((item) => (
-          <li class="path-item">
-            <p class="path-date">{item.date}</p>
+      <div class="about-content">
+        <ol class="path-list">
+          {path.map((item) => (
+            <li class="path-item" data-fade>
+              <p class="path-date">{item.date}</p>
+              <div class="path-body">
+                <h2 class="path-title">{item.title}</h2>
+                <p class="path-place">{item.place}</p>
+                <p class="path-detail">{item.detail}</p>
+              </div>
+            </li>
+          ))}
+          <li class="path-item path-item--open" data-fade>
+            <p class="path-date">{isEn ? 'Beyond' : '此刻之后'}</p>
             <div class="path-body">
-              <h2 class="path-title">{item.title}</h2>
-              <p class="path-place">{item.place}</p>
-              <p class="path-detail">{item.detail}</p>
+              <h2 class="path-title">{isEn ? 'Still becoming.' : '仍在成为。'}</h2>
             </div>
           </li>
-        ))}
-        <li class="path-item path-item--open">
-          <p class="path-date">{isEn ? 'Beyond' : '此刻之后'}</p>
-          <div class="path-body">
-            <h2 class="path-title">{isEn ? 'Still becoming.' : '仍在成为。'}</h2>
-          </div>
-        </li>
-      </ol>
-      <div class="path-journey">
-        <a href={href(lang, '/journey/')} class="path-link">
-          {isEn ? 'Walk the 3D corridor' : '走进这条走廊'} <span aria-hidden="true">→</span>
-        </a>
-        <p class="path-journey-note">{isEn ? 'The same path as an interactive scene · WebGL' : '同一段经历的 3D 互动场景 · 需要 WebGL'}</p>
+        </ol>
+        <div class="path-journey" data-fade>
+          <a href={href(lang, '/journey/')} class="path-link">
+            {isEn ? 'Walk the 3D corridor' : '走进这条走廊'} <span aria-hidden="true">→</span>
+          </a>
+          <p class="path-journey-note">{isEn ? 'The same path as an interactive scene · WebGL' : '同一段经历的 3D 互动场景 · 需要 WebGL'}</p>
+        </div>
       </div>
     </section>
 
-    <section class="about-section" data-fade>
+    <section class="about-section">
       <p class="eyebrow">{isEn ? 'Beliefs' : '相信的事'}</p>
-      <ul class="belief-list">
+      <ul class="about-content belief-list">
         {beliefs.map((b) => (
-          <li class="belief-item">
+          <li class="belief-item" data-fade>
             <p class="belief-text">{b.text}</p>
             {b.source && (
               <a href={b.source.href} class="belief-source">{b.source.label}</a>
@@ -150,71 +150,93 @@ const beliefs = [
 
     <section class="about-section about-contact" data-fade>
       <p class="eyebrow">{isEn ? 'Contact' : '联系'}</p>
-      <p class="about-prose">{isEn ? 'Letters are always welcome.' : '欢迎写信给我，什么都可以聊。'}</p>
-      <ul class="contact-list">
-        <li><a href="mailto:sacharn@163.com" class="contact-link" data-mail="sacharn@163.com">{isEn ? 'Email' : '邮件'}</a></li>
-        <li><span class="contact-link contact-link--plain">{isEn ? 'WeChat' : '微信'} sacharn</span></li>
-        <li><a href="https://github.com/SacharnYan" class="contact-link" target="_blank" rel="noopener">GitHub</a></li>
-        <li><a href={href(lang, '/rss.xml')} class="contact-link">RSS</a></li>
-      </ul>
+      <div class="about-content">
+        <p class="about-prose contact-lede">{isEn ? 'Letters are always welcome.' : '欢迎写信给我，什么都可以聊。'}</p>
+        <ul class="contact-list">
+          <li><a href="mailto:sacharn@163.com" class="contact-link" data-mail="sacharn@163.com">{isEn ? 'Email' : '邮件'}</a></li>
+          <li><span class="contact-link contact-link--plain">{isEn ? 'WeChat' : '微信'} sacharn</span></li>
+          <li><a href="https://github.com/SacharnYan" class="contact-link" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href={href(lang, '/rss.xml')} class="contact-link">RSS</a></li>
+        </ul>
+      </div>
     </section>
   </article>
 </Base>
 
 <style>
   .about {
-    max-width: 768px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 0 24px;
   }
 
+  /* ===== Eyebrow（左栏标记 + 短横线） ===== */
   .eyebrow {
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: 12px;
     line-height: 20px;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: #b8b8b8;
-    margin: 0 0 24px 0;
+    margin: 0;
+    padding-top: 8px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1px;
+    background: #d0d0d0;
+    margin-bottom: 16px;
   }
 
   /* ===== Hero ===== */
   .about-hero {
-    padding: 160px 0 96px;
+    padding: 168px 0 112px;
+  }
+
+  .about-hero .eyebrow {
+    margin-bottom: 40px;
   }
 
   .about-name {
     font-family: var(--font-display);
-    font-size: 54px;
+    font-size: 64px;
     font-weight: 400;
-    line-height: 1.2;
+    line-height: 1.15;
     letter-spacing: -0.02em;
     color: #000;
-    margin: 0 0 16px 0;
+    margin: 0 0 20px 0;
   }
 
   .about-role {
     font-family: var(--font-display);
-    font-size: 26px;
+    font-size: 28px;
     line-height: 1.4;
     color: #707070;
-    margin: 0 0 40px 0;
+    margin: 0 0 56px 0;
   }
 
   .about-lede {
-    max-width: 560px;
-    font-size: 17px;
-    line-height: 30px;
+    max-width: 640px;
+    font-family: var(--font-display);
+    font-size: 23px;
+    line-height: 1.7;
     color: #292929;
+    margin: 0;
   }
 
-  .about-lede p { margin: 0; }
-
-  /* ===== Sections ===== */
+  /* ===== 双栏编辑版式 ===== */
   .about-section {
-    padding: 72px 0;
+    display: grid;
+    grid-template-columns: 144px 1fr;
+    gap: 56px;
+    padding: 88px 0;
     border-top: 1px solid #d0d0d0;
   }
+
+  .about-content { min-width: 0; }
 
   .about-prose {
     max-width: 560px;
@@ -234,9 +256,9 @@ const beliefs = [
 
   .path-item {
     display: grid;
-    grid-template-columns: 128px 1fr;
-    gap: 32px;
-    padding: 28px 0;
+    grid-template-columns: 120px 1fr;
+    gap: 36px;
+    padding: 32px 0;
   }
 
   .path-item + .path-item {
@@ -244,16 +266,17 @@ const beliefs = [
   }
 
   .path-date {
-    font-size: 14px;
+    font-size: 13px;
     line-height: 24px;
+    letter-spacing: 0.04em;
     color: #707070;
-    margin: 3px 0 0 0;
+    margin: 4px 0 0 0;
     font-variant-numeric: tabular-nums;
   }
 
   .path-title {
     font-family: var(--font-display);
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 400;
     line-height: 1.35;
     color: #000;
@@ -261,10 +284,11 @@ const beliefs = [
   }
 
   .path-place {
-    font-size: 15px;
+    font-size: 14px;
     line-height: 24px;
+    letter-spacing: 0.02em;
     color: #707070;
-    margin: 0 0 10px 0;
+    margin: 0 0 12px 0;
   }
 
   .path-detail {
@@ -272,48 +296,62 @@ const beliefs = [
     line-height: 28px;
     color: #292929;
     margin: 0;
+    max-width: 520px;
   }
 
   .path-item--open .path-title { color: #707070; }
 
+  /* 逐条错峰入场（仅 fade-in，不动别的） */
+  html.js .path-item[data-fade]:nth-child(2) { transition-delay: 70ms; }
+  html.js .path-item[data-fade]:nth-child(3) { transition-delay: 140ms; }
+  html.js .path-item[data-fade]:nth-child(4) { transition-delay: 210ms; }
+  html.js .path-item[data-fade]:nth-child(5) { transition-delay: 280ms; }
+  html.js .belief-item[data-fade]:nth-child(2) { transition-delay: 90ms; }
+  html.js .belief-item[data-fade]:nth-child(3) { transition-delay: 180ms; }
+
+  /* ===== 走廊入口（通栏细线区块） ===== */
   .path-journey {
-    margin-top: 40px;
-    padding: 32px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    margin-top: 56px;
+    padding: 40px 0;
+    border-top: 1px solid #d0d0d0;
+    border-bottom: 1px solid #d0d0d0;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px 40px;
+    flex-wrap: wrap;
   }
 
   .path-link {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding-bottom: 3px;
-    border-bottom: 1px solid rgba(0,0,0,.35);
-    font-size: 15px;
-    line-height: 24px;
+    gap: 12px;
+    font-family: var(--font-display);
+    font-size: 24px;
+    line-height: 1.4;
     color: #000;
-    transition: border-color 200ms, color 200ms;
+    transition: color 200ms;
   }
 
-  .path-link:hover { color: #707070; border-color: #707070; }
+  .path-link:hover { color: #707070; }
   .path-link span { transition: transform 220ms cubic-bezier(.22,1,.36,1); }
-  .path-link:hover span { transform: translateX(4px); }
+  .path-link:hover span { transform: translateX(5px); }
 
   .path-journey-note {
-    margin: 14px 0 0 0;
+    margin: 0;
     font-size: 13px;
     line-height: 20px;
     color: #8a8a8a;
   }
 
-  /* ===== Beliefs ===== */
+  /* ===== Beliefs（pull-quote） ===== */
   .belief-list {
     display: flex;
     flex-direction: column;
   }
 
   .belief-item {
-    padding: 24px 0;
+    padding: 36px 0;
   }
 
   .belief-item + .belief-item {
@@ -322,17 +360,18 @@ const beliefs = [
 
   .belief-text {
     font-family: var(--font-display);
-    font-size: 24px;
-    line-height: 1.4;
+    font-size: 30px;
+    line-height: 1.45;
     color: #000;
     margin: 0;
   }
 
   .belief-source {
     display: inline-block;
-    margin-top: 8px;
-    font-size: 14px;
+    margin-top: 12px;
+    font-size: 13px;
     line-height: 22px;
+    letter-spacing: 0.06em;
     color: #707070;
     border-bottom: 1px solid rgba(0,0,0,.18);
     padding-bottom: 2px;
@@ -342,11 +381,11 @@ const beliefs = [
   .belief-source:hover { color: #000; border-color: #000; }
 
   /* ===== Contact ===== */
-  .about-contact .about-prose { margin-bottom: 32px; }
+  .contact-lede { margin: 0 0 36px 0; }
 
   .contact-list {
     display: flex;
-    gap: 32px;
+    gap: 36px;
     flex-wrap: wrap;
   }
 
@@ -369,22 +408,34 @@ const beliefs = [
   .contact-link--plain:hover { color: #000; }
 
   @media (max-width: 768px) {
-    .about-hero { padding: 120px 0 64px; }
+    .about-hero { padding: 128px 0 72px; }
 
-    .about-name { font-size: 36px; }
+    .about-hero .eyebrow { margin-bottom: 28px; }
 
-    .about-role { font-size: 20px; margin-bottom: 32px; }
+    .about-name { font-size: 40px; }
 
-    .about-section { padding: 56px 0; }
+    .about-role { font-size: 20px; margin-bottom: 36px; }
+
+    .about-lede { font-size: 19px; }
+
+    .about-section {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 64px 0;
+    }
+
+    .eyebrow { padding-top: 0; }
 
     .path-item {
       grid-template-columns: 1fr;
-      gap: 6px;
-      padding: 24px 0;
+      gap: 4px;
+      padding: 28px 0;
     }
 
-    .path-journey { padding: 24px; }
+    .path-journey { padding: 32px 0; }
 
-    .belief-text { font-size: 20px; }
+    .path-link { font-size: 20px; }
+
+    .belief-text { font-size: 22px; }
   }
 </style>
