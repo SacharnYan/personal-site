@@ -1,0 +1,1181 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, href, type Lang } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const isEn = lang === 'en';
+
+const timeline = [
+  { theme: 'origin', date: '1996', date_en: '1996', stage: '出生', stage_en: 'Born', place: '江苏省兴化市', place_en: 'Xinghua, Jiangsu', detail: '故事从这里开始。', detail_en: 'The story begins here.' },
+  { theme: 'play', date: '2000–2002', date_en: '2000–2002', stage: '幼儿园', stage_en: 'Kindergarten', place: '蔡堡中心幼儿园', place_en: 'Caibao Central Kindergarten', detail: '游戏、颜色，以及最初的好奇心。', detail_en: 'Play, color, and the first stirrings of curiosity.' },
+  { theme: 'notebook', date: '2002–2008', date_en: '2002–2008', stage: '小学', stage_en: 'Primary School', place: '蔡堡中心小学、陈堡中心小学', place_en: 'Caibao & Chenbao Primary Schools', detail: '一页页写下，世界开始有了秩序。', detail_en: 'Page by page, the world begins to find an order.' },
+  { theme: 'geometry', date: '2008–2011', date_en: '2008–2011', stage: '初中', stage_en: 'Middle School', place: '泰州实验学校', place_en: 'Taizhou Experimental School', detail: '坐标、尺度，和逐渐扩大的世界。', detail_en: 'Coordinates, scale, and a world growing larger.' },
+  { theme: 'focus', date: '2011–2014', date_en: '2011–2014', stage: '高中', stage_en: 'High School', place: '江苏省口岸中学', place_en: "Kou'an High School, Jiangsu", detail: '在密集的时间里，寻找自己的方向。', detail_en: 'Finding a direction inside an intense stretch of time.' },
+  { theme: 'signal', date: '2014–2022', date_en: '2014–2022', stage: '高等教育', stage_en: 'Higher Education', place: '电子信息 → 电子与通信工程 · 硕士毕业于南京邮电大学', place_en: 'Electronic Information → Electronic & Communication Engineering · M.Eng., Nanjing Univ. of Posts & Telecom', detail: '从电子信息走向通信工程。', detail_en: 'From electronic information to communication engineering.' },
+  { theme: 'network', date: '2022–2025', date_en: '2022–2025', stage: '工作', stage_en: 'Work', place: '华为终端 BG · 服务产品', place_en: 'Huawei Device BG · Services Product', detail: '让服务穿过系统，抵达真实的人。', detail_en: 'Helping services move through systems to reach real people.' },
+  { theme: 'retail', date: '2025–现在', date_en: '2025–Now', stage: '工作', stage_en: 'Work', place: '华为终端 BG · 零售产品', place_en: 'Huawei Device BG · Retail Product', detail: '把复杂的系统，变成可感知的体验。', detail_en: 'Turning complex systems into experiences people can feel.' },
+];
+---
+
+<Base
+  title={isEn ? 'Journey — Sacharn' : '经历走廊 — 思想名片'}
+  description={isEn ? 'An interactive 3D walk through the life of Shucheng Yan.' : '用 3D 走廊的方式，走一遍严树成的经历。'}
+  lang={lang}
+  hideFooter
+>
+  <article class="article">
+    <section
+      class="sketch-journey"
+      data-sketch-journey
+      style={`--steps:${timeline.length + 1}`}
+      aria-label={isEn ? 'An interactive life journey' : '交互式人生经历'}
+    >
+      <div class="journey-sticky">
+        <canvas class="journey-canvas" data-journey-canvas aria-hidden="true"></canvas>
+        <div class="paper-grain" aria-hidden="true"></div>
+        <div class="journey-vignette" aria-hidden="true"></div>
+        <div class="journey-transition" data-journey-transition aria-hidden="true"></div>
+
+        <div class="journey-heading">
+          <h1>{t(lang, 'about.secPath')}</h1>
+          <a class="journey-back" href={href(lang, '/about/')}>{isEn ? 'About' : '关于'}</a>
+          <span data-progress-label>01 / {String(timeline.length + 1).padStart(2, '0')}</span>
+        </div>
+
+        <div class="chapter-layer" aria-live="polite">
+          {timeline.map((item, index) => (
+            <section class="chapter" data-chapter data-side={index % 2 ? 'right' : 'left'}>
+              <p class="chapter-number">{String(index + 1).padStart(2, '0')}</p>
+              <p class="chapter-date">{isEn ? item.date_en : item.date}</p>
+              <h3>{isEn ? item.stage_en : item.stage}</h3>
+              <p class="chapter-place">{isEn ? item.place_en : item.place}</p>
+              <p class="chapter-detail">{isEn ? item.detail_en : item.detail}</p>
+            </section>
+          ))}
+          <section class="chapter chapter-horizon" data-chapter data-side="center">
+            <p class="chapter-number">{String(timeline.length + 1).padStart(2, '0')}</p>
+            <p class="chapter-date">{isEn ? 'Beyond the present' : '此刻之后'}</p>
+            <h3>{isEn ? 'Still becoming.' : '仍在成为。'}</h3>
+            <p class="chapter-detail">{isEn ? 'The road does not end here.' : '路没有在这里结束。'}</p>
+          </section>
+        </div>
+
+        <button class="journey-door-action" data-enter-door type="button" aria-label={isEn ? 'Knock to enter the current chapter' : '敲门进入当前阶段'}>
+          <span data-door-action-label>01</span>
+          {isEn ? 'Knock to enter' : '敲门进入'}
+        </button>
+
+        <aside class="journey-room" data-journey-room aria-hidden="true" aria-label={isEn ? 'Chapter detail' : '阶段详情'}>
+          <div class="room-threshold" aria-hidden="true"></div>
+          <button class="room-back" data-room-back type="button">← {isEn ? 'Back to corridor' : '回到走廊'}</button>
+          <div class="room-copy">
+            <p class="room-number" data-room-number></p>
+            <p class="room-date" data-room-date></p>
+            <h2 data-room-title></h2>
+            <p class="room-place" data-room-place></p>
+            <p class="room-detail" data-room-detail></p>
+          </div>
+          <p class="room-ghost" data-room-ghost aria-hidden="true"></p>
+        </aside>
+
+        <p class="journey-hint" data-journey-hint aria-hidden="true">
+          {isEn ? 'Scroll to walk' : '滚动，向前走'}
+          <span></span>
+        </p>
+        <div class="journey-progress" aria-hidden="true"><i data-progress-bar></i></div>
+        <p class="webgl-note" data-webgl-note hidden>
+          {isEn ? 'Your browser cannot display this 3D scene. The complete timeline follows.' : '当前浏览器无法显示 3D 场景，完整经历见下方。'}
+        </p>
+      </div>
+
+      <ol class="journey-accessible">
+        {timeline.map((item) => (
+          <li>
+            <p>{isEn ? item.date_en : item.date}</p>
+            <h3>{isEn ? item.stage_en : item.stage}</h3>
+            <p>{isEn ? item.place_en : item.place}</p>
+            <p>{isEn ? item.detail_en : item.detail}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+  </article>
+</Base>
+
+<script is:inline src="/snow/three.min.js"></script>
+<script is:inline src="/about-stage-rooms.js"></script>
+<script is:inline>
+  (function () {
+    var root = document.querySelector('[data-sketch-journey]');
+    var canvas = root && root.querySelector('[data-journey-canvas]');
+    if (!root || !canvas) return;
+
+    var chapters = root.querySelectorAll('[data-chapter]');
+    var progressLabel = root.querySelector('[data-progress-label]');
+    var progressBar = root.querySelector('[data-progress-bar]');
+    var hint = root.querySelector('[data-journey-hint]');
+    var note = root.querySelector('[data-webgl-note]');
+    var doorButton = root.querySelector('[data-enter-door]');
+    var doorActionLabel = root.querySelector('[data-door-action-label]');
+    var room = root.querySelector('[data-journey-room]');
+    var roomBack = root.querySelector('[data-room-back]');
+    var roomNumber = root.querySelector('[data-room-number]');
+    var roomDate = root.querySelector('[data-room-date]');
+    var roomTitle = root.querySelector('[data-room-title]');
+    var roomPlace = root.querySelector('[data-room-place]');
+    var roomDetail = root.querySelector('[data-room-detail]');
+    var roomGhost = root.querySelector('[data-room-ghost]');
+    var transition = root.querySelector('[data-journey-transition]');
+    var reduced = false;
+    try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+
+    /* 软渲染检测：公司电脑无 GPU 加速时 Chrome 用 SwiftShader 软渲染 WebGL，
+       全屏 3D 即使停帧也吃大量内存。检测到软渲染直接降级为静态列表，不启动 3D。
+       用独立临时 canvas 探测，避免占用主 canvas 的 WebGL context。 */
+    function isSoftwareGL() {
+      try {
+        var probe = document.createElement('canvas');
+        var gl = probe.getContext('webgl2') || probe.getContext('webgl') || probe.getContext('experimental-webgl');
+        if (!gl) return true;
+        var dbg = gl.getExtension('WEBGL_debug_renderer_info');
+        var name = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
+        if (!name) return false;
+        return /swiftshader|llvmpipe|softpipe|software/i.test(name);
+      } catch (e) { return true; }
+    }
+
+    if (reduced || !window.THREE || isSoftwareGL()) {
+      root.classList.add('is-static');
+      /* 软渲染/加载失败（非 reduced-motion）走静态章节列表降级；
+         reduced-motion 走无障碍列表（reduced-motion CSS 分支处理）。 */
+      if (!reduced) root.classList.add('is-fallback');
+      if (!window.THREE && note) note.hidden = false;
+      return;
+    }
+
+    var THREE = window.THREE;
+    var scene, camera, renderer;
+    try {
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xeeeade);
+      scene.fog = new THREE.Fog(0xeeeade, 10, 58);
+      camera = new THREE.PerspectiveCamera(50, 1, 0.1, 260);
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false, powerPreference: 'default' });
+    } catch (e) {
+      root.classList.add('is-static');
+      if (note) note.hidden = false;
+      return;
+    }
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.4));
+    renderer.outputEncoding = THREE.sRGBEncoding;
+
+    var ink = 0x171814;
+    var paper = 0xeeeade;
+    var wash = [0xb76f55, 0xc89a55, 0x6f8f88, 0x607a9b, 0x8c735b, 0xb26f55, 0x6d8470, 0xbf765d];
+    var stepDepth = 17;
+    var firstZ = -13;
+    var count = chapters.length;
+    var lastStageZ = firstZ - (count - 2) * stepDepth;
+    var endZ = lastStageZ - 19;
+    var world = new THREE.Group();
+    scene.add(world);
+    var roomWorld = new THREE.Group();
+    roomWorld.visible = false;
+    scene.add(roomWorld);
+
+    function lineMaterial(color, opacity) {
+      return new THREE.LineBasicMaterial({ color: color || ink, transparent: opacity < 1, opacity: opacity == null ? 1 : opacity });
+    }
+
+    function addEdges(group, geometry, material, position, rotation, scale) {
+      var edges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), material);
+      if (position) edges.position.set(position[0], position[1], position[2]);
+      if (rotation) edges.rotation.set(rotation[0], rotation[1], rotation[2]);
+      if (scale) edges.scale.set(scale[0], scale[1], scale[2]);
+      group.add(edges);
+      return edges;
+    }
+
+    function addLine(group, points, material) {
+      var geometry = new THREE.BufferGeometry().setFromPoints(points.map(function (p) {
+        return new THREE.Vector3(p[0], p[1], p[2]);
+      }));
+      var line = new THREE.Line(geometry, material);
+      group.add(line);
+      return line;
+    }
+
+    function addPaperPlane(group, w, h, color, opacity) {
+      var material = new THREE.MeshBasicMaterial({
+        color: color,
+        transparent: opacity < 1,
+        opacity: opacity,
+        side: THREE.DoubleSide,
+        depthWrite: opacity >= 1
+      });
+      var mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), material);
+      group.add(mesh);
+      return mesh;
+    }
+
+    function makeDoorLabelTexture(index) {
+      var chapter = chapters[index];
+      var stage = chapter && chapter.querySelector('h3');
+      var date = chapter && chapter.querySelector('.chapter-date');
+      var stageText = stage ? stage.textContent.trim() : '';
+      var dateText = date ? date.textContent.trim() : '';
+      var numberText = String(index + 1).padStart(2, '0');
+      var c = document.createElement('canvas');
+      c.width = 512; c.height = 900;
+      var ctx = c.getContext('2d');
+      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.fillStyle = 'rgba(23,24,20,.58)';
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'left';
+      ctx.font = '400 28px Arial, sans-serif';
+      ctx.fillText(numberText, 42, 58);
+      ctx.textAlign = 'right';
+      ctx.font = '400 22px Arial, sans-serif';
+      ctx.fillText(dateText, 470, 58);
+      ctx.strokeStyle = 'rgba(23,24,20,.25)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(42, 91); ctx.lineTo(470, 88);
+      ctx.stroke();
+      ctx.fillStyle = '#171814';
+      ctx.textAlign = 'center';
+      var fontSize = stageText.length > 10 ? 46 : (stageText.length > 6 ? 56 : 70);
+      ctx.font = '400 ' + fontSize + 'px "Noto Serif SC", Georgia, serif';
+      while (ctx.measureText(stageText).width > 420 && fontSize > 34) {
+        fontSize -= 2;
+        ctx.font = '400 ' + fontSize + 'px "Noto Serif SC", Georgia, serif';
+      }
+      ctx.fillText(stageText, 256, 806);
+      ctx.strokeStyle = 'rgba(23,24,20,.18)';
+      ctx.beginPath();
+      ctx.moveTo(116, 850); ctx.lineTo(396, 847);
+      ctx.stroke();
+      var texture = new THREE.CanvasTexture(c);
+      texture.minFilter = THREE.LinearFilter;
+      texture.generateMipmaps = false;
+      return texture;
+    }
+
+    function sketchDoor(index, z) {
+      var side = index % 2 ? 1 : -1;
+      var group = new THREE.Group();
+      group.position.set(side * 5.83, 0, z);
+      group.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
+      world.add(group);
+
+      var leaf = new THREE.Group();
+      group.add(leaf);
+
+      var wallPaper = addPaperPlane(group, 8.4, 8.6, paper, 1);
+      wallPaper.position.set(0, 4.3, 0.035);
+
+      var accent = addPaperPlane(group, 3.25, 5.7, wash[index], 0.0);
+      accent.position.set(0, 3.0, 0.085);
+      accent.userData.targetOpacity = 0;
+
+      var doorPaper = addPaperPlane(leaf, 3.25, 5.7, 0xf5f1e7, 1);
+      doorPaper.position.set(0, 3.0, 0.1);
+
+      var frameMat = lineMaterial(ink, 0.9);
+      addEdges(group, new THREE.BoxGeometry(3.55, 6.0, 0.12), frameMat, [0, 3.0, 0.1]);
+      addEdges(group, new THREE.BoxGeometry(3.25, 5.7, 0.08), lineMaterial(ink, 0.45), [0, 3.0, 0.12]);
+
+      var label = new THREE.Mesh(
+        new THREE.PlaneGeometry(3.06, 5.38),
+        new THREE.MeshBasicMaterial({ map: makeDoorLabelTexture(index), transparent: true, side: THREE.DoubleSide, depthWrite: false })
+      );
+      label.position.set(0, 3.0, 0.19);
+      leaf.add(label);
+
+      addLine(leaf, [[-1.62, 5.72, .18], [1.62, 5.68, .18]], lineMaterial(ink, .62));
+      addLine(leaf, [[-1.62, .18, .18], [1.62, .22, .18]], lineMaterial(ink, .45));
+
+      var motif = new THREE.Group();
+      motif.position.set(0, 3.0, 0.24);
+      leaf.add(motif);
+      var faint = lineMaterial(ink, .38);
+
+      if (index === 0) {
+        addEdges(motif, new THREE.RingGeometry(1.03, 1.06, 48), faint);
+        addEdges(motif, new THREE.RingGeometry(1.27, 1.29, 48), lineMaterial(ink, .18));
+      } else if (index === 1) {
+        addLine(motif, [[-1.1,-1.5,0],[.9,1.25,0],[-.7,.55,0],[1.15,-.65,0],[-1.1,-1.5,0]], faint);
+        addEdges(motif, new THREE.CircleGeometry(.26, 16), faint, [-.65,.75,0]);
+        addEdges(motif, new THREE.CircleGeometry(.18, 16), faint, [.72,-.9,0]);
+      } else if (index === 2) {
+        for (var r = -2; r <= 2; r++) addLine(motif, [[-1.18,r*.46,0],[1.16,r*.46+.03,0]], faint);
+        addLine(motif, [[-.76,-1.25,0],[-.76,1.25,0]], lineMaterial(0xb76f55,.58));
+      } else if (index === 3) {
+        addLine(motif, [[-1.1,-1.15,0],[1.05,-1.15,0],[.32,1.18,0],[-1.1,-1.15,0]], faint);
+        addEdges(motif, new THREE.CircleGeometry(.67, 28), faint, [.3,.05,0]);
+        addLine(motif, [[-1.2,.15,0],[1.2,.15,0],[0,1.35,0],[0,-1.35,0]], lineMaterial(ink,.2));
+      } else if (index === 4) {
+        for (var b = -2; b <= 2; b++) addLine(motif, [[b*.42,-1.3,0],[b*.42,1.3,0]], lineMaterial(ink,b === 0 ? .62 : .22));
+        addLine(motif, [[-1.08,.82,0],[1.08,.82,0]], faint);
+      } else if (index === 5) {
+        var pts = [];
+        for (var s = 0; s < 42; s++) pts.push([-1.2+s*.058, Math.sin(s*.55)*(.16+s*.009), 0]);
+        addLine(motif, pts, lineMaterial(0x607a9b,.72));
+        addLine(motif, [[-1.2,-.9,0],[1.2,-.9,0]], faint);
+      } else if (index === 6) {
+        var nodes = [[-1,-.85],[-.72,.7],[0,-.1],[.62,.94],[1,-.68]];
+        addLine(motif, nodes.map(function(n){return [n[0],n[1],0];}), faint);
+        nodes.forEach(function(n){ addEdges(motif,new THREE.CircleGeometry(.12,14),lineMaterial(0x6d8470,.75),[n[0],n[1],0]); });
+      } else {
+        addLine(motif, [[-1.15,-1.22,0],[-1.15,1.22,0],[1.15,1.22,0],[1.15,-1.22,0]], faint);
+        for (var y = -1; y <= 1; y++) addLine(motif, [[-1.15,y*.72,0],[1.15,y*.72,0]], lineMaterial(ink,.32));
+        for (var x = -1; x <= 1; x++) addLine(motif, [[x*.72,-1.2,0],[x*.72,1.2,0]], lineMaterial(ink,.2));
+      }
+
+      group.userData = { accent: accent, side: side, z: z, leaf: leaf, doorPaper: doorPaper, index: index };
+      return group;
+    }
+
+    var stages = [];
+    for (var i = 0; i < count - 1; i++) stages.push(sketchDoor(i, firstZ - i * stepDepth));
+
+    var wallMat = new THREE.MeshBasicMaterial({ color: paper, side: THREE.DoubleSide });
+    var floor = new THREE.Mesh(new THREE.PlaneGeometry(12, Math.abs(endZ) + 36), wallMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.set(0, 0, endZ / 2 + 5);
+    world.add(floor);
+    var ceiling = floor.clone();
+    ceiling.position.y = 8.6;
+    ceiling.rotation.x = Math.PI / 2;
+    world.add(ceiling);
+    var leftWall = new THREE.Mesh(new THREE.PlaneGeometry(Math.abs(endZ) + 36, 8.6), wallMat);
+    leftWall.rotation.y = Math.PI / 2;
+    leftWall.position.set(-5.85, 4.3, endZ / 2 + 5);
+    world.add(leftWall);
+    var rightWall = leftWall.clone();
+    rightWall.rotation.y = -Math.PI / 2;
+    rightWall.position.x = 5.85;
+    world.add(rightWall);
+
+    var corridorInk = lineMaterial(ink, .2);
+    addLine(world, [[-5.85,0,8],[-5.85,0,endZ]], corridorInk);
+    addLine(world, [[5.85,0,8],[5.85,0,endZ]], corridorInk);
+    addLine(world, [[-5.85,8.6,8],[-5.85,8.6,endZ]], corridorInk);
+    addLine(world, [[5.85,8.6,8],[5.85,8.6,endZ]], corridorInk);
+    for (var gz = 8; gz > endZ; gz -= 8.5) {
+      addLine(world, [[-5.85,.01,gz],[5.85,.01,gz]], lineMaterial(ink,.11));
+      addLine(world, [[-5.85,8.59,gz],[5.85,8.59,gz]], lineMaterial(ink,.09));
+    }
+
+    var horizon = new THREE.Group();
+    horizon.position.set(0, 0, endZ - 3);
+    horizon.visible = false;
+    world.add(horizon);
+    var sky = addPaperPlane(horizon, 24, 14, 0xd8e5e2, 1);
+    sky.position.set(0, 6, -.8);
+    var opening = addEdges(horizon, new THREE.BoxGeometry(7.4, 7.2, .1), lineMaterial(ink,.72), [0,3.6,0]);
+    var path = addPaperPlane(horizon, 3.2, 18, 0xd0bd98, .44);
+    path.rotation.x = -Math.PI / 2;
+    path.position.set(0,.03,-7);
+    addLine(horizon, [[-3.7,0,0],[-8,0,-11]], lineMaterial(ink,.4));
+    addLine(horizon, [[3.7,0,0],[8,0,-11]], lineMaterial(ink,.4));
+    addLine(horizon, [[-1.6,.04,0],[-4.5,.04,-18]], lineMaterial(ink,.24));
+    addLine(horizon, [[1.6,.04,0],[4.5,.04,-18]], lineMaterial(ink,.24));
+    addLine(horizon, [[-.95,4.95,.12],[.95,4.48,.12],[-.22,4.16,.12],[-.12,3.56,.12],[-.57,4.08,.12],[-.95,4.95,.12]], lineMaterial(ink,.72));
+    addLine(horizon, [[-.57,4.08,.12],[.28,4.43,.12]], lineMaterial(ink,.42));
+    addEdges(horizon, new THREE.CircleGeometry(.46, 24), lineMaterial(ink,.18), [-2.9,5.65,.05]);
+    addEdges(horizon, new THREE.CircleGeometry(.34, 24), lineMaterial(ink,.18), [-2.35,5.55,.05]);
+    addEdges(horizon, new THREE.CircleGeometry(.28, 24), lineMaterial(ink,.18), [2.65,5.15,.05]);
+    addEdges(horizon, new THREE.CircleGeometry(.19, 24), lineMaterial(ink,.18), [3.04,5.09,.05]);
+
+    var pointerX = 0, pointerY = 0, targetProgress = 0, smoothProgress = 0, smoothGlance = 0;
+    var activeDoorIndex = 0;
+    var enteringDoor = -1;
+    var enteringStartedAt = 0;
+    var roomOpen = false;
+    var roomShown = false;
+    var roomMode = false;
+    var stageRooms = null;
+    var pointerDown = null;
+    var raycaster = new THREE.Raycaster();
+    var pointer = new THREE.Vector2();
+    var clock = new THREE.Clock();
+
+    function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+
+    function chapterText(chapter, selector) {
+      var element = chapter && chapter.querySelector(selector);
+      return element ? element.textContent.trim() : '';
+    }
+
+    if (window.JourneyStageRooms) {
+      stageRooms = window.JourneyStageRooms.create({
+        THREE: THREE,
+        group: roomWorld,
+        chapters: chapters,
+        wash: wash,
+        ink: ink,
+        paper: paper,
+        lineMaterial: lineMaterial,
+        addLine: addLine,
+        addEdges: addEdges,
+        chapterText: chapterText
+      });
+    }
+
+    function showRoom(index) {
+      if (!room || roomShown || !stageRooms || index < 0 || index >= stages.length) return;
+      roomShown = true;
+      var chapter = chapters[index];
+      if (roomNumber) roomNumber.textContent = String(index + 1).padStart(2, '0');
+      if (roomDate) roomDate.textContent = chapterText(chapter, '.chapter-date');
+      if (roomTitle) roomTitle.textContent = chapterText(chapter, 'h3');
+      if (roomPlace) roomPlace.textContent = chapterText(chapter, '.chapter-place');
+      if (roomDetail) roomDetail.textContent = chapterText(chapter, '.chapter-detail');
+      if (transition) transition.classList.add('is-covering');
+      window.setTimeout(function () {
+        var roomZ = stageRooms.build(index);
+        world.visible = false;
+        roomWorld.visible = true;
+        roomMode = true;
+        roomOpen = true;
+        camera.position.set(0, 3.35, roomZ);
+        camera.lookAt(0, 3.4, -9);
+        room.setAttribute('aria-hidden', 'false');
+        room.classList.add('is-visible');
+        root.classList.add('is-room-open');
+        if (roomBack) roomBack.focus({ preventScroll: true });
+        if (transition) requestAnimationFrame(function () { transition.classList.remove('is-covering'); });
+        requestRender();
+      }, 230);
+    }
+
+    function knockDoor(index) {
+      if (roomOpen || enteringDoor >= 0 || index < 0 || index >= stages.length) return;
+      enteringDoor = index;
+      enteringStartedAt = performance.now();
+      roomShown = false;
+      root.classList.add('is-entering');
+      try { if (navigator.vibrate) navigator.vibrate([22, 70, 22]); } catch (e) {}
+      if (doorButton) doorButton.disabled = true;
+    }
+
+    function closeRoom() {
+      if (!roomOpen) return;
+      if (transition) transition.classList.add('is-covering');
+      roomOpen = false;
+      window.setTimeout(function () {
+        room.classList.remove('is-visible');
+        room.setAttribute('aria-hidden', 'true');
+        root.classList.remove('is-room-open', 'is-entering');
+        roomMode = false;
+        roomWorld.visible = false;
+        if (stageRooms) stageRooms.dispose();
+        world.visible = true;
+        roomShown = false;
+        enteringDoor = -1;
+        camera.position.set(smoothGlance, 3.25, 3 + ((endZ + 9) - 3) * smoothProgress);
+        camera.lookAt(camera.position.x + smoothGlance * 3.5, 3.15, camera.position.z - 10);
+        if (doorButton) doorButton.focus({ preventScroll: true });
+        if (transition) requestAnimationFrame(function () { transition.classList.remove('is-covering'); });
+        requestRender();
+      }, 230);
+    }
+    function updateScroll() {
+      var rect = root.getBoundingClientRect();
+      var range = Math.max(1, root.offsetHeight - window.innerHeight);
+      targetProgress = clamp(-rect.top / range, 0, 1);
+    }
+
+    function renderDom(progress) {
+      var raw = progress * (count - 1);
+      var active = Math.min(count - 1, Math.max(0, Math.round(raw)));
+      for (var j = 0; j < chapters.length; j++) {
+        var distance = Math.abs(raw - j);
+        var opacity = clamp(1 - (distance - .12) / .72, 0, 1);
+        opacity = opacity * opacity * (3 - 2 * opacity);
+        chapters[j].style.setProperty('--chapter-opacity', opacity.toFixed(3));
+      }
+      activeDoorIndex = active < stages.length ? active : -1;
+      if (progressLabel) progressLabel.textContent = String(active + 1).padStart(2, '0') + ' / ' + String(count).padStart(2, '0');
+      if (progressBar) progressBar.style.transform = 'scaleX(' + progress.toFixed(4) + ')';
+      if (hint) hint.style.opacity = progress > .025 ? '0' : '1';
+      if (doorActionLabel && activeDoorIndex >= 0) doorActionLabel.textContent = String(activeDoorIndex + 1).padStart(2, '0');
+      if (doorButton) {
+        var canEnter = activeDoorIndex >= 0 && enteringDoor < 0 && !roomOpen;
+        doorButton.disabled = !canEnter;
+        doorButton.setAttribute('aria-hidden', canEnter ? 'false' : 'true');
+        doorButton.style.setProperty('--door-action-opacity', canEnter ? '1' : '0');
+      }
+    }
+
+    function resize() {
+      var w = canvas.clientWidth || window.innerWidth;
+      var h = canvas.clientHeight || window.innerHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h, false);
+    }
+
+    /* 事件驱动渲染循环：静止时停帧（公司电脑核显/无 GPU 时避免 60fps 空转吃满 CPU/GPU）。
+       滚动、指针移动、敲门、进出房间等交互通过 requestRender() 唤醒。 */
+    var rafActive = false;
+    function requestRender() {
+      if (rafActive) return;
+      rafActive = true;
+      requestAnimationFrame(animate);
+    }
+
+    function animate() {
+      rafActive = false;
+      var dt = Math.min(clock.getDelta(), .05);
+      smoothProgress += (targetProgress - smoothProgress) * (1 - Math.exp(-5.2 * dt));
+      var chapterFloat = smoothProgress * (count - 1);
+      var endReveal = clamp((smoothProgress - .91) / .075, 0, 1);
+      var travelEnd = endZ + 9;
+      var z = 3 + (travelEnd - 3) * smoothProgress;
+      var glance = 0;
+      var glanceWeight = 0;
+      for (var g = 0; g < stages.length; g++) {
+        var influence = clamp(1 - Math.abs(chapterFloat - g), 0, 1);
+        influence = influence * influence * (3 - 2 * influence);
+        glance += stages[g].userData.side * influence;
+        glanceWeight += influence;
+      }
+      if (glanceWeight > 0) glance /= glanceWeight;
+      smoothGlance += (glance - smoothGlance) * (1 - Math.exp(-5 * dt));
+      renderDom(smoothProgress);
+
+      if (roomMode) {
+        if (stageRooms) stageRooms.animate(performance.now() * .001, pointerX, pointerY, camera, dt);
+        renderer.render(scene, camera);
+        requestRender(); /* 房间内浮动物持续动画，保持渲染 */
+        return;
+      }
+
+      var entryFocus = 0;
+      var entrySide = 0;
+      if (enteringDoor >= 0) {
+        entryFocus = clamp(((performance.now() - enteringStartedAt) / 1000 - .46) / .62, 0, 1);
+        entryFocus = entryFocus * entryFocus * (3 - 2 * entryFocus);
+        entrySide = stages[enteringDoor].userData.side;
+      }
+      var corridorX = smoothGlance * 1.0 + pointerX * .34;
+      var desiredX = corridorX * (1 - entryFocus) + entrySide * 3.35 * entryFocus;
+      camera.position.x += (desiredX - camera.position.x) * (1 - Math.exp(-4 * dt));
+      camera.position.y += ((3.25 - pointerY * .22 + Math.sin(performance.now() * .00035) * .035) - camera.position.y) * (1 - Math.exp(-4 * dt));
+      camera.position.z = z - entryFocus * 1.85;
+      var lookX = camera.position.x + (smoothGlance * 3.5 + pointerX * .45) * (1 - entryFocus) + entrySide * 2.4 * entryFocus;
+      camera.lookAt(lookX, 3.15 - pointerY * .25, camera.position.z - 10 + entryFocus * 6);
+
+      for (var k = 0; k < stages.length; k++) {
+        var approach = clamp(1 - Math.abs(chapterFloat - k) / .8, 0, 1);
+        var stage = stages[k];
+        var leaf = stage.userData.leaf;
+        var openAmount = 0;
+        var knockOffset = 0;
+        if (k === enteringDoor) {
+          var elapsed = (performance.now() - enteringStartedAt) / 1000;
+          if (elapsed < .52) knockOffset = Math.sin(elapsed * 42) * Math.max(0, 1 - elapsed / .52) * .045;
+          openAmount = clamp((elapsed - .5) / .68, 0, 1);
+          openAmount = openAmount * openAmount * (3 - 2 * openAmount);
+          if (elapsed > 1.12) showRoom(k);
+        }
+        leaf.position.z += ((knockOffset + openAmount * .05) - leaf.position.z) * (1 - Math.exp(-14 * dt));
+        leaf.position.x += ((-1.5 * openAmount) - leaf.position.x) * (1 - Math.exp(-9 * dt));
+        leaf.scale.x += ((1 - openAmount * .92) - leaf.scale.x) * (1 - Math.exp(-9 * dt));
+        stage.userData.accent.material.opacity += (((approach * .18) + openAmount * .2) - stage.userData.accent.material.opacity) * (1 - Math.exp(-6 * dt));
+      }
+
+      horizon.visible = endReveal > .01;
+      sky.material.opacity = endReveal;
+      path.material.opacity = endReveal * .44;
+      opening.material.opacity = endReveal * .72;
+      scene.fog.far = 58 + endReveal * 82;
+      renderer.render(scene, camera);
+
+      /* 静止判定：所有缓动收敛且无进行中动画才停帧（省 CPU/GPU）。
+         相机 y 目标含 ±.035 的呼吸波动，阈值需覆盖它；x 无波动可精确收敛。 */
+      var desiredX = corridorX * (1 - entryFocus) + entrySide * 3.35 * entryFocus;
+      var desiredY = 3.25 - pointerY * .22;
+      var animating = enteringDoor >= 0 || roomOpen
+        || Math.abs(targetProgress - smoothProgress) > 0.0001
+        || Math.abs(glance - smoothGlance) > 0.0001
+        || Math.abs(desiredX - camera.position.x) > 0.002
+        || Math.abs(desiredY - camera.position.y) > 0.05;
+      if (animating) requestRender();
+    }
+
+    if (doorButton) doorButton.addEventListener('click', function () { knockDoor(activeDoorIndex); requestRender(); });
+    if (roomBack) roomBack.addEventListener('click', function () { closeRoom(); requestRender(); });
+    if (room) {
+      room.addEventListener('wheel', function (event) { if (roomOpen) event.preventDefault(); }, { passive: false });
+      room.addEventListener('touchmove', function (event) { if (roomOpen) event.preventDefault(); }, { passive: false });
+    }
+    canvas.addEventListener('pointerdown', function (event) {
+      pointerDown = { x: event.clientX, y: event.clientY, time: performance.now() };
+    }, { passive: true });
+    canvas.addEventListener('pointerup', function (event) {
+      if (!pointerDown || roomOpen || enteringDoor >= 0 || activeDoorIndex < 0) return;
+      var moved = Math.hypot(event.clientX - pointerDown.x, event.clientY - pointerDown.y);
+      var held = performance.now() - pointerDown.time;
+      pointerDown = null;
+      if (moved > 10 || held > 700) return;
+      var rect = canvas.getBoundingClientRect();
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      var hit = raycaster.intersectObject(stages[activeDoorIndex].userData.doorPaper, false);
+      if (hit.length) { knockDoor(activeDoorIndex); requestRender(); }
+    }, { passive: true });
+    window.addEventListener('keydown', function (event) { if (event.key === 'Escape') { closeRoom(); requestRender(); } });
+    window.addEventListener('scroll', function () { updateScroll(); requestRender(); }, { passive: true });
+    window.addEventListener('resize', function () { resize(); updateScroll(); requestRender(); });
+    window.addEventListener('pointermove', function (e) {
+      pointerX = (e.clientX / window.innerWidth - .5) * 2;
+      pointerY = (e.clientY / window.innerHeight - .5) * 2;
+      requestRender();
+    }, { passive: true });
+
+    camera.position.set(0, 3.25, 3);
+    resize();
+    updateScroll();
+    smoothProgress = targetProgress;
+    renderDom(smoothProgress);
+    requestRender();
+  })();
+</script>
+
+<style>
+  .article {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    overflow: clip;
+  }
+
+  .article-hero,
+  .article-intro,
+  .article-contact {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  .article-hero { padding: 160px 0 96px; }
+  .article-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -.02em;
+    color: #707070;
+    margin: 0 0 16px;
+  }
+  .article-title,
+  .article-sub {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -.02em;
+    margin: 0;
+  }
+  .article-title { color: #000; }
+  .article-sub { color: #707070; }
+  .article-intro > p,
+  .article-contact > p {
+    font-family: var(--font-body);
+    font-size: 24px;
+    line-height: 42px;
+    color: #000;
+    margin: 0;
+  }
+  .article-intro > p + p { margin-top: 1.5em; }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 50px;
+    letter-spacing: -.02em;
+    color: #000;
+    margin: 96px 0 24px;
+  }
+  .journey-lead {
+    color: #707070 !important;
+    font-size: 16px !important;
+    line-height: 28px !important;
+  }
+
+  .sketch-journey {
+    position: relative;
+    height: calc(var(--steps) * 100vh);
+    margin-top: 0;
+    background: #eeeade;
+  }
+  .journey-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: #eeeade;
+    color: #171814;
+  }
+  .journey-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .paper-grain,
+  .journey-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .paper-grain {
+    opacity: .13;
+    mix-blend-mode: multiply;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
+  }
+  .journey-vignette {
+    background:
+      linear-gradient(90deg, rgba(75,65,45,.12), transparent 18%, transparent 82%, rgba(75,65,45,.12)),
+      linear-gradient(180deg, rgba(255,255,255,.08), transparent 55%, rgba(70,60,40,.1));
+  }
+  .journey-transition {
+    position: absolute;
+    z-index: 20;
+    inset: 0;
+    background: #eeeade;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 230ms cubic-bezier(.4,0,.2,1);
+  }
+  .journey-transition.is-covering { opacity: 1; }
+  .journey-heading {
+    position: absolute;
+    z-index: 3;
+    top: 88px;
+    left: 42px;
+    right: 42px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-body);
+    font-size: 10px;
+    line-height: 16px;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+  }
+  .journey-heading h1,
+  .journey-heading span { margin: 0; }
+  .journey-heading h1 {
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+  }
+  .journey-back {
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: inherit;
+    text-decoration: none;
+    margin-left: auto;
+    margin-right: 2.5em;
+    opacity: .55;
+    transition: opacity 200ms;
+  }
+  .journey-back:hover { opacity: 1; }
+  .chapter-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .chapter {
+    --chapter-opacity: 0;
+    position: absolute;
+    top: 50%;
+    width: min(34vw, 460px);
+    transform: translateY(-46%);
+    opacity: var(--chapter-opacity);
+    transition: opacity 340ms cubic-bezier(.22, 1, .36, 1);
+  }
+  .chapter[data-side='left'] { left: 7vw; }
+  .chapter[data-side='right'] { right: 7vw; text-align: right; }
+  .chapter[data-side='center'] {
+    left: 50%;
+    transform: translate(-50%, -44%);
+    text-align: center;
+    width: min(72vw, 720px);
+  }
+  .chapter-number,
+  .chapter-date,
+  .chapter-place,
+  .chapter-detail {
+    font-family: var(--font-body);
+    margin: 0;
+  }
+  .chapter-number {
+    font-family: var(--font-display);
+    font-size: 13px;
+    color: rgba(23,24,20,.48);
+    margin-bottom: 38px;
+  }
+  .chapter-date {
+    font-size: 11px;
+    line-height: 18px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: rgba(23,24,20,.58);
+  }
+  .chapter h3 {
+    font-family: var(--font-display);
+    font-size: clamp(42px, 5.2vw, 76px);
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -.035em;
+    margin: 10px 0 16px;
+  }
+  .chapter-place {
+    font-size: 13px;
+    line-height: 22px;
+    color: rgba(23,24,20,.68);
+  }
+  .chapter-detail {
+    font-family: var(--font-display);
+    font-size: 17px;
+    line-height: 28px;
+    color: rgba(23,24,20,.76);
+    margin-top: 24px;
+  }
+  .chapter[data-side='right'] .chapter-detail { margin-left: auto; }
+  .chapter-horizon h3 { font-size: clamp(52px, 7vw, 100px); }
+  .journey-door-action {
+    --door-action-opacity: 0;
+    position: absolute;
+    z-index: 6;
+    right: 42px;
+    bottom: 38px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(23,24,20,.42);
+    color: #171814;
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: .08em;
+    opacity: var(--door-action-opacity);
+    pointer-events: auto;
+    transition: opacity 240ms ease, border-color 200ms ease;
+  }
+  .journey-door-action span {
+    font-family: var(--font-display);
+    color: rgba(23,24,20,.48);
+  }
+  .journey-door-action:hover { border-color: #171814; }
+  .journey-door-action:disabled { pointer-events: none; }
+  .journey-room {
+    position: absolute;
+    z-index: 12;
+    inset: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .journey-room::before,
+  .journey-room::after,
+  .room-threshold,
+  .room-ghost { display: none; }
+  .journey-room.is-visible {
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .room-back {
+    position: absolute;
+    z-index: 2;
+    top: 88px;
+    left: 42px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(23,24,20,.34);
+    background: rgba(238,234,222,.62);
+    box-shadow: 0 0 24px 16px rgba(238,234,222,.42);
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: .06em;
+    pointer-events: auto;
+  }
+  .room-back:focus-visible {
+    outline: 1px solid rgba(23,24,20,.34);
+    outline-offset: 4px;
+    border-radius: 0;
+  }
+  .room-copy {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .room-date {
+    font-family: var(--font-body);
+    font-size: 9px;
+    letter-spacing: .14em;
+    color: rgba(23,24,20,.54);
+  }
+  .room-copy h2 {
+    margin: 8px 0 15px;
+    font-family: var(--font-display);
+    font-size: clamp(42px, 5vw, 66px);
+    line-height: .96;
+    font-weight: 400;
+    letter-spacing: -.035em;
+  }
+  .room-place {
+    font-family: var(--font-body);
+    font-size: 12px;
+    line-height: 20px;
+    color: rgba(23,24,20,.62);
+  }
+  .room-detail {
+    max-width: 390px;
+    margin-top: 20px;
+    font-family: var(--font-display);
+    font-size: 17px;
+    line-height: 28px;
+    color: rgba(23,24,20,.76);
+  }
+  .is-entering .journey-door-action,
+  .is-room-open .journey-heading,
+  .is-room-open .chapter-layer,
+  .is-room-open .journey-progress { opacity: 0; }
+  .journey-hint {
+    position: absolute;
+    z-index: 4;
+    left: 50%;
+    bottom: 42px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    letter-spacing: .08em;
+    transition: opacity 400ms;
+  }
+  .journey-hint span {
+    position: relative;
+    width: 28px;
+    height: 1px;
+    background: rgba(23,24,20,.28);
+    overflow: hidden;
+  }
+  .journey-hint span::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #171814;
+    animation: walk-line 1.8s ease-in-out infinite;
+  }
+  .journey-progress {
+    position: absolute;
+    z-index: 4;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: rgba(23,24,20,.14);
+  }
+  .journey-progress i {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #171814;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .webgl-note {
+    position: absolute;
+    z-index: 5;
+    inset: auto 24px 32px;
+    text-align: center;
+    font-size: 13px;
+  }
+  .journey-accessible {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .article-contact { padding-top: 12px; }
+  .inline-link {
+    color: #000;
+    border-bottom: 1px solid #000;
+    transition: color 200ms, border-color 200ms;
+  }
+  .inline-link:hover { color: #707070; border-color: #707070; }
+
+  @keyframes walk-line {
+    0% { transform: translateX(-105%); }
+    50%, 100% { transform: translateX(105%); }
+  }
+
+  @media (max-width: 820px) {
+    .article { padding: 0; }
+    .article-hero,
+    .article-intro,
+    .article-contact { max-width: none; }
+    .article-hero { padding: 126px 0 68px; }
+    .article-title,
+    .article-sub { font-size: 40px; line-height: 50px; }
+    .article-intro > p,
+    .article-contact > p { font-size: 18px; line-height: 32px; }
+    .section-title { font-size: 34px; line-height: 42px; margin-top: 72px; }
+    .sketch-journey { margin-left: 0; margin-right: 0; }
+    .journey-heading { top: 72px; left: 20px; right: 20px; }
+    .journey-door-action {
+      right: 20px;
+      bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
+      font-size: 10px;
+    }
+    .room-back { top: 72px; left: 20px; font-size: 10px; }
+    .chapter {
+      top: auto;
+      bottom: max(68px, calc(env(safe-area-inset-bottom) + 52px));
+      left: 20px !important;
+      right: auto !important;
+      width: min(64vw, 252px) !important;
+      text-align: left !important;
+      transform: translateY(calc((1 - var(--chapter-opacity)) * 8px)) !important;
+      padding: 0;
+      background: none;
+      backdrop-filter: none;
+      text-shadow: 0 1px 12px rgba(238,234,222,.9);
+    }
+    .chapter-number,
+    .chapter-detail { display: none; }
+    .chapter-date { font-size: 9px; line-height: 14px; letter-spacing: .12em; }
+    .chapter h3 { font-size: clamp(28px, 9vw, 36px); line-height: .98; margin: 5px 0 8px; }
+    .chapter-place { max-width: 220px; font-size: 11px; line-height: 17px; color: rgba(23,24,20,.62); }
+    .chapter-horizon { width: calc(100vw - 40px) !important; }
+    .chapter-horizon h3 { font-size: clamp(38px, 12vw, 52px); }
+    .chapter-horizon .chapter-detail { display: block; margin-top: 10px !important; font-size: 13px; line-height: 20px; }
+    .journey-hint {
+      left: 20px;
+      bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
+      transform: none;
+    }
+  }
+
+  /* 降级模式（THREE 加载失败 / 软渲染，非 reduced-motion）：静态章节列表，不依赖 3D */
+  .sketch-journey.is-static.is-fallback {
+    height: auto;
+    background: #eeeade;
+    padding: 96px 24px 48px;
+  }
+  .sketch-journey.is-static.is-fallback .journey-sticky {
+    position: static;
+    height: auto;
+    overflow: visible;
+    background: transparent;
+  }
+  .sketch-journey.is-static.is-fallback .journey-canvas,
+  .sketch-journey.is-static.is-fallback .journey-vignette,
+  .sketch-journey.is-static.is-fallback .journey-heading,
+  .sketch-journey.is-static.is-fallback .journey-door-action,
+  .sketch-journey.is-static.is-fallback .journey-transition {
+    display: none;
+  }
+  .sketch-journey.is-static.is-fallback .chapter-layer {
+    position: static;
+    display: grid;
+    gap: 0;
+    pointer-events: auto;
+  }
+  .sketch-journey.is-static.is-fallback .chapter {
+    --chapter-opacity: 1;
+    position: static;
+    width: auto;
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 40px 0;
+    border-bottom: 1px solid rgba(23,24,20,.18);
+    opacity: 1;
+    transform: none;
+    text-align: left;
+  }
+  .sketch-journey.is-static.is-fallback .chapter-number {
+    font-size: 11px;
+    letter-spacing: .17em;
+    color: rgba(23,24,20,.48);
+    margin-bottom: 8px;
+  }
+  .sketch-journey.is-static.is-fallback .chapter h3 {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 50px;
+    letter-spacing: -.02em;
+    margin: 0 0 12px;
+  }
+  .sketch-journey.is-static.is-fallback .chapter-date {
+    font-size: 11px;
+    letter-spacing: .12em;
+    color: rgba(23,24,20,.55);
+    margin-bottom: 6px;
+  }
+  .sketch-journey.is-static.is-fallback .chapter-place {
+    font-size: 15px;
+    line-height: 24px;
+    color: rgba(23,24,20,.78);
+    margin-bottom: 12px;
+  }
+  .sketch-journey.is-static.is-fallback .chapter-detail {
+    font-size: 15px;
+    line-height: 26px;
+    color: rgba(23,24,20,.6);
+  }
+  .sketch-journey.is-static.is-fallback .journey-hint {
+    display: none;
+  }
+  .sketch-journey.is-static.is-fallback + .journey-accessible {
+    display: none;
+  }
+  @media (max-width: 820px) {
+    .sketch-journey.is-static.is-fallback { padding: 72px 20px 40px; }
+    .sketch-journey.is-static.is-fallback .chapter { padding: 32px 0; }
+    .sketch-journey.is-static.is-fallback .chapter h3 { font-size: 30px; line-height: 38px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sketch-journey,
+    .sketch-journey.is-static {
+      height: auto;
+      background: #eeeade;
+      padding: 48px 24px;
+    }
+    .journey-sticky { display: none; }
+    .journey-accessible {
+      position: static;
+      width: auto;
+      height: auto;
+      overflow: visible;
+      clip: auto;
+      clip-path: none;
+      white-space: normal;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+    .journey-accessible li { padding: 28px 0; border-top: 1px solid rgba(23,24,20,.2); }
+    .journey-accessible h3 { font-family: var(--font-display); font-size: 32px; font-weight: 400; margin: 4px 0 10px; }
+    .journey-accessible p { font-size: 14px; line-height: 24px; color: rgba(23,24,20,.72); }
+  }
+</style>

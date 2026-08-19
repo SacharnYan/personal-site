@@ -24,7 +24,7 @@ const check = (name, ok, extra = '') => {
 const hasCJK = (s) => /[\u4e00-\u9fff]/.test(s || '');
 
 // 所有应有双语镜像的静态路径（动态页抽查代表）
-const ZH_PATHS = ['/', '/about/', '/projects/', '/projects/snow/', '/projects/floral/', '/writing/', '/shelf/', '/notes/', '/photos/', '/vlog/', '/life/'];
+const ZH_PATHS = ['/', '/about/', '/journey/', '/projects/', '/projects/snow/', '/projects/floral/', '/writing/', '/shelf/', '/notes/', '/photos/', '/vlog/', '/life/'];
 const enPath = (p) => (p === '/' ? '/en/' : '/en' + p);
 
 const pg = await browser.newPage({ viewport: { width: 1440, height: 900 } });
@@ -128,20 +128,43 @@ check('中文首页 Hero 不变', zhHome.hero === '终身学习，认真创造�
 check('中文页脚链接完整', /邮件/.test(zhHome.footLinks) && /GitHub/.test(zhHome.footLinks) && /RSS/.test(zhHome.footLinks), zhHome.footLinks);
 check('中文署名不变', zhHome.copy?.includes('严树成'), zhHome.copy);
 
-// 9) 英文关于页：journey 章节英译
+// 9) 英文关于页：编辑式结构 + 内容英译
 await pg.goto('http://localhost:4597/en/about/', { waitUntil: 'networkidle' });
 const enAbout = await pg.evaluate(() => ({
+  name: document.querySelector('.about-name')?.textContent?.trim(),
+  role: document.querySelector('.about-role')?.textContent?.trim(),
+  firstTitle: document.querySelector('.path-title')?.textContent,
+  pathText: document.querySelector('.path-list')?.textContent || '',
+  journeyHref: document.querySelector('.path-journey a')?.getAttribute('href'),
+  beliefsCJK: /[\u4e00-\u9fff]/.test(document.querySelector('.belief-list')?.textContent || ''),
+  contact: document.querySelector('.contact-list')?.textContent || '',
+  footer: document.querySelector('.site-footer') !== null,
+  bodyCJK: /[\u4e00-\u9fff]/.test(document.querySelector('.about')?.textContent || ''),
+}));
+check('EN 关于姓名', enAbout.name === 'Shucheng Yan', enAbout.name);
+check('EN 关于头衔', enAbout.role === 'Solution Designer · Huawei · Nanjing', enAbout.role);
+check('EN 经历首条', enAbout.firstTitle === 'Growing up', enAbout.firstTitle);
+check('EN 学习经历已合并', enAbout.pathText.includes('Higher Education') && enAbout.pathText.includes('Nanjing Univ. of Posts & Telecom'));
+check('EN 时间线不再出现本科学校', !enAbout.pathText.includes('Nanjing Institute of Technology'));
+check('EN 工作经历英译', enAbout.pathText.includes('Retail Product') && enAbout.pathText.includes('Huawei Device BG'));
+check('EN 关于页无中文残留', !enAbout.bodyCJK && !enAbout.beliefsCJK);
+check('EN 走廊入口指向 /en/journey/', enAbout.journeyHref === '/en/journey/', enAbout.journeyHref);
+check('关于页恢复页脚出口', enAbout.footer);
+
+// 9b) 经历走廊独立页：双语镜像 + 章节英译
+await pg.goto('http://localhost:4597/en/journey/', { waitUntil: 'networkidle' });
+const enJourney = await pg.evaluate(() => ({
   h1: document.querySelector('.journey-heading h1')?.textContent?.trim(),
+  back: document.querySelector('.journey-back')?.getAttribute('href'),
   stage: document.querySelector('.chapter h3')?.textContent,
   place: document.querySelector('.chapter-place')?.textContent,
   timelineText: document.querySelector('.chapter-layer')?.textContent || '',
 }));
-check('EN 关于标题', enAbout.h1 === 'Path', enAbout.h1);
-check('EN 时间线首条', enAbout.stage === 'Born' && enAbout.place === 'Xinghua, Jiangsu', enAbout.stage + ' | ' + enAbout.place);
-
-check('EN 学习经历已合并', enAbout.timelineText.includes('Higher Education') && enAbout.timelineText.includes('M.Eng., Nanjing Univ. of Posts & Telecom'));
-check('EN 时间线不再出现本科学校', !enAbout.timelineText.includes('Nanjing Institute of Technology'));
-check('EN 工作经历英译', enAbout.timelineText.includes('Huawei Device BG · Retail Product'));
+check('EN 走廊标题', enJourney.h1 === 'Path', enJourney.h1);
+check('EN 走廊返回 About', enJourney.back === '/en/about/', enJourney.back);
+check('EN 走廊时间线首条', enJourney.stage === 'Born' && enJourney.place === 'Xinghua, Jiangsu', enJourney.stage + ' | ' + enJourney.place);
+check('EN 走廊学习经历已合并', enJourney.timelineText.includes('Higher Education') && enJourney.timelineText.includes('M.Eng., Nanjing Univ. of Posts & Telecom'));
+check('EN 走廊工作经历英译', enJourney.timelineText.includes('Huawei Device BG · Retail Product'));
 // 10) 英文随记：17 条全译、提示条撤下、英文日期、无中文残留；中文页不受污染
 const notesData = JSON.parse(fs.readFileSync('src/data/notes.json', 'utf8'));
 check('notes.json 每条都有 text_en', notesData.every(n => typeof n.text_en === 'string' && n.text_en.length > 10), `${notesData.filter(n => !n.text_en).length} 条缺失`);

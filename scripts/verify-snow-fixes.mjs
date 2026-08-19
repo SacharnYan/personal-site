@@ -30,8 +30,8 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 const results = [];
 const check = (name, ok, detail) => { results.push({ name, ok, detail }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}  ${detail ?? ''}`); };
 
-/* ---------- 1. about 标题（journey 基线） ---------- */
-await page.goto(`http://localhost:${PORT}/about/`, { waitUntil: 'networkidle' });
+/* ---------- 1. journey 走廊标题（journey 基线） ---------- */
+await page.goto(`http://localhost:${PORT}/journey/`, { waitUntil: 'networkidle' });
 const aboutTitle = await page.evaluate(() => {
   const h1 = document.querySelector('.journey-heading h1');
   const progress = document.querySelector('.journey-heading span');
@@ -42,11 +42,11 @@ const aboutTitle = await page.evaluate(() => {
     progressText: progress.textContent.trim(),
   };
 });
-check('about 标题存在', !!aboutTitle, JSON.stringify(aboutTitle));
+check('journey 标题存在', !!aboutTitle, JSON.stringify(aboutTitle));
 if (aboutTitle) {
-  check('about 主标题为「经历」', aboutTitle.h1Text === '经历', aboutTitle.h1Text);
-  check('about 主标题为墨色 #171814', aboutTitle.h1Color === 'rgb(23, 24, 20)', aboutTitle.h1Color);
-  check('about 进度计数存在', /^\d{2} \/ \d{2}$/.test(aboutTitle.progressText), aboutTitle.progressText);
+  check('journey 主标题为「经历」', aboutTitle.h1Text === '经历', aboutTitle.h1Text);
+  check('journey 主标题为墨色 #171814', aboutTitle.h1Color === 'rgb(23, 24, 20)', aboutTitle.h1Color);
+  check('journey 进度计数存在', /^\d{2} \/ \d{2}$/.test(aboutTitle.progressText), aboutTitle.progressText);
 }
 
 /* ---------- 2. snow intro 竖排标题不折列 ---------- */
