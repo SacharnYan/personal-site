@@ -60,7 +60,7 @@ const isEn = lang === 'en';
                   )}
                   {more && (
                     <a href={more.href} class="module-more">
-                      {more.label} <span aria-hidden="true">→</span>
+                      {more.label}
                     </a>
                   )}
                 </div>
@@ -309,16 +309,6 @@ const isEn = lang === 'en';
 
   .module-more:hover {
     border-color: #000;
-  }
-
-  .module-more span {
-    color: #b8b8b8;
-    transition: transform 250ms cubic-bezier(.22,1,.36,1), color 250ms;
-  }
-
-  .module-more:hover span {
-    color: #000;
-    transform: translateX(4px);
   }
 
   .module-figure {
