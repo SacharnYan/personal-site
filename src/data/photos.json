@@ -7,5 +7,10 @@
   { "id": "06", "src": "/photos/photo-06.jpg", "width": 1500, "height": 2000, "title": "灯桥", "title_en": "Lights on the Bridge", "date": "" },
   { "id": "07", "src": "/photos/photo-07.jpg", "width": 1499, "height": 2000, "title": "窗竹", "title_en": "Bamboo by the Window", "date": "" },
   { "id": "08", "src": "/photos/photo-08.jpg", "width": 1500, "height": 2000, "title": "荷", "title_en": "Lotus", "date": "" },
-  { "id": "09", "src": "/photos/photo-09.jpg", "width": 1500, "height": 2000, "title": "檐铃", "title_en": "Bells under the Eaves", "date": "" }
+  { "id": "09", "src": "/photos/photo-09.jpg", "width": 1500, "height": 2000, "title": "檐铃", "title_en": "Bells under the Eaves", "date": "" },
+  { "id": "10", "src": "/photos/photo-10.jpg", "width": 1280, "height": 1707, "title": "嗅花", "title_en": "Sniffing the Blooms", "date": "" },
+  { "id": "11", "src": "/photos/photo-11.jpg", "width": 1080, "height": 1440, "title": "窗前", "title_en": "At the Window", "date": "" },
+  { "id": "12", "src": "/photos/photo-12.jpg", "width": 1080, "height": 1440, "title": "花篮", "title_en": "The Flower Basket", "date": "" },
+  { "id": "13", "src": "/photos/photo-13.jpg", "width": 1080, "height": 1440, "title": "陪伴", "title_en": "Quiet Company", "date": "" },
+  { "id": "14", "src": "/photos/photo-14.jpg", "width": 1080, "height": 1440, "title": "巡园", "title_en": "Garden Patrol", "date": "" }
 ]
