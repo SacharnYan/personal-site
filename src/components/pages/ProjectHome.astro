@@ -1,0 +1,182 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, type Lang } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const isEn = lang === 'en';
+---
+
+<Base
+  title={isEn ? 'My Home · After Hours' : '我的家 · After Hours'}
+  description={isEn
+    ? 'The house I live in, rebuilt as a 3D world you can walk into.'
+    : '把自己住的房子，做成一个可以走进来的三维小世界。'}
+  lang={lang}
+>
+  <article class="story">
+    <header class="story-hero" data-fade>
+      <p class="story-eyebrow">Interactive · 2026</p>
+      <h1 class="story-title">{isEn ? 'My Home · After Hours' : '我的家 · After Hours'}</h1>
+      <p class="story-sub">{isEn
+        ? 'The house I live in, rebuilt as a 3D world you can walk into.'
+        : '把自己住的房子，做成一个可以走进来的三维小世界。'}</p>
+    </header>
+
+    <div class="story-body">
+      <figure class="story-figure">
+        <a href="/home/" aria-label={isEn ? 'Enter the 3D house: drag to rotate, click a room to step closer' : '进入三维住宅：拖动旋转，点击房间走近一点'}>
+          <img
+            src="/projects/home/card.jpg"
+            alt={isEn ? 'My home at night: a warm-lit 3D model of the rooms I live in' : '夜里的家：自己住宅的三维模型，房间亮着暖灯'}
+            loading="eager"
+          />
+        </a>
+      </figure>
+
+      {isEn ? (
+        <>
+          <p>
+            My home, rebuilt as a three-dimensional model you can actually walk around: drag to rotate the house, scroll to zoom, and click a room — the living room, the study by the window, the two bedrooms, the dining room, the kitchen, even the bathroom and the balcony — to glide over and look in. A day-and-night switch turns the lights on after hours.
+          </p>
+          <p>
+            The house is modelled from scratch in Blender against the floor plan of the home I live in — every piece of furniture is a familiar corner, right down to the walnut bookcase and the four chairs around the dining table. The web experience is rebuilt on the open-source <a class="story-link" href="https://github.com/enderh3art/Ramen-Shop" target="_blank" rel="noopener noreferrer">Ramen-Shop ↗</a> by Jesse Zhou, whose credit is kept inside the page.
+          </p>
+          <p>
+            <a class="story-link" href="/home/">Turn on the lights, come home →</a>
+          </p>
+        </>
+      ) : (
+        <>
+          <p>
+            把自己住的房子，做成一个可以走进来的三维小世界：拖动画面旋转房子，滚轮缩放，点一下房间——书房、客厅、两间卧室、餐厅、厨房，连浴室和阳台都在——就滑到那个空间门口往里看。右下角还能把白天切成深夜，让灯一间一间亮起来。
+          </p>
+          <p>
+            住宅模型对照自己家的户型，在 Blender 里从零建模——每一件家具都是熟悉的角落，黑胡桃木书柜、餐桌旁的四把椅子、阳台的蛋卷桌。网页交互基于开源项目 <a class="story-link" href="https://github.com/enderh3art/Ramen-Shop" target="_blank" rel="noopener noreferrer">Jesse Zhou · Ramen-Shop ↗</a> 改造，页面内保留了对原作者的致谢。
+          </p>
+          <p>
+            <a class="story-link" href="/home/">点灯，回家 →</a>
+          </p>
+        </>
+      )}
+    </div>
+  </article>
+</Base>
+
+<style>
+  .story {
+    padding: 0 96px 160px;
+  }
+
+  .story-hero {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 160px 0 72px;
+  }
+
+  .story-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .story-title {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    margin: 0;
+  }
+
+  .story-sub {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #707070;
+    margin: 0;
+  }
+
+  .story-body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  .story-body p {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: 0;
+    color: #000;
+    margin: 0;
+  }
+
+  .story-body p + p {
+    margin-top: 1.5em;
+  }
+
+  .story-figure {
+    margin: 48px 0;
+    width: 100%;
+  }
+
+  .story-figure:first-child {
+    margin-top: 0;
+  }
+
+  .story-figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 200ms;
+  }
+
+  .story-figure a:hover img {
+    opacity: 0.85;
+  }
+
+  .story-link {
+    color: #000;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    transition: color 200ms;
+  }
+
+  .story-link:hover {
+    color: #707070;
+  }
+
+  @media (max-width: 768px) {
+    .story {
+      padding: 0 24px 80px;
+    }
+
+    .story-hero {
+      padding: 120px 0 56px;
+    }
+
+    .story-title,
+    .story-sub {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .story-body p {
+      font-size: 19px;
+      line-height: 33px;
+    }
+
+    .story-figure {
+      margin: 40px 0;
+    }
+  }
+</style>
