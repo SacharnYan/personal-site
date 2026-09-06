@@ -1,0 +1,182 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, type Lang } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const isEn = lang === 'en';
+---
+
+<Base
+  title={isEn ? 'Treasure Cabin' : '海边木屋'}
+  description={isEn
+    ? 'A fjord-side cabin in blue hour that lights up as you find the treasures it hides.'
+    : '蓝调时刻的峡湾岸边，一间找到宝物就亮起灯的小木屋。'}
+  lang={lang}
+>
+  <article class="story">
+    <header class="story-hero" data-fade>
+      <p class="story-eyebrow">Interactive · 2026</p>
+      <h1 class="story-title">{isEn ? 'Treasure Cabin' : '海边木屋'}</h1>
+      <p class="story-sub">{isEn
+        ? 'Blue hour on a fjord shore — a cabin that lights up as you find what it hides.'
+        : '蓝调时刻的峡湾岸边，一间找到宝物就亮起灯的小木屋。'}</p>
+    </header>
+
+    <div class="story-body">
+      <figure class="story-figure">
+        <a href="/cabin/" aria-label={isEn ? 'Enter the cabin and look for its treasures' : '走进海边木屋寻宝'}>
+          <img
+            src="/projects/cabin/card.jpg"
+            alt={isEn ? 'A wooden cabin on a fjord shore at blue hour, warm lights on the porch, birches and a mirror-still sea' : '蓝调时刻峡湾边的木屋：门廊亮着暖灯，白桦与镜面海'}
+            loading="eager"
+          />
+        </a>
+      </figure>
+
+      {isEn ? (
+        <>
+          <p>
+            Last time I made the Atlas so you could look down at everything I collect. This time I wanted you to walk in — a small wooden cabin on a fjord shore, in that blue twenty minutes after sunset. Five treasures hide inside it: experiences, writing, projects, even the story of the house itself. Every one you find lights a lamp in the room, until the whole cabin glows.
+          </p>
+          <p>
+            The cabin was procedurally modeled in Blender with AI — nineteen style frames were rejected before it felt right. The web side runs on three.js with free orbit and synthesized ambience (wind, waves, firewood — no audio files at all). The full process, including three ghost stories from right before launch, is written up in the article.
+          </p>
+          <p>
+            <a class="story-link" href="/cabin/">Step inside and look around →</a>
+          </p>
+        </>
+      ) : (
+        <>
+          <p>
+            上一次做星图，是让你俯瞰我收藏的一切；这一次想请你走进去——峡湾边的小木屋，日落后二十分钟的那种蓝。屋里藏着五件宝物：经历、写作、项目，还有这栋房子的来历。每找到一件，屋里就亮起一盏灯，直到整间屋子都暖起来。
+          </p>
+          <p>
+            木屋由 AI 驱动 Blender 程序化建模，19 版风格帧反复打磨才定稿；网页端 three.js 自由环绕，环境音实时合成——风、浪、柴火，没有加载任何音频文件。完整的创作过程，包括上线前的三个灵异事件，都写在文章里。
+          </p>
+          <p>
+            <a class="story-link" href="/cabin/">进屋寻宝 →</a>
+          </p>
+        </>
+      )}
+    </div>
+  </article>
+</Base>
+
+<style>
+  .story {
+    padding: 0 96px 160px;
+  }
+
+  .story-hero {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 160px 0 72px;
+  }
+
+  .story-eyebrow {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.28px;
+    color: #707070;
+    margin: 0 0 16px 0;
+  }
+
+  .story-title {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #000;
+    margin: 0;
+  }
+
+  .story-sub {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 72px;
+    letter-spacing: -1.2px;
+    color: #707070;
+    margin: 0;
+  }
+
+  .story-body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
+  .story-body p {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: 0;
+    color: #000;
+    margin: 0;
+  }
+
+  .story-body p + p {
+    margin-top: 1.5em;
+  }
+
+  .story-figure {
+    margin: 48px 0;
+    width: 100%;
+  }
+
+  .story-figure:first-child {
+    margin-top: 0;
+  }
+
+  .story-figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 200ms;
+  }
+
+  .story-figure a:hover img {
+    opacity: 0.85;
+  }
+
+  .story-link {
+    color: #000;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    transition: color 200ms;
+  }
+
+  .story-link:hover {
+    color: #707070;
+  }
+
+  @media (max-width: 768px) {
+    .story {
+      padding: 0 24px 80px;
+    }
+
+    .story-hero {
+      padding: 120px 0 56px;
+    }
+
+    .story-title,
+    .story-sub {
+      font-size: 36px;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+    }
+
+    .story-body p {
+      font-size: 19px;
+      line-height: 33px;
+    }
+
+    .story-figure {
+      margin: 40px 0;
+    }
+  }
+</style>

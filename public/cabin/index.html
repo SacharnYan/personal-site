@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>海边木屋 · 蓝调时刻寻宝</title>
+    <script type="module" crossorigin src="./assets/index-AhOY0Y-a.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BDSlVplt.css">
+  </head>
+  <body>
+    <canvas class="webgl"></canvas>
+
+    <!-- 启动覆盖层：点击进入，同时解锁 AudioContext -->
+    <div id="overlay">
+      <div class="overlay-inner">
+        <h1>海边木屋</h1>
+        <p class="overlay-sub">蓝 调 时 刻 · 礁 岸 藏 着 五 件 宝 物</p>
+        <div id="loading-track"><div id="loading-progress"></div></div>
+        <button id="enter-button" disabled>备 灯 中 …</button>
+        <p class="overlay-tip">点击探索 · 每找到一件宝物就点亮一盏灯 · 建议开启声音</p>
+      </div>
+    </div>
+
+    <!-- 宝物内容面板（marked 渲染 markdown） -->
+    <aside id="treasure-panel">
+      <div class="panel-header">
+        <span class="panel-type"></span>
+        <h2 class="panel-title"></h2>
+        <button class="panel-close" aria-label="关闭">×</button>
+      </div>
+      <article class="panel-body"></article>
+      <footer class="panel-hint"></footer>
+    </aside>
+
+    <!-- 点灯进度 -->
+    <div id="lights-hud">灯火 <span id="lights-count">0</span> / <span id="lights-total">5</span></div>
+
+  </body>
+</html>
