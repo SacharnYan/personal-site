@@ -6,7 +6,3 @@
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 
 
-
-/* A photograph-sized preview replaces the live scene until entry. */
-.entry.static-preview{background:linear-gradient(90deg,rgba(23,19,15,.92),rgba(23,19,15,.38)),url("images/home-night.png") center/cover no-repeat}
-
