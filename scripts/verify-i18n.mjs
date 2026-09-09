@@ -79,7 +79,7 @@ const enPd = await pg.evaluate(() => ({
 }));
 check('EN 照片标题', enPd.title === 'Rainbow over the City', enPd.title);
 check('EN 返回文案', enPd.back === '← All photos', enPd.back);
-check('EN 计数器', enPd.counter === '01 / 09', enPd.counter);
+check('EN 计数器', enPd.counter === '01 / 14', enPd.counter);
 check('EN 下一张', enPd.next === 'Bamboo Raft on the River ›', enPd.next);
 
 // 5) hreflang 互指
@@ -88,20 +88,20 @@ check('hreflang 三条', hreflang.length === 3, hreflang.join(' | '));
 check('hreflang zh 指向中文版', hreflang.some(h => h.startsWith('zh-CN:') && h.endsWith('/photos/01/')), hreflang.find(h => h.startsWith('zh')) || '');
 check('hreflang en 指向英文版', hreflang.some(h => h.startsWith('en:') && h.includes('/en/photos/01/')), hreflang.find(h => h.startsWith('en:')) || '');
 
-// 6) 英文写作列表：11 篇全部已译，不再出现 In Chinese 徽标
+// 6) 英文写作列表：13 篇，collection-atlas 尚无译文
 await pg.goto('http://localhost:4597/en/writing/', { waitUntil: 'networkidle' });
 const enW = await pg.evaluate(() => {
   const items = [...document.querySelectorAll('.article-item')];
   return {
-    first: items[0]?.querySelector('.article-item-title a')?.textContent?.trim(),
+    home: document.querySelector('.article-item-title a[href="/en/writing/home/"]')?.textContent?.trim(),
     badges: document.querySelectorAll('.article-badge').length,
     count: items.length,
     date: document.querySelector('.article-date')?.textContent,
   };
 });
-check('EN 写作列表 11 篇', enW.count === 11, 'count=' + enW.count);
-check('EN 写作首篇英译标题', enW.first === 'Home — A Synopsis', enW.first);
-check('EN 写作列表无徽标（全部已译）', enW.badges === 0, 'badges=' + enW.badges);
+check('EN 写作列表 13 篇', enW.count === 13, 'count=' + enW.count);
+check('EN 家园英译标题', enW.home === 'Home', enW.home);
+check('EN 写作列表一篇待译徽标', enW.badges === 1, 'badges=' + enW.badges);
 check('EN 日期格式', /^[A-Z][a-z]{2} \d{1,2}, \d{4}$/.test(enW.date || ''), enW.date);
 
 // 7) 英文写作详情：11 篇全部直接渲染英文正文，无提示条、无中文残留

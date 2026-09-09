@@ -27,15 +27,15 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 let failed = 0;
 const check = (name, ok, detail) => { if (!ok) failed++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}  ${detail ?? ''}`); };
 
-/* 列表页：11 篇，按日期倒序 */
+/* 列表页：13 篇，按日期倒序 */
 await page.goto(`http://localhost:${PORT}/writing/`, { waitUntil: 'networkidle' });
 const list = await page.$$eval('.article-item', items => items.map(i => ({
   date: i.querySelector('.article-date').textContent.trim(),
   title: i.querySelector('.article-item-title').textContent.trim(),
   href: i.querySelector('a').getAttribute('href'),
 })));
-check('写作列表共 11 篇', list.length === 11, `实际 ${list.length}`);
-const expected = ['《家园》——故事梗概', '2023 年度回顾', '三丫坡之行', '我的食粮清单', '警惕主题的碎片', '简约世界观', '夏日畅想', '探秘之旅', '花弄影', '最美的非龙', '2019 中秋归泰途中'];
+check('写作列表共 13 篇', list.length === 13, `实际 ${list.length}`);
+const expected = ['我在蓝调时刻的海边，建了一间藏宝物的木屋', '我把 800+ 条收藏做成了一张活的星图', '《家园》', '2023 年度回顾', '三丫坡之行', '我的食粮清单', '警惕主题的碎片', '简约世界观', '夏日畅想', '探秘之旅', '花弄影', '最美的非龙', '2019 中秋归泰途中'];
 check('列表顺序按日期倒序', JSON.stringify(list.map(i => i.title)) === JSON.stringify(expected), list.map(i => `${i.date} ${i.title}`).join(' | '));
 
 /* 逐篇检查 */

@@ -33,7 +33,7 @@ const swipe = (x0, x1) => `(function (el) {
 const pg = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 pg.on('pageerror', e => errors.push('desktop: ' + e.message));
 await pg.goto('http://localhost:4595/photos/', { waitUntil: 'networkidle' });
-check('网格链接数 9', await pg.evaluate(() => document.querySelectorAll('.gallery-item').length) === 9);
+check('网格链接数 14', await pg.evaluate(() => document.querySelectorAll('.gallery-item').length) === 14);
 
 await pg.click('.gallery-item');
 await pg.waitForTimeout(900);
@@ -47,7 +47,7 @@ const d1 = await pg.evaluate(() => ({
 check('进入详情 01', d1.url === '/photos/01/', d1.url);
 check('卡牌图加载', d1.imgOk);
 check('标题', d1.title === '彩虹过城', d1.title);
-check('计数器', d1.counter === '01 / 09', d1.counter);
+check('计数器', d1.counter === '01 / 14', d1.counter);
 check('底部导航两项', d1.steps === 2, 'steps=' + d1.steps);
 
 // 键盘右键 → 02
@@ -83,7 +83,7 @@ await pg.waitForTimeout(800);
 check('返回照片墙', await pg.evaluate(() => location.pathname) === '/photos/');
 
 // 最后一张：边界
-await pg.goto('http://localhost:4595/photos/09/', { waitUntil: 'networkidle' });
+await pg.goto('http://localhost:4595/photos/14/', { waitUntil: 'networkidle' });
 await pg.waitForTimeout(600);
 const d9 = await pg.evaluate(() => ({
   dim: document.querySelector('.pd-step-dim')?.textContent,
@@ -93,7 +93,7 @@ check('最后一张提示', d9.dim === '已是最后一张', d9.dim);
 check('最后一张无 next', !d9.hasNext);
 await pg.evaluate(swipe(600, 380));
 await pg.waitForTimeout(900);
-check('最后一张左滑不翻页', await pg.evaluate(() => location.pathname) === '/photos/09/');
+check('最后一张左滑不翻页', await pg.evaluate(() => location.pathname) === '/photos/14/');
 
 // 截图供过目
 await pg.goto('http://localhost:4595/photos/01/', { waitUntil: 'networkidle' });
@@ -115,7 +115,7 @@ const dm = await m.evaluate(() => {
   };
 });
 check('手机卡牌不超出屏幕', dm.fitsWidth && !dm.overflowX, JSON.stringify(dm));
-check('手机标题计数', dm.title === '暮色' && dm.counter === '05 / 09', dm.title + ' ' + dm.counter);
+check('手机标题计数', dm.title === '暮色' && dm.counter === '05 / 14', dm.title + ' ' + dm.counter);
 
 // 手机上滑动翻页
 await m.evaluate(swipe(300, 120));
